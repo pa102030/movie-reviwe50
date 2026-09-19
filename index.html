@@ -1,35 +1,191 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <title>MOVIES WORLD - Movie Reviews, Ratings & Cinematic Guide</title>
+  <title>MOVIES WORLD | Movie Reviews, Ratings, Editorial Guides & Where to Watch</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Discover curated movie reviews, ratings, trending cinematic releases, and official streaming guide information at MOVIES WORLD.">
+  <meta name="description" content="Discover, review, and read editorial guides on the best movies from 1970 to 2026. Detailed ratings, trailers, release news, and official streaming guides.">
+  <meta name="robots" content="index, follow">
+  
   <meta property="og:site_name" content="MOVIES WORLD">
-  <meta property="og:title" content="MOVIES WORLD - Movie Reviews, Ratings & Cinematic Guide">
-  <meta property="og:description" content="Discover curated movie reviews, ratings, trending cinematic releases, and official streaming guide information at MOVIES WORLD.">
+  <meta property="og:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
+  <meta property="og:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MOVIES WORLD - Movie Reviews, Ratings & Cinematic Guide">
-  <meta name="twitter:description" content="Discover curated movie reviews, ratings, trending cinematic releases, and official streaming guide information at MOVIES WORLD.">
-
+  <meta name="twitter:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
+  <meta name="twitter:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+
+  <!-- Google AdSense Code (ඔබේ Publisher ID එක මෙතැනට යොදන්න) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Structured Data (SEO / Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MOVIES WORLD",
+    "url": "https://yourdomain.com/",
+    "description": "Independent Movie Reviews, Editorial Recommendations, and Legal Streaming Information."
+  }
+  </script>
+
+  <style>
+    /* Global Dropdown Styling */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropdown-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 7px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-dropdown-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background-color: #0f172a;
+      min-width: 150px;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      z-index: 1000;
+      padding: 6px 0;
+    }
+    .nav-dropdown-content a, .nav-dropdown-content button {
+      color: #cbd5e1;
+      padding: 8px 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-dropdown-content a:hover, .nav-dropdown-content button:hover {
+      background-color: rgba(229, 9, 20, 0.15);
+      color: #e50914;
+    }
+    .nav-dropdown:hover .nav-dropdown-content { 
+      display: block; 
+    }
+
+    /* Custom Pagination Styling */
+    .pagination-wrapper {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .page-status {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .pagination-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #111827;
+      padding: 6px;
+      border-radius: 8px;
+    }
+    .page-btn {
+      background: #1f2937;
+      border: none;
+      color: #9ca3af;
+      min-width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      padding: 0 10px;
+    }
+    .page-btn:hover {
+      background: #374151;
+      color: #fff;
+    }
+    .page-btn.active {
+      background: #e50914;
+      color: #fff;
+    }
+    .page-btn.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Unique Content / Editorial Section for AdSense Approval */
+    .editorial-section {
+      max-width: 1200px;
+      margin: 50px auto 20px auto;
+      padding: 24px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+    .editorial-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .editorial-title i {
+      color: #e50914;
+    }
+    .editorial-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Hidden Native Google Element */
+    #google_translate_element {
+      display: none;
+    }
+    body { top: 0px !important; }
+    .goog-te-banner-frame { display: none !important; }
+  </style>
 </head>
 <body>
 
   <a href="#main" class="skip-link">Skip to content</a>
-  <div class="loader" aria-hidden="true">
-    <div>
-      <div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div>
-      <p>MOVIES WORLD</p>
-    </div>
-  </div>
+  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
   
   <header class="site-header">
     <div class="header-inner">
@@ -39,16 +195,44 @@
       </a>
       
       <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html" class="active">Home</a>
+        <a href="index.html">Home</a>
         <a href="movies.html">Movies</a>
         <a href="reviews.html">Reviews</a>
         <a href="genres.html">Genres</a>
         <a href="movies.html?sort=rating">Top Rated</a>
         <a href="movies.html?sort=newest">Latest</a>
+        
+        <!-- 1970 to 2026 Years Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Years <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
+          <div class="nav-dropdown-content" id="years-dropdown"></div>
+        </div>
+
         <a href="watchlist.html">Watchlist</a>
       </nav>
 
       <div class="header-actions">
+        <!-- Professional Theme-Matched Language Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn" id="current-lang-btn">
+            <i class="fa-solid fa-globe"></i> <span>Language</span> <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+          </button>
+          <div class="nav-dropdown-content">
+            <button onclick="changeLanguage('en')">English</button>
+            <button onclick="changeLanguage('si')">Sinhala (සිංහල)</button>
+            <button onclick="changeLanguage('ta')">Tamil (தமிழ்)</button>
+            <button onclick="changeLanguage('hi')">Hindi (हिंदी)</button>
+            <button onclick="changeLanguage('es')">Spanish (Español)</button>
+            <button onclick="changeLanguage('fr')">French (Français)</button>
+            <button onclick="changeLanguage('de')">German (Deutsch)</button>
+            <button onclick="changeLanguage('ja')">Japanese (日本語)</button>
+            <button onclick="changeLanguage('zh-CN')">Chinese (中文)</button>
+            <button onclick="changeLanguage('ru')">Russian (Русский)</button>
+            <button onclick="changeLanguage('ar')">Arabic (العربية)</button>
+            <button onclick="changeLanguage('ko')">Korean (한국어)</button>
+          </div>
+        </div>
+
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
@@ -57,82 +241,38 @@
     </div>
   </header>
 
+  <!-- Native Element (Background running) -->
+  <div id="google_translate_element"></div>
+
   <main id="main">
-    <!-- Hero Section -->
-    <section class="hero-banner">
-      <div class="hero-content">
-        <span class="badge"><i class="fa-solid fa-fire"></i> Welcome to CineHub</span>
-        <h1>Explore Cinematic Masterpieces & Honest Reviews</h1>
-        <p>Your ultimate destination for curated movie recommendations, deep-dive editorial reviews, and official streaming availability.</p>
-        <div class="hero-btns">
-          <a href="movies.html" class="btn btn-primary"><i class="fa-solid fa-compass"></i> Explore Movies</a>
-          <a href="reviews.html" class="btn btn-secondary"><i class="fa-solid fa-pen-nib"></i> Read Editorials</a>
-        </div>
-      </div>
+    <section class="hero" aria-label="Featured movie">
+      <div class="hero-bg" id="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content" id="hero-content"></div>
+      <div class="hero-fade"></div>
     </section>
 
-    <!-- Trending Movies Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2>Trending Cinematic Releases</h2>
-        <a href="movies.html" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
-      </div>
-      <div id="trending-grid" class="movie-grid">
-        <!-- Dynamic content loaded via JS api.js -->
-      </div>
-    </section>
+    <!-- Main Home Movie Lists Grid Container -->
+    <div id="home-sections"></div>
 
-    <!-- Unique Editorial & Reviews Section (Crucial for AdSense Approval) -->
-    <section class="section" style="background: rgba(255,255,255,0.02); padding: 40px 20px; border-radius: 16px; margin: 40px auto; max-width: 1200px;">
-      <div class="section-header">
-        <h2><i class="fa-solid fa-award" style="color: #e50914;"></i> Editor's Choice & Critical Reviews</h2>
-        <a href="reviews.html" class="view-all">All Reviews <i class="fa-solid fa-arrow-right"></i></a>
+    <!-- Pagination Controls (Page 1 of 500) -->
+    <div class="pagination-wrapper">
+      <div class="page-status" id="page-status">Page 1 of 500</div>
+      <div class="pagination-container">
+        <button class="page-btn" id="prev-btn" onclick="changeHomePage(currentHomePg - 1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="page-numbers" style="display: flex; gap: 6px;"></div>
+        <button class="page-btn" id="next-btn" onclick="changeHomePage(currentHomePg + 1)"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 20px;">
-        
-        <!-- Review Card 1 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 24px; border-radius: 12px;">
-          <span style="color: #e50914; font-size: 14px; font-weight: 600; text-transform: uppercase;">Sci-Fi Masterpiece</span>
-          <h3 style="color: #f8fafc; font-size: 20px; margin: 10px 0;">Redefining Modern Visual Storytelling</h3>
-          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">
-            Recent cinematic achievements in science fiction demonstrate how immersive sound design and practical effects blend seamlessly with CGI to create unforgettable worlds. Our editorial analysis breaks down why depth of narrative matters more than scale.
-          </p>
-          <a href="reviews.html" style="color: #e50914; font-weight: 600; font-size: 14px; text-decoration: none;">Read Full Review <i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></a>
-        </div>
+    </div>
 
-        <!-- Review Card 2 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 24px; border-radius: 12px;">
-          <span style="color: #e50914; font-size: 14px; font-weight: 600; text-transform: uppercase;">Drama & Performance</span>
-          <h3 style="color: #f8fafc; font-size: 20px; margin: 10px 0;">The Evolution of Character-Driven Plots</h3>
-          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">
-            A close examination of breakout performances this year reveals a shift toward subtle, grounded emotional resonance. We explore how directors are steering away from Hollywood tropes to focus on raw human connection.
-          </p>
-          <a href="reviews.html" style="color: #e50914; font-weight: 600; font-size: 14px; text-decoration: none;">Read Full Review <i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></a>
-        </div>
-
-        <!-- Review Card 3 -->
-        <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 24px; border-radius: 12px;">
-          <span style="color: #e50914; font-size: 14px; font-weight: 600; text-transform: uppercase;">Cinematography</span>
-          <h3 style="color: #f8fafc; font-size: 20px; margin: 10px 0;">Lighting and Mood in Modern Thrillers</h3>
-          <p style="color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 16px;">
-            Analyzing how low-key lighting and natural color grading elevate tension in suspense thrillers. This guide looks at iconic framing techniques used by visionary directors to keep audiences hooked.
-          </p>
-          <a href="reviews.html" style="color: #e50914; font-weight: 600; font-size: 14px; text-decoration: none;">Read Full Review <i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Top Rated Section -->
-    <section class="section">
-      <div class="section-header">
-        <h2>Top Rated Masterpieces</h2>
-        <a href="movies.html?sort=rating" class="view-all">View All <i class="fa-solid fa-arrow-right"></i></a>
-      </div>
-      <div id="top-rated-grid" class="movie-grid">
-        <!-- Dynamic content loaded via JS api.js -->
-      </div>
+    <!-- Editorial Overview Section (Essential for Unique Content & AdSense) -->
+    <section class="editorial-section">
+      <h3 class="editorial-title"><i class="fa-solid fa-film"></i> About MOVIES WORLD Editorial Reviews</h3>
+      <p class="editorial-desc">
+        Welcome to MOVIES WORLD, your ultimate source for independent movie analysis, curated watchlists, and streaming guides. 
+        Our team reviews cinema releases from 1970 to 2026, offering honest critiques, audience ratings, and legal streaming destination links 
+        such as Netflix, Amazon Prime Video, Apple TV, and Disney+. Explore top-rated titles, upcoming trailers, and genre breakdowns updated daily.
+      </p>
     </section>
   </main>
 
@@ -141,7 +281,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
+          <p>Your trusted destination for discovering great movies, in-depth reviews, and official streaming options.</p>
           <div class="socials">
             <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -165,25 +305,26 @@
           <ul>
             <li><a href="movies.html?year=2026">Best of 2026</a></li>
             <li><a href="movies.html?year=2025">Best of 2025</a></li>
-            <li><a href="movies.html?year=2024">Best of 2024</a></li>
             <li><a href="movies.html?year=2020">Best of 2020</a></li>
             <li><a href="movies.html?year=2010">Best of 2010</a></li>
+            <li><a href="movies.html?year=1990">Best of 1990</a></li>
+            <li><a href="movies.html?year=1970">Best of 1970</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Company</h4>
+          <h4>Company & Legal</h4>
           <ul>
             <li><a href="watchlist.html">Watchlist</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="privacy.html#terms">Terms</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
         <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+        <span>All movie metadata courtesy of TMDB · This site is an independent film database & review platform.</span>
       </div>
     </div>
   </footer>
@@ -191,5 +332,96 @@
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/home.js"></script>
+
+  <!-- Auto Generate 1970-2026 Years Dropdown -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dropdown = document.getElementById("years-dropdown");
+      if (dropdown) {
+        let html = "";
+        for (let y = 2026; y >= 1970; y--) {
+          html += `<a href="movies.html?year=${y}">${y}</a>`;
+        }
+        dropdown.innerHTML = html;
+      }
+    });
+  </script>
+
+  <!-- Custom Professional Language Switcher Engine -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function changeLanguage(langCode) {
+      document.cookie = "googtrans=/en/" + langCode + "; path=/; domain=" + window.location.hostname;
+      document.cookie = "googtrans=/en/" + langCode + "; path=/";
+      window.location.reload();
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- Dynamic Pagination & Live Film Loading Logic -->
+  <script>
+    let currentHomePg = 1;
+    const maxHomePg = 500;
+
+    function renderPagination() {
+      const pageNumbersContainer = document.getElementById("page-numbers");
+      const pageStatus = document.getElementById("page-status");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+
+      if (!pageNumbersContainer) return;
+      pageNumbersContainer.innerHTML = "";
+      pageStatus.innerText = `Page ${currentHomePg} of ${maxHomePg}`;
+
+      if (currentHomePg === 1) prevBtn.classList.add("disabled");
+      else prevBtn.classList.remove("disabled");
+
+      if (currentHomePg === maxHomePg) nextBtn.classList.add("disabled");
+      else nextBtn.classList.remove("disabled");
+
+      let start = Math.max(1, currentHomePg - 1);
+      let end = Math.min(maxHomePg, currentHomePg + 1);
+
+      if (currentHomePg === 1) end = Math.min(maxHomePg, 3);
+      if (currentHomePg === maxHomePg) start = Math.max(1, maxHomePg - 2);
+
+      for (let i = start; i <= end; i++) {
+        const btn = document.createElement("button");
+        btn.className = `page-btn ${i === currentHomePg ? "active" : ""}`;
+        btn.innerText = i;
+        btn.onclick = () => changeHomePage(i);
+        pageNumbersContainer.appendChild(btn);
+      }
+    }
+
+    function changeHomePage(page) {
+      if (page < 1 || page > maxHomePg || page === currentHomePg) return;
+      currentHomePg = page;
+      renderPagination();
+      
+      if (typeof loadHomeMovies === "function") {
+        loadHomeMovies(currentHomePg);
+      } else if (typeof fetchMovies === "function") {
+        fetchMovies(currentHomePg);
+      }
+      
+      // Smooth scroll to movie grid container instead of top of window
+      const movieGrid = document.getElementById('home-sections');
+      if (movieGrid) {
+        movieGrid.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      renderPagination();
+    });
+  </script>
 </body>
 </html>
