@@ -78,16 +78,8 @@ const MW_API = (() => {
       year: m.release_date ? +m.release_date.slice(0, 4) : null,
       releaseDate: m.release_date, rating: Math.round(m.vote_average * 10) / 10,
       votes: m.vote_count, overview: m.overview, tagline: m.tagline || "",
-      poster: img(m.poster_path, "w500"), backdrop: img(m.backdrop_path, "original"),
-      genres: (m.genres || []).map(g => g.name),
-      runtime: m.runtime || null, language: m.original_language,
-      country: (m.production_countries || []).map(c => c.name),
-      director: m.director || null, cast: m.cast || [], ageRating: m.certification || null,
-      watch: [], review: null, budget: m.budget, boxOffice: m.revenue, trailer: m.trailer || null
-    };
-  }
-
-  async function tmdbDiscover(opts) {
+  
+      dasync function tmdbDiscover(opts) {
     const params = { page: opts.page || 1, "vote_count.gte": 200 };
     if (opts.year)        params["primary_release_year"] = opts.year;
     if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
@@ -96,18 +88,32 @@ const MW_API = (() => {
     else if (opts.sort === "oldest")  params.sort_by = "primary_release_date.asc";
     else if (opts.sort === "title")   params.sort_by = "title.asc";
     else params.sort_by = "popularity.desc";
-    if (opts.releaseLte) params["primary_release_date.lte"] = opts.releaseLte; // keep <= 2026
+    if (opts.releaseLte) params["primary_release_date.lte"] = opts.releaseLte;
+
     let data;
-    if (opts.genre || opts.language || opts.search) {
-      // use search endpoint which supports filters
-      const sParams = { query: opts.search || "", page: opts.page || 1, include_adult: "false" };
+
+    // Handle string search separately from genre filtering
+    if (opts.search) {
+      const sParams = { query: opts.search, page: opts.page || 1, include_adult: "false" };
       data = await tmdb("/search/movie", sParams);
-      let list = data.results;
+    } else {
+      // Map genre name to TMDB genre ID for /discover/movie queries
       if (opts.genre) {
-        const gid = (await genres()).find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
-        if (gid) list = list.filter(m => (m.genre_ids || []).includes(gid.id));
+        const allGenres = await genres();
+        const found = allGenres.find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
+        if (found) {
+          params.with_genres = found.id;
+        }
       }
-      data.results = list;
+      data = await tmdb("/discover/movie", params);
+    }
+
+    const movies = (data.results || [])
+      .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
+      .map(m => tmdbToMovie(m));
+
+    return { results: movies, total: data.total_results, page: data.page };
+  }ata.results = list;
     } else {
       data = await tmdb("/discover/movie", params);
     }
