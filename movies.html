@@ -127,4 +127,123 @@
   <script src="js/app.js"></script>
   <script src="js/movies.js"></script>
 </body>
+<script>
+  // Save movie to LocalStorage (Max 10 items with poster)
+  function saveMovieToHistory(movie) {
+    let history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
+    history = history.filter(item => item.id !== movie.id);
+    history.unshift(movie);
+    if (history.length > 10) {
+      history = history.slice(0, 10);
+    }
+    localStorage.setItem('recentSearchedMovies', JSON.stringify(history));
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Look for any search input or header action area
+    const headerActions = document.querySelector('.header-actions') || document.querySelector('header');
+    if (!headerActions) return;
+
+    // Check if search container already exists, if not create one dynamically
+    let searchContainer = document.querySelector('.search-box-container');
+    if (!searchContainer) {
+      searchContainer = document.createElement('div');
+      searchContainer.className = 'search-box-container';
+      searchContainer.style.cssText = 'position: relative; display: inline-flex; align-items: center; margin-right: 10px;';
+      
+      searchContainer.innerHTML = `
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; color: #9ca3af; font-size: 13px; pointer-events: none;"></i>
+        <input type="text" id="movieSearchInput" placeholder="Search movies..." autocomplete="off" style="background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 7px 12px 7px 35px; border-radius: 8px; font-size: 13px; width: 180px; outline: none; transition: width 0.3s;">
+        <div id="searchHistoryDropdown" style="position: absolute; top: 120%; right: 0; width: 320px; background: #0f172a; border-radius: 10px; max-height: 380px; overflow-y: auto; z-index: 999999; box-shadow: 0 15px 30px rgba(0,0,0,0.9); border: 1px solid rgba(255, 255, 255, 0.2); display: none;"></div>
+      `;
+      
+      // Insert before the first button or theme toggle in header actions
+      headerActions.insertBefore(searchContainer, headerActions.firstChild);
+    }
+
+    const searchInput = document.getElementById('movieSearchInput');
+    const dropdown = document.getElementById('searchHistoryDropdown');
+
+    function renderDropdown() {
+      const history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
+      if (history.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+      }
+
+      let html = `
+        <div style="padding: 10px 15px; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; background: #111827; border-bottom: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+          <span>Recent Searched Movies</span>
+          <span id="clearHistoryBtn" style="color: #e50914; cursor: pointer; font-weight: 600;">Clear All</span>
+        </div>
+      `;
+
+      history.forEach(movie => {
+        const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://via.placeholder.com/40x60';
+        html += `
+          <div class="hist-item" style="display: flex; align-items: center; gap: 12px; padding: 10px 15px; cursor: pointer; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;">
+            <img src="${poster}" style="width: 40px; height: 60px; object-fit: cover; border-radius: 4px;" alt="">
+            <div>
+              <div style="font-weight: bold; font-size: 0.95rem; color: #fff;">${movie.title}</div>
+              <div style="font-size: 0.8rem; color: #94a3b8;">${movie.year || 'N/A'}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      dropdown.innerHTML = html;
+      dropdown.style.display = 'block';
+
+      // Clear history event
+      const clearBtn = document.getElementById('clearHistoryBtn');
+      if (clearBtn) {
+        clearBtn.onclick = function(e) {
+          e.stopPropagation();
+          localStorage.removeItem('recentSearchedMovies');
+          dropdown.style.display = 'none';
+        };
+      }
+
+      // Click item event
+      dropdown.querySelectorAll('.hist-item').forEach((el, index) => {
+        el.onclick = function() {
+          const selectedMovie = history[index];
+          dropdown.style.display = 'none';
+          if (typeof loadMovieDetails === 'function') {
+            loadMovieDetails(selectedMovie.id, selectedMovie.title);
+          } else {
+            window.location.href = `movies.html?id=${selectedMovie.id}`;
+          }
+        };
+      });
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('focus', function() {
+        if (this.value.trim() === '') renderDropdown();
+      });
+
+      searchInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (this.value.trim() === '') renderDropdown();
+      });
+
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const query = this.value.trim();
+          if (query !== '') {
+            dropdown.style.display = 'none';
+            window.location.href = `movies.html?search=${encodeURIComponent(query)}`;
+          }
+        }
+      });
+    }
+
+    document.addEventListener('click', function(e) {
+      if (dropdown && !searchContainer.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  });
+</script>  
 </html>
