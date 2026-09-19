@@ -87,28 +87,35 @@ const MW_API = (() => {
     };
   }
 
-let data;
-
-    if (opts.search) {
-      const sParams = { query: opts.search, page: opts.page || 1, include_adult: "false" };
+  async function tmdbDiscover(opts) {
+    const params = { page: opts.page || 1, "vote_count.gte": 200 };
+    if (opts.year)        params["primary_release_year"] = opts.year;
+    if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
+    if (opts.sort === "rating")     params.sort_by = "vote_average.desc";
+    else if (opts.sort === "newest")  params.sort_by = "primary_release_date.desc";
+    else if (opts.sort === "oldest")  params.sort_by = "primary_release_date.asc";
+    else if (opts.sort === "title")   params.sort_by = "title.asc";
+    else params.sort_by = "popularity.desc";
+    if (opts.releaseLte) params["primary_release_date.lte"] = opts.releaseLte; // keep <= 2026
+    let data;
+    if (opts.genre || opts.language || opts.search) {
+      // use search endpoint which supports filters
+      const sParams = { query: opts.search || "", page: opts.page || 1, include_adult: "false" };
       data = await tmdb("/search/movie", sParams);
-    } else {
+      let list = data.results;
       if (opts.genre) {
-        const allGenres = await genres();
-        const found = allGenres.find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
-        if (found) {
-          params.with_genres = found.id;
-        }
+        const gid = (await genres()).find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
+        if (gid) list = list.filter(m => (m.genre_ids || []).includes(gid.id));
       }
+      data.results = list;
+    } else {
       data = await tmdb("/discover/movie", params);
     }
-
-    const movies = (data.results || [])
+    const movies = data.results
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
-
     return { results: movies, total: data.total_results, page: data.page };
-  } 
+  }
 
   /* ---------- public API ---------- */
   async function discover(opts = {}) {
