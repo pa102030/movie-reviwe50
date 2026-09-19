@@ -1,116 +1,151 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <title>Movie Reviews | MOVIES WORLD</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Original in-house movie reviews with scores for story, acting, direction, cinematography, music and VFX.">
-  <meta property="og:site_name" content="MOVIES WORLD">
-  <meta property="og:title" content="Movie Reviews | MOVIES WORLD">
-  <meta property="og:description" content="Original in-house movie reviews with scores for story, acting, direction, cinematography, music and VFX.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Movie Reviews | MOVIES WORLD">
-  <meta name="twitter:description" content="Original in-house movie reviews with scores for story, acting, direction, cinematography, music and VFX.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Reviews - MOVIES WORLD</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #141414;
+            color: #ffffff;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e50914;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .review-card {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            border-left: 4px solid #e50914;
+            transition: transform 0.2s ease-in-out;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+        }
+        .review-card:hover {
+            transform: translateY(-5px);
+            background-color: #282828;
+        }
+        .movie-title {
+            font-size: 1.3rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .genre-badge {
+            display: inline-block;
+            background-color: #333;
+            color: #e50914;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .review-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #ccc;
+        }
+    </style>
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
-  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
-        <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
-        MOVIES<b>WORLD</b>
-      </a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="movies.html">Movies</a>
-        <a href="reviews.html">Reviews</a>
-        <a href="genres.html">Genres</a>
-        <a href="movies.html?sort=rating">Top Rated</a>
-        <a href="movies.html?sort=newest">Latest</a>
-        <a href="watchlist.html">Watchlist</a>
-      </nav>
-      <div class="header-actions">
-        <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
-        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
-        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-      </div>
-    </div>
-  </header>
+    <h1>Movie Reviews Collection</h1>
 
-  <main id="main">
-    <div class="page-hero">
-      <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> <i class="fa-solid fa-chevron-right" style="font-size:10px"></i> <span>Reviews</span></nav>
-      <h1>Editorial Reviews</h1>
-      <p>Original MOVIES WORLD reviews with full category scores — <b id="reviews-count">0</b> reviewed and counting. Our verdicts are written in-house and never copied.</p>
-    </div>
-    <section class="section" style="padding-top:0"><div class="movie-grid" id="reviews-grid"></div></section>
-  </main>
+    <!-- Reviews පෙන්වන Main Container එක -->
+    <div class="reviews-container" id="reviewsContainer"></div>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
-          <div class="socials">
-            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="movies.html">Movies</a></li>
-            <li><a href="reviews.html">Reviews</a></li>
-            <li><a href="genres.html">Genres</a></li>
-            <li><a href="movies.html?sort=rating">Top Rated</a></li>
-            <li><a href="movies.html?sort=newest">Latest</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Years</h4>
-          <ul>
-            <li><a href="movies.html?year=2026">Best of 2026</a></li>
-            <li><a href="movies.html?year=2025">Best of 2025</a></li>
-            <li><a href="movies.html?year=2024">Best of 2024</a></li>
-            <li><a href="movies.html?year=2020">Best of 2020</a></li>
-            <li><a href="movies.html?year=2010">Best of 2010</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="watchlist.html">Watchlist</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="privacy.html#terms">Terms</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
-      </div>
-    </div>
-  </footer>
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/reviews.js"></script>
+    <script>
+        // Movie Reviews Data Array with accurate TMDB Movie IDs
+        const movieReviews = [
+            { id: 27205, title: "Inception", genre: "Action / Sci-Fi", review: "A mind-bending cinematic experience that dives deep into the sub-conscious. Stunning visual effects and Hans Zimmer's haunting score make it an absolute masterpiece that leaves you questioning reality." },
+            { id: 76341, title: "Mad Max: Fury Road", genre: "Action / Sci-Fi", review: "A non-stop high-octane action spectacle. A prime example of how to tell a compelling story purely through relentless cinematic action without wasting a single second." },
+            { id: 245891, title: "John Wick", genre: "Action / Thriller", review: "A game-changer for the gun-fu action genre. Keanu Reeves delivers an iconic performance backed by stylish cinematography and relentless fight choreography." },
+            { id: 155, title: "The Dark Knight", genre: "Action / Crime", review: "An absolute masterclass in superhero cinema. Heath Ledger's legendary performance as the Joker steals the show and elevates the entire film into a timeless masterpiece." },
+            { id: 361743, title: "Top Gun: Maverick", genre: "Action / Drama", review: "The perfect sequel that seamlessly blends nostalgia with cutting-edge real jet aerial sequences. An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
+            { id: 98, title: "Gladiator", genre: "Action / Drama", review: "An epic tale of vengeance, honor, and redemption. Russell Crowe gives a powerful performance, perfectly complemented by Hans Zimmer’s emotional soundtrack." },
+            { id: 299534, title: "Avengers: Endgame", genre: "Action / Sci-Fi", review: "A deeply satisfying and emotional conclusion to a decade-long cinematic journey. Gives every core character their fitting moment to shine." },
+            { id: 36557, title: "Casino Royale", genre: "Action / Thriller", review: "A gritty, grounded reboot that successfully redefined James Bond. Daniel Craig captivated audiences right from his debut with raw intensity." },
+            { id: 353081, title: "Mission: Impossible - Fallout", genre: "Action / Thriller", review: "Tom Cruise proves why he is a true cinema icon. The real, jaw-dropping stunts deliver a level of suspense and thrill that CGI can never replicate." },
+            { id: 603, title: "The Matrix", genre: "Action / Sci-Fi", review: "A revolutionary milestone in film history. Blends philosophical questions with ground-breaking visual effects and iconic action sequences." },
+            { id: 157336, title: "Interstellar", genre: "Sci-Fi / Drama", review: "A breathtaking fusion of complex science, deep space exploration, and emotional father-daughter love. Christopher Nolan's finest cinematic poem." },
+            { id: 1124, title: "The Prestige", genre: "Sci-Fi / Mystery", review: "A brilliant story about obsession that keeps you in the dark until the final frame. The final twist leaves you completely speechless." },
+            { id: 329865, title: "Arrival", genre: "Sci-Fi / Drama", review: "Proves that Sci-Fi isn't just about explosions and alien wars, but about empathy, communication, and human connection. Deeply emotional and thought-provoking." },
+            { id: 335984, title: "Blade Runner 2049", genre: "Sci-Fi / Mystery", review: "Every single frame looks like a fine art painting. Slowly paced, yet its immersive sound design and visual world pull you completely into another reality." },
+            { id: 11324, title: "Shutter Island", genre: "Psychological Thriller", review: "A psychological maze that plays tricks on your mind. Scorsese creates a chilling atmosphere that leaves you questioning what is real until the very end." },
+            { id: 545611, title: "Everything Everywhere All at Once", genre: "Sci-Fi / Comedy", review: "An insanely creative, heartwarming, and chaotic journey through the multiverse. Completely unique and wildly entertaining from start to finish." },
+            { id: 693134, title: "Dune: Part Two", genre: "Sci-Fi / Adventure", review: "A modern masterpiece of visual and sound design. Sets a new benchmark for how realistic and immersive a sci-fi world can be built on screen." },
+            { id: 264660, title: "Ex Machina", genre: "Sci-Fi / Drama", review: "A slick, tense, and thought-provoking look at the dark side of AI and human manipulation. Simple setting, but intensely gripping execution." },
+            { id: 220289, title: "Coherence", genre: "Sci-Fi / Mystery", review: "Proof that you don't need a massive budget to make a mind-blowing film. A dinner party turns into a terrifying multiverse puzzle." },
+            { id: 577922, title: "Tenet", genre: "Sci-Fi / Action", review: "Complex and hard to grasp on the first watch, but the time-inversion concept and booming soundtrack make it an unforgettable ride." },
+            { id: 278, title: "The Shawshank Redemption", genre: "Drama", review: "A deeply touching masterpiece that reminds us that hope is a powerful thing. A heartwarming story about friendship and endurance." },
+            { id: 550, title: "Fight Club", genre: "Drama / Thriller", review: "A dark, gritty masterpiece that critiques consumerism and explores internal human conflict. Unfiltered and wildly unpredictable." },
+            { id: 496243, title: "Parasite", genre: "Thriller / Drama", review: "A masterfully crafted Korean thriller that blends dark humor and social satire to expose class inequality in a shocking way." },
+            { id: 244786, title: "Whiplash", genre: "Drama / Music", review: "An intense exploration of perfectionism and obsession. Features explosive performances and editing that keeps your heart racing till the last beat." },
+            { id: 807, title: "Se7en", genre: "Crime / Thriller", review: "A grim, dark crime thriller built around the seven deadly sins. Features one of the most haunting and shocking endings in cinema history." },
+            { id: 475557, title: "Joker", genre: "Drama / Crime", review: "Joaquin Phoenix gives a hauntingly brilliant performance depicting a tragic descent into madness caused by a cold and unforgiving society." },
+            { id: 1949, title: "Zodiac", genre: "Crime / Mystery", review: "A meticulously detailed and patient detective thriller based on true events. Keeps you hooked purely through obsession and realistic investigation." },
+            { id: 146233, title: "Prisoners", genre: "Crime / Drama", review: "A tense and heartbreaking thriller showing how far a desperate father will go to find his missing child. Phenomenal acting throughout." },
+            { id: 242582, title: "Nightcrawler", genre: "Thriller", review: "Jake Gyllenhaal delivers a chilling performance in this dark critique of ruthless freelance crime journalism and modern media ethics." },
+            { id: 6977, title: "No Country for Old Men", genre: "Crime / Thriller", review: "A masterclass in building pure tension and suspense, surprisingly without relying on any background music. Anton Chigurh is terrifying." },
+            { id: 138843, title: "The Conjuring", genre: "Horror / Mystery", review: "Goes beyond basic jump scares by building a genuinely terrifying atmosphere. A modern classic in traditional haunted house horror." },
+            { id: 493922, title: "Hereditary", genre: "Horror / Drama", review: "A deeply unsettling psychological horror film that deals with grief and family trauma. Stays in your head long after the credits roll." },
+            { id: 447332, title: "A Quiet Place", genre: "Horror / Sci-Fi", review: "Demonstrates how silence itself can create overwhelming tension. A brilliant concept executed with incredible suspense and heart." },
+            { id: 419430, title: "Get Out", genre: "Horror / Mystery", review: "Seamlessly weaves social commentary into a psychological horror framework. Smart, disturbing, and deeply thought-provoking." },
+            { id: 274, title: "The Silence of the Lambs", genre: "Crime / Horror", review: "Anthony Hopkins' portrayal of Hannibal Lecter redefined cinematic villains. A tense, brilliant game of psychological cat-and-mouse." },
+            { id: 458723, title: "Us", genre: "Horror / Mystery", review: "Jordan Peele's unique directorial style shines with terrifying doppelgängers and layers of hidden symbolism to unpack." },
+            { id: 694, title: "The Shining", genre: "Horror", review: "Kubrick’s atmospheric direction combined with Jack Nicholson’s unhinged performance makes this an timeless descent into madness." },
+            { id: 1008042, title: "Talk to Me", genre: "Horror / Thriller", review: "A fresh and modern take on supernatural horror that uses obsession as a clever allegory. Fast-paced, scary, and slickly directed." },
+            { id: 565, title: "The Ring", genre: "Horror / Mystery", review: "Successfully blended technology with urban legend to terrify a generation. Creepy visuals and an unforgettable atmosphere." },
+            { id: 82507, title: "Sinister", genre: "Horror", review: "The creepy super-8 home footage combined with an unsettling score makes this genuinely hard to watch alone in the dark." },
+            { id: 313369, title: "La La Land", genre: "Romance / Musical", review: "A gorgeous, bittersweet tribute to dreamers, love, and reality. Beautifully shot with vibrant colors and unforgettable music." },
+            { id: 19913, title: "500 Days of Summer", genre: "Romance / Comedy", review: "Not a typical love story, but an honest look at relationship heartbreaks and expectations. Real, funny, and deeply relatable." },
+            { id: 129, title: "Spirited Away", genre: "Animation / Fantasy", review: "Hayao Miyazaki’s magical world makes you feel like a child again. An enchanting animated poem full of wonder and emotion." },
+            { id: 324857, title: "Spider-Man: Into the Spider-Verse", genre: "Animation / Action", review: "Proves that animation is a groundbreaking art form. Visually stunning, fast-paced, and full of heart and style." },
+            { id: 372058, title: "Your Name", genre: "Animation / Romance", review: "Features breathtaking visual animation, a captivating soundtrack, and a deeply emotional story that transcends time and space." },
+            { id: 37165, title: "The Truman Show", genre: "Comedy / Drama", review: "A witty yet prophetic movie that questions our reality and media obsession. Jim Carrey delivers a perfect balance of humor and heart." },
+            { id: 14160, title: "Up", genre: "Animation / Adventure", review: "The opening ten minutes alone tell a more poignant love story than most full-length films. A beautiful, emotional Pixar classic." },
+            { id: 354912, title: "Coco", genre: "Animation / Family", review: "A vibrant, colorful celebration of family, memory, and music. Packed with emotional depth that touches viewers of all ages." },
+            { id: 122906, title: "About Time", genre: "Romance / Drama", review: "Uses time travel not for sci-fi action, but to deliver a heartwarming lesson on appreciating the small, daily moments of life." },
+            { id: 18785, title: "The Hangover", genre: "Comedy", review: "An absolute riot from start to finish. A benchmark for modern R-rated comedies that promises non-stop laughs." }
+        ];
+
+        const container = document.getElementById('reviewsContainer');
+
+        movieReviews.forEach(item => {
+            const card = document.createElement('a');
+            card.className = 'review-card';
+            
+            // Movie Details Page එකට Redirect කිරීම
+            card.href = `movie_2.html?id=${item.id}`;
+
+            card.innerHTML = `
+                <h3 class="movie-title">${item.title}</h3>
+                <span class="genre-badge">${item.genre}</span>
+                <p class="review-text">"${item.review}"</p>
+            `;
+            container.appendChild(card);
+        });
+    </script>
 </body>
 </html>
