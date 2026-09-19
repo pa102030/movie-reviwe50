@@ -1,6 +1,16 @@
 /* MOVIES WORLD - shared UI */
 "use strict";
 
+/* ---------- Preloader Hide Helper ---------- */
+function hidePreloader() {
+  const preloader = document.getElementById("preloader") || document.querySelector(".preloader") || document.querySelector("[data-preloader]");
+  if (preloader) {
+    preloader.style.opacity = "0";
+    preloader.style.pointerEvents = "none";
+    setTimeout(() => { preloader.style.display = "none"; }, 500);
+  }
+}
+
 /* ---------- storage: watchlist & favorites ---------- */
 const MWStore = {
   get(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; } },
@@ -36,7 +46,7 @@ function toast(msg, icon = "fa-circle-check") {
   }, 3000);
 }
 
-/* ---------- Main App & Movie Details Logic ---------- */
+/* ---------- Main App Logic ---------- */
 document.addEventListener('DOMContentLoaded', () => {
 
   // Theme Toggle
@@ -85,11 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!movieId) {
       movieDetailsContainer.innerHTML = '<p style="color:#e50914; text-align:center; padding:40px;">No Movie ID found in URL!</p>';
+      hidePreloader();
       return;
     }
 
     if (!TMDB_API_KEY) {
       movieDetailsContainer.innerHTML = '<p style="color:#e50914; text-align:center; padding:40px;">TMDB API Key missing! Check js/config.js file.</p>';
+      hidePreloader();
       return;
     }
 
@@ -146,7 +158,17 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(err => {
         console.error(err);
-        movieDetailsContainer.innerHTML = '<p style="color:#e50914; text-align:center; padding:40px;">Error loading movie details. Please check your internet connection or API Key.</p>';
+        movieDetailsContainer.innerHTML = '<p style="color:#e50914; text-align:center; padding:40px;">Error loading movie details.</p>';
+      })
+      .finally(() => {
+        hidePreloader();
       });
+  } else {
+    hidePreloader();
   }
+});
+
+// Fallback safety to remove preloader after page load
+window.addEventListener('load', () => {
+  setTimeout(hidePreloader, 300);
 });
