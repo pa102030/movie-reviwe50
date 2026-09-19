@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies World - Search & Reviews</title>
+    <title>Movies World - 50 Movie Reviews</title>
     <style>
         * {
             box-sizing: border-box;
@@ -26,6 +26,9 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .app-title {
             color: #e50914;
@@ -83,15 +86,15 @@
             border-radius: 4px;
         }
 
-        /* MAIN HOME / REVIEWS SECTION */
+        /* HOME / REVIEWS SECTION */
         #homePage {
             padding: 30px 20px;
-            max-width: 1200px;
+            max-width: 1300px;
             margin: 0 auto;
         }
         .section-title {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
             color: #e50914;
             border-left: 4px solid #e50914;
             padding-left: 10px;
@@ -194,14 +197,14 @@
             object-fit: cover;
         }
         .movie-title {
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 8px;
             color: #ffffff;
         }
         .tagline {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: #b3b3b3;
             font-style: italic;
             margin-bottom: 20px;
@@ -282,13 +285,13 @@
         </div>
     </header>
 
-    <!-- HOME / REVIEWS LIST -->
+    <!-- HOME / REVIEWS LIST (50 MOVIES) -->
     <div id="homePage">
-        <h2 class="section-title">Latest Reviews</h2>
+        <h2 class="section-title">Latest Movie Reviews (50 Collections)</h2>
         <div class="reviews-grid" id="reviewsContainer"></div>
     </div>
 
-    <!-- MOVIE DETAILS PAGE (DIRECT FROM API) -->
+    <!-- MOVIE DETAILS PAGE -->
     <div id="detailsPage">
         <button class="back-btn" onclick="showHomePage()">← Back</button>
         <div class="overlay">
@@ -319,17 +322,61 @@
     <script>
         const API_KEY = '8ee66710f2f840fe7b6a29bc84db0629';
 
-        // Reviews array connected with real TMDB IDs
+        // Reviews list containing 50 popular movies with TMDB IDs
         const movieReviews = [
             { tmdbId: 361743, title: "Top Gun: Maverick", review: "An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
             { tmdbId: 27205, title: "Inception", review: "A mind-bending cinematic experience that dives deep into the sub-conscious." },
             { tmdbId: 155, title: "The Dark Knight", review: "An absolute masterclass in superhero cinema with an iconic performance." },
             { tmdbId: 157336, title: "Interstellar", review: "A breathtaking fusion of complex science and emotional storytelling." },
             { tmdbId: 245891, title: "John Wick", review: "A game-changer for the gun-fu action genre with relentless fight choreography." },
-            { tmdbId: 693134, title: "Dune: Part Two", review: "A modern masterpiece of visual and sound design that sets a new benchmark." }
+            { tmdbId: 693134, title: "Dune: Part Two", review: "A modern masterpiece of visual and sound design that sets a new benchmark." },
+            { tmdbId: 550, title: "Fight Club", review: "A gritty and rebellious social satire with an unforgettable twist." },
+            { tmdbId: 13, title: "Forrest Gump", review: "A heartwarming journey through American history anchored by a legendary lead role." },
+            { tmdbId: 238, title: "The Godfather", review: "The pinnacle of crime drama filmmaking, rich with tension and family loyalty." },
+            { tmdbId: 680, title: "Pulp Fiction", review: "Quentin Tarantino's stylish non-linear crime classic filled with sharp dialogue." },
+            { tmdbId: 122, title: "The Lord of the Rings: The Return of the King", review: "An epic conclusion to fantasy cinema that sweeps emotional and visual heights." },
+            { tmdbId: 278, title: "The Shawshank Redemption", review: "A powerful tale of hope, resilience, and an enduring friendship behind bars." },
+            { tmdbId: 424, title: "Schindler's List", review: "A harrowing and profoundly moving historical masterpiece by Steven Spielberg." },
+            { tmdbId: 120, title: "The Lord of the Rings: The Fellowship of the Ring", review: "The magical beginning of Middle-earth's legendary journey." },
+            { tmdbId: 121, title: "The Lord of the Rings: The Two Towers", review: "Brilliant battle sequences and complex character arcs driving the middle chapter." },
+            { tmdbId: 603, title: "The Matrix", review: "A revolutionary sci-fi action thriller that changed visual effects forever." },
+            { tmdbId: 11, title: "Star Wars", review: "The space opera that launched a global cultural phenomenon." },
+            { tmdbId: 157, title: "Apocalypse Now", review: "A mesmerizing and intense psychological journey into the heart of Vietnam." },
+            { tmdbId: 497, title: "The Green Mile", review: "A deeply emotional supernatural drama that pulls at every heartstring." },
+            { tmdbId: 562, title: "Die Hard", review: "The ultimate Christmas action movie that redefined the genre." },
+            { tmdbId: 8587, title: "The Lion King", review: "A timeless animated masterpiece with unforgettable music and emotional depth." },
+            { tmdbId: 638, title: "Terminator 2: Judgment Day", review: "Groundbreaking CGI paired with relentless action pacing." },
+            { tmdbId: 105, title: "Back to the Future", review: "A fun, fast-paced time travel adventure packed with iconic chemistry." },
+            { tmdbId: 597, title: "Titanic", review: "A grand scale romantic tragedy set against historical maritime disaster." },
+            { tmdbId: 49026, title: "The Dark Knight Rises", review: "A dark and gritty finale to Christopher Nolan's Batman trilogy." },
+            { tmdbId: 1891, title: "The Empire Strikes Back", review: "Widely regarded as the best sequel in cinematic history." },
+            { tmdbId: 769, title: "GoodFellas", review: "Martin Scorsese's masterclass in fast-paced mob storytelling." },
+            { tmdbId: 38, title: "Eternal Sunshine of the Spotless Mind", review: "A wonderfully surreal and heartbreaking look at love and memory." },
+            { tmdbId: 539, title: "Psycho", review: "Alfred Hitchcock's suspenseful horror pillar that shocked the world." },
+            { tmdbId: 103, title: "Taxi Driver", review: "A moody, atmospheric character study of urban isolation and descent." },
+            { tmdbId: 73, title: "American History X", review: "A heavy, hard-hitting drama addressing hatred and redemption." },
+            { tmdbId: 129, title: "Spirited Away", review: "Hayao Miyazaki's enchanting and imaginative animated masterpiece." },
+            { tmdbId: 496243, title: "Parasite", review: "A razor-sharp social satire thriller with brilliant pacing and plot shifts." },
+            { tmdbId: 515042, title: "Gladiator II", review: "An epic continuation of the Roman colosseum spectacles." },
+            { tmdbId: 98, title: "Gladiator", review: "Russell Crowe delivers a powerhouse performance in this brutal historical epic." },
+            { tmdbId: 299534, title: "Avengers: Endgame", review: "The ultimate superhero culmination event packed with fan service." },
+            { tmdbId: 299536, title: "Avengers: Infinity War", review: "A high-stakes thriller where the villain actually achieves his goal." },
+            { tmdbId: 315635, title: "Spider-Man: Into the Spider-Verse", review: "A visually revolutionary animation style that redefined comic book movies." },
+            { tmdbId: 569094, title: "Spider-Man: Across the Spider-Verse", review: "Expanding the multiverse with staggering artistic vision." },
+            { tmdbId: 634649, title: "Spider-Man: No Way Home", review: "A nostalgic celebration of three generations of live-action Spider-Man history." },
+            { tmdbId: 335984, title: "Blade Runner 2049", review: "Denis Villeneuve's visually breathtaking sci-fi noir continuation." },
+            { tmdbId: 324857, title: "Spider-Man: Into the Spider-Verse", review: "A visual treat that broke all standard animation rules." },
+            { tmdbId: 872585, title: "Oppenheimer", review: "Christopher Nolan's tense biographical drama driven by brilliant performances." },
+            { tmdbId: 346648, title: "The Martian", review: "A witty, science-backed survival story led by Matt Damon." },
+            { tmdbId: 264660, title: "The Revenant", review: "A grueling, raw survival epic featuring stunning natural cinematography." },
+            { tmdbId: 10681, title: "WALL·E", review: "A charming sci-fi animation with powerful environmental themes." },
+            { tmdbId: 1422, title: "The Departed", review: "A tense cat-and-mouse crime thriller set in Boston." },
+            { tmdbId: 16869, title: "Inglourious Basterds", review: "Tarantino's entertaining alternate-history World War II thriller." },
+            { tmdbId: 24428, title: "The Avengers", review: "The landmark crossover that cemented the modern superhero franchise era." },
+            { tmdbId: 671, title: "Harry Potter and the Sorcerer's Stone", review: "The magical entry point into J.K. Rowling's spellbinding wizarding world." }
         ];
 
-        // Render Reviews list on Home Page
+        // Render 50 Reviews Grid
         const reviewsContainer = document.getElementById('reviewsContainer');
         movieReviews.forEach(item => {
             const card = document.createElement('div');
@@ -386,14 +433,14 @@
             }
         }
 
-        // FETCH & OPEN MOVIE DETAILS (Works for both Search Results & Review clicks)
+        // FETCH & OPEN MOVIE DETAILS (Works for both Search & 50 Reviews Clicks)
         async function loadMovieDetails(movieId) {
             document.getElementById('homePage').style.display = 'none';
             const detailsPage = document.getElementById('detailsPage');
             detailsPage.style.display = 'block';
             window.scrollTo(0, 0);
 
-            // Reset UI Loading
+            // Reset Loading UI
             document.getElementById('movieTitle').innerText = "Loading...";
             document.getElementById('tagline').innerText = "";
             document.getElementById('posterImg').src = "";
@@ -409,10 +456,13 @@
                 document.getElementById('yearVal').innerText = movie.release_date ? movie.release_date.split('-')[0] : "----";
                 document.getElementById('runtimeVal').innerText = movie.runtime ? `${movie.runtime} min` : "N/A";
                 
-                // Poster & Backdrop Image URLs
+                // Poster & Backdrop Images
                 if (movie.poster_path) {
-                    document.getElementById('posterImg').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+                    document.getElementById('posterImg').src = `https://image.ti.org/t/p/w500${movie.poster_path}`.replace('ti.org', 'image.tmdb.org');
+                } else {
+                    document.getElementById('posterImg').src = 'https://via.placeholder.com/320x480?text=No+Image';
                 }
+
                 if (movie.backdrop_path) {
                     detailsPage.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
                 }
