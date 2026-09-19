@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Discover, review and watch the best movies from 2000 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  <meta name="description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
   <meta property="og:site_name" content="MOVIES WORLD">
   <meta property="og:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
-  <meta property="og:description" content="Discover, review and watch the best movies from 2000 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  <meta property="og:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
-  <meta name="twitter:description" content="Discover, review and watch the best movies from 2000 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  <meta name="twitter:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,13 +21,12 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
   
   <style>
-    /* Styled Language Dropdown for Dark Theme */
+    /* Google Translate Styling */
     #google_translate_element {
       display: inline-flex;
       align-items: center;
       margin-left: 8px;
     }
-
     .goog-te-gadget-simple {
       background-color: rgba(255, 255, 255, 0.05) !important;
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -37,36 +36,58 @@
       font-size: 13px !important;
       font-family: 'Inter', sans-serif !important;
       cursor: pointer;
-      display: flex !important;
-      align-items: center !important;
-      gap: 6px;
-      transition: all 0.2s ease;
     }
+    .goog-te-gadget-simple img { display: none !important; }
+    .goog-te-gadget-simple span { color: #e2e8f0 !important; }
+    .goog-te-banner-frame { display: none !important; }
+    body { top: 0px !important; }
 
-    .goog-te-gadget-simple:hover {
-      background-color: rgba(255, 255, 255, 0.1) !important;
-      border-color: rgba(255, 255, 255, 0.25) !important;
+    /* Years Dropdown Styling */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
     }
-
-    .goog-te-gadget-simple img {
-      display: none !important; /* Hide ugly default Google icon */
-    }
-
-    .goog-te-gadget-simple span {
-      color: #e2e8f0 !important;
-    }
-
-    .goog-te-menu-value span:first-child {
+    .nav-dropdown-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted, #94a3b8);
+      font-size: 14px;
       font-weight: 500;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
     }
-
-    .goog-te-banner-frame {
-      display: none !important;
+    .nav-dropdown-btn:hover { color: #fff; }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #0f172a;
+      min-width: 120px;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      z-index: 1000;
     }
-
-    body {
-      top: 0px !important;
+    .nav-dropdown-content a {
+      color: #e2e8f0;
+      padding: 8px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 13px;
+      transition: background 0.2s;
     }
+    .nav-dropdown-content a:hover {
+      background-color: rgba(229, 9, 20, 0.2);
+      color: #e50914;
+    }
+    .nav-dropdown:hover .nav-dropdown-content { display: block; }
   </style>
 </head>
 <body>
@@ -86,12 +107,17 @@
         <a href="genres.html">Genres</a>
         <a href="movies.html?sort=rating">Top Rated</a>
         <a href="movies.html?sort=newest">Latest</a>
+        
+        <!-- 1970 to 2026 Years Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Years <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
+          <div class="nav-dropdown-content" id="years-dropdown"></div>
+        </div>
+
         <a href="watchlist.html">Watchlist</a>
       </nav>
       <div class="header-actions">
-        <!-- Styled Language Translator -->
         <div id="google_translate_element"></div>
-
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
@@ -139,9 +165,10 @@
           <ul>
             <li><a href="movies.html?year=2026">Best of 2026</a></li>
             <li><a href="movies.html?year=2025">Best of 2025</a></li>
-            <li><a href="movies.html?year=2024">Best of 2024</a></li>
             <li><a href="movies.html?year=2020">Best of 2020</a></li>
             <li><a href="movies.html?year=2010">Best of 2010</a></li>
+            <li><a href="movies.html?year=1990">Best of 1990</a></li>
+            <li><a href="movies.html?year=1970">Best of 1970</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -161,20 +188,31 @@
       </div>
     </div>
   </footer>
-  <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"MOVIES WORLD","url":"https://moviesworld.example/","potentialAction":{"@type":"SearchAction","target":"https://moviesworld.example/movies.html?q={search_term_string}","query-input":"required name=search_term_string"}}
-  </script>
+
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script src="js/home.js"></script>
 
-  <!-- Google Translate Integration Script (English Default Force) -->
+  <!-- Auto Generate 1970-2026 Years Dropdown -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dropdown = document.getElementById("years-dropdown");
+      if (dropdown) {
+        let html = "";
+        for (let y = 2026; y >= 1970; y--) {
+          html += `<a href="movies.html?year=${y}">${y}</a>`;
+        }
+        dropdown.innerHTML = html;
+      }
+    });
+  </script>
+
+  <!-- Google Translate Integration -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
-        autoDisplay: false,
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
     }
