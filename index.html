@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <title>MOVIES WORLD | Movie Reviews, Ratings & Where to Watch</title>
+  <title>MOVIES WORLD | Movie Reviews, Ratings, Editorial Guides & Where to Watch</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  <meta name="description" content="Discover, review, and read editorial guides on the best movies from 1970 to 2026. Detailed ratings, trailers, release news, and official streaming guides.">
+  <meta name="robots" content="index, follow">
+  
   <meta property="og:site_name" content="MOVIES WORLD">
   <meta property="og:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
   <meta property="og:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
@@ -13,13 +15,28 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
   <meta name="twitter:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
-  
+
+  <!-- Google AdSense Code (ඔබේ Publisher ID එක මෙතැනට යොදන්න) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Structured Data (SEO / Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MOVIES WORLD",
+    "url": "https://yourdomain.com/",
+    "description": "Independent Movie Reviews, Editorial Recommendations, and Legal Streaming Information."
+  }
+  </script>
+
   <style>
     /* Global Dropdown Styling */
     .nav-dropdown {
@@ -83,7 +100,7 @@
       display: block; 
     }
 
-    /* Custom Pagination Styling (Matched to Image) */
+    /* Custom Pagination Styling */
     .pagination-wrapper {
       text-align: center;
       margin: 40px 0;
@@ -128,6 +145,33 @@
     .page-btn.disabled {
       opacity: 0.3;
       cursor: not-allowed;
+    }
+
+    /* Unique Content / Editorial Section for AdSense Approval */
+    .editorial-section {
+      max-width: 1200px;
+      margin: 50px auto 20px auto;
+      padding: 24px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+    .editorial-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .editorial-title i {
+      color: #e50914;
+    }
+    .editorial-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     /* Hidden Native Google Element */
@@ -220,6 +264,16 @@
         <button class="page-btn" id="next-btn" onclick="changeHomePage(currentHomePg + 1)"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
+
+    <!-- Editorial Overview Section (Essential for Unique Content & AdSense) -->
+    <section class="editorial-section">
+      <h3 class="editorial-title"><i class="fa-solid fa-film"></i> About MOVIES WORLD Editorial Reviews</h3>
+      <p class="editorial-desc">
+        Welcome to MOVIES WORLD, your ultimate source for independent movie analysis, curated watchlists, and streaming guides. 
+        Our team reviews cinema releases from 1970 to 2026, offering honest critiques, audience ratings, and legal streaming destination links 
+        such as Netflix, Amazon Prime Video, Apple TV, and Disney+. Explore top-rated titles, upcoming trailers, and genre breakdowns updated daily.
+      </p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -227,7 +281,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
+          <p>Your trusted destination for discovering great movies, in-depth reviews, and official streaming options.</p>
           <div class="socials">
             <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
@@ -258,11 +312,11 @@
           </ul>
         </div>
         <div class="footer-col">
-          <h4>Company</h4>
+          <h4>Company & Legal</h4>
           <ul>
             <li><a href="watchlist.html">Watchlist</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
             <li><a href="privacy.html">Privacy Policy</a></li>
             <li><a href="terms.html">Terms of Service</a></li>
           </ul>
@@ -270,7 +324,7 @@
       </div>
       <div class="footer-bottom">
         <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+        <span>All movie metadata courtesy of TMDB · This site is an independent film database & review platform.</span>
       </div>
     </div>
   </footer>
@@ -352,15 +406,17 @@
       currentHomePg = page;
       renderPagination();
       
-      // js/home.js හි හෝ API එකෙහි ඇති Load Function එක කැඳවීම
       if (typeof loadHomeMovies === "function") {
         loadHomeMovies(currentHomePg);
       } else if (typeof fetchMovies === "function") {
         fetchMovies(currentHomePg);
       }
       
-      // Smooth scroll back to top of movies
-      window.scrollTo({ top: 350, behavior: 'smooth' });
+      // Smooth scroll to movie grid container instead of top of window
+      const movieGrid = document.getElementById('home-sections');
+      if (movieGrid) {
+        movieGrid.scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
     document.addEventListener("DOMContentLoaded", function() {
