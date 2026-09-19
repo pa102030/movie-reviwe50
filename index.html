@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <title>Explore Movies | MOVIES WORLD</title>
+  <title>MOVIES WORLD | Movie Reviews, Ratings & Where to Watch</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Browse movies by categories, pages, year and ratings on MOVIES WORLD.">
+  <meta name="description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and streaming links.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,60 +14,73 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
   
   <style>
-    .movies-page-container {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
+    /* Navigation Language Dropdown Styling */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
     }
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .page-title {
-      font-size: 28px;
-      color: #fff;
-      font-weight: 700;
-    }
-    
-    /* Category Filter Buttons Styling */
-    .category-bar {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 12px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .cat-btn {
+    .nav-dropdown-btn {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #cbd5e1;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
+      color: #e2e8f0;
       font-size: 13px;
-      font-weight: 600;
-      white-space: nowrap;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 7px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: all 0.2s ease;
     }
-    .cat-btn:hover, .cat-btn.active {
-      background: #e50914;
-      border-color: #e50914;
+    .nav-dropdown-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
       color: #fff;
     }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background-color: #0f172a;
+      min-width: 160px;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      z-index: 1000;
+      padding: 6px 0;
+    }
+    .nav-dropdown-content button, .nav-dropdown-content a {
+      color: #cbd5e1;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-dropdown-content button:hover, .nav-dropdown-content a:hover {
+      background-color: rgba(229, 9, 20, 0.15);
+      color: #e50914;
+    }
+    .nav-dropdown:hover .nav-dropdown-content { display: block; }
 
-    /* Pagination Bar Styles */
+    /* Home Pagination Control Styles */
     .pagination-container {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      margin-top: 40px;
-      margin-bottom: 20px;
+      margin: 40px 0 20px 0;
       flex-wrap: wrap;
     }
     .page-btn {
@@ -97,76 +110,41 @@
       pointer-events: none;
     }
 
-    /* Header Language Dropdown */
-    .nav-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .nav-dropdown-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #e2e8f0;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 7px 12px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .nav-dropdown-content {
-      display: none;
-      position: absolute;
-      top: 110%;
-      right: 0;
-      background-color: #0f172a;
-      min-width: 150px;
-      max-height: 280px;
-      overflow-y: auto;
-      box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      z-index: 1000;
-    }
-    .nav-dropdown-content button {
-      color: #cbd5e1;
-      padding: 8px 14px;
-      display: block;
-      width: 100%;
-      background: none;
-      border: none;
-      text-align: left;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .nav-dropdown-content button:hover {
-      background-color: rgba(229, 9, 20, 0.15);
-      color: #e50914;
-    }
-    .nav-dropdown:hover .nav-dropdown-content { display: block; }
     #google_translate_element { display: none; }
+    body { top: 0px !important; }
+    .goog-te-banner-frame { display: none !important; }
   </style>
 </head>
 <body>
 
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
+  
   <header class="site-header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
+      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
         <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
         MOVIES<b>WORLD</b>
       </a>
       
-      <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="movies.html" class="active">Movies</a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html" class="active">Home</a>
+        <a href="movies.html">Movies</a>
         <a href="reviews.html">Reviews</a>
         <a href="genres.html">Genres</a>
+        <a href="movies.html?sort=rating">Top Rated</a>
+        
+        <!-- Years Dropdown (1970 - 2026) -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Years <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
+          <div class="nav-dropdown-content" id="years-dropdown"></div>
+        </div>
+
         <a href="watchlist.html">Watchlist</a>
       </nav>
 
       <div class="header-actions">
-        <!-- Language Switcher Dropdown -->
+        <!-- Professional Language Selector Dropdown -->
         <div class="nav-dropdown">
           <button class="nav-dropdown-btn">
             <i class="fa-solid fa-globe"></i> <span>Language</span> <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
@@ -178,10 +156,15 @@
             <button onclick="changeLanguage('hi')">Hindi (हिंदी)</button>
             <button onclick="changeLanguage('es')">Spanish (Español)</button>
             <button onclick="changeLanguage('fr')">French (Français)</button>
+            <button onclick="changeLanguage('de')">German (Deutsch)</button>
+            <button onclick="changeLanguage('ja')">Japanese (日本語)</button>
+            <button onclick="changeLanguage('zh-CN')">Chinese (中文)</button>
+            <button onclick="changeLanguage('ru')">Russian (Русский)</button>
           </div>
         </div>
 
-        <button class="icon-btn" data-open-search><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
       </div>
     </div>
@@ -189,106 +172,127 @@
 
   <div id="google_translate_element"></div>
 
-  <main class="movies-page-container">
-    <div class="page-header">
-      <h1 class="page-title">Explore Movies</h1>
-    </div>
+  <main id="main">
+    <!-- Featured Hero Banner Section -->
+    <section class="hero" aria-label="Featured movie">
+      <div class="hero-bg" id="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content" id="hero-content"></div>
+      <div class="hero-fade"></div>
+    </section>
 
-    <!-- Category Selector Tabs -->
-    <div class="category-bar">
-      <button class="cat-btn active" onclick="filterCategory('all', this)">All Movies</button>
-      <button class="cat-btn" onclick="filterCategory('28', this)">Action</button>
-      <button class="cat-btn" onclick="filterCategory('35', this)">Comedy</button>
-      <button class="cat-btn" onclick="filterCategory('18', this)">Drama</button>
-      <button class="cat-btn" onclick="filterCategory('27', this)">Horror</button>
-      <button class="cat-btn" onclick="filterCategory('878', this)">Sci-Fi</button>
-      <button class="cat-btn" onclick="filterCategory('10749', this)">Romance</button>
-      <button class="cat-btn" onclick="filterCategory('16', this)">Animation</button>
-      <button class="cat-btn" onclick="filterCategory('53', this)">Thriller</button>
-    </div>
+    <!-- Main Home Movie Lists -->
+    <div id="home-sections"></div>
 
-    <!-- Movies Grid Display Container -->
-    <div id="movies-grid" class="movies-grid"></div>
-
-    <!-- Pagination Controls (Page 1, 2, 3...) -->
-    <div class="pagination-container" id="pagination">
-      <button class="page-btn" id="prev-btn" onclick="goToPage(currentPage - 1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+    <!-- Page Number Navigation Bar for Home Page -->
+    <div class="pagination-container" id="home-pagination">
+      <button class="page-btn" id="prev-btn" onclick="changeHomePage(currentHomePg - 1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
       <div id="page-numbers" style="display: flex; gap: 6px;"></div>
-      <button class="page-btn" id="next-btn" onclick="goToPage(currentPage + 1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="page-btn" id="next-btn" onclick="changeHomePage(currentHomePg + 1)">Next <i class="fa-solid fa-chevron-right"></i></button>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
+          <p>Your destination for discovering great movies. Discover, review and explore legal watch options.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="movies.html">Movies</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
+            <li><a href="genres.html">Genres</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="watchlist.html">Watchlist</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
       <div class="footer-bottom">
         <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span><a href="terms.html" style="color:#cbd5e1;">Terms of Service</a> · <a href="privacy.html" style="color:#cbd5e1;">Privacy Policy</a></span>
+        <span>Movie data provided by TMDB.</span>
       </div>
     </div>
   </footer>
 
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
-  
-  <script>
-    let currentPage = 1;
-    let currentCategory = 'all';
-    const totalPages = 500;
+  <script src="js/app.js"></script>
+  <script src="js/home.js"></script>
 
-    function renderPagination() {
+  <!-- Dynamic Years Dropdown Generator -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dropdown = document.getElementById("years-dropdown");
+      if (dropdown) {
+        let html = "";
+        for (let y = 2026; y >= 1970; y--) {
+          html += `<a href="movies.html?year=${y}">${y}</a>`;
+        }
+        dropdown.innerHTML = html;
+      }
+    });
+  </script>
+
+  <!-- Home Pagination Script -->
+  <script>
+    let currentHomePg = 1;
+    const maxHomePg = 500;
+
+    function renderHomePagination() {
       const pageNumbersContainer = document.getElementById("page-numbers");
       const prevBtn = document.getElementById("prev-btn");
       const nextBtn = document.getElementById("next-btn");
 
+      if (!pageNumbersContainer) return;
       pageNumbersContainer.innerHTML = "";
 
-      if (currentPage === 1) {
-        prevBtn.classList.add("disabled");
-      } else {
-        prevBtn.classList.remove("disabled");
-      }
+      if (currentHomePg === 1) prevBtn.classList.add("disabled");
+      else prevBtn.classList.remove("disabled");
 
-      if (currentPage === totalPages) {
-        nextBtn.classList.add("disabled");
-      } else {
-        nextBtn.classList.remove("disabled");
-      }
+      if (currentHomePg === maxHomePg) nextBtn.classList.add("disabled");
+      else nextBtn.classList.remove("disabled");
 
-      let startPage = Math.max(1, currentPage - 2);
-      let endPage = Math.min(totalPages, currentPage + 2);
+      let start = Math.max(1, currentHomePg - 2);
+      let end = Math.min(maxHomePg, currentHomePg + 2);
 
-      for (let i = startPage; i <= endPage; i++) {
+      for (let i = start; i <= end; i++) {
         const btn = document.createElement("button");
-        btn.className = `page-btn ${i === currentPage ? "active" : ""}`;
+        btn.className = `page-btn ${i === currentHomePg ? "active" : ""}`;
         btn.innerText = i;
-        btn.onclick = () => goToPage(i);
+        btn.onclick = () => changeHomePage(i);
         pageNumbersContainer.appendChild(btn);
       }
     }
 
-    function goToPage(page) {
-      if (page < 1 || page > totalPages) return;
-      currentPage = page;
-      renderPagination();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      // API call using currentPage and currentCategory
-    }
-
-    function filterCategory(catId, btnElement) {
-      currentCategory = catId;
-      currentPage = 1; // Category එකක් වෙනස් කළ විට නැවත Page 1 ට යයි
+    function changeHomePage(page) {
+      if (page < 1 || page > maxHomePg) return;
+      currentHomePg = page;
+      renderHomePagination();
+      window.scrollTo({ top: 400, behavior: 'smooth' });
       
-      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-      btnElement.classList.add('active');
-
-      renderPagination();
-      // API call using selected category
+      // If home.js supports page parameter:
+      if (typeof loadHomeMovies === "function") {
+        loadHomeMovies(currentHomePg);
+      }
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-      renderPagination();
+      renderHomePagination();
     });
 
+    // Language Engine Initializer
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
     }
