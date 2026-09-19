@@ -1,133 +1,154 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-<head>
-  <title>Movie Details & Review | MOVIES WORLD</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="In-depth movie details, story breakdown, and original editorial critique on MOVIES WORLD.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
-</head>
-<body>
+/* MOVIES WORLD - Movie details page (movie.html?id=) */
+"use strict";
+document.addEventListener("mw:ready", async () => {
+  const id = new URLSearchParams(location.search).get("id");
+  const root = document.getElementById("detail-root");
+  if (!id) { root.innerHTML = errorBox("No movie selected."); return; }
 
-  <a href="#main" class="skip-link">Skip to content</a>
-  
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
-        <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
-        MOVIES<b>WORLD</b>
-      </a>
-      
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="movies.html">Movies</a>
-        <a href="reviews.html">Reviews</a>
-        <a href="genres.html">Genres</a>
-        <a href="movies.html?sort=rating">Top Rated</a>
-        <a href="movies.html?sort=newest">Latest</a>
-        <a href="watchlist.html">Watchlist</a>
-      </nav>
+  let m;
+  try { m = await MW_API.getMovie(id); }
+  catch (e) { root.innerHTML = errorBox("Movie not found or unavailable."); return; }
 
-      <div class="header-actions">
-        <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
-        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
-        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
+  const desc = (m.overview || "").slice(0, 155);
+  setMeta("description", `${m.title} (${m.year}) — rating, review, trailer and where to watch legally. ${desc}`);
+  injectMovieSchema(m);
+
+  const inW = MWStore.inWatchlist(m.id), inF = MWStore.inFavorites(m.id);
+  const cast = m.cast || [];
+  const facts = [
+    ["Director", m.director], ["Release Date", m.releaseDate],
+    ["Runtime", m.runtime ? m.runtime + " min" : null], ["Language", m.language],
+    ["Country", (m.country || []).join(", ")], ["Age Rating", m.ageRating],
+    ["Votes", m.votes ? m.votes.toLocaleString() : null]
+  ].filter(([, v]) => v);
+
+  /* ---------- hero ---------- */
+  const heroBg = document.getElementById("detail-bg");
+  if (m.backdrop) heroBg.innerHTML = `<img src="${m.backdrop}" alt="">`;
+  else heroBg.innerHTML = `<div class="hero-ph" style="position:absolute;inset:0;background:linear-gradient(120deg,#141e30,#243b55 45%,#0f0c29);"></div>`;
+
+  document.getElementById("detail-grid").innerHTML = `
+    <div class="detail-poster">${posterHTML(m)}</div>
+    <div class="detail-main">
+      <h1>${esc(m.title)}</h1>
+      <p class="tagline">${esc(m.tagline || "")}</p>
+      <div class="detail-meta">
+        <span class="rate"><i class="fa-solid fa-star"></i> ${m.rating ? m.rating.toFixed(1) : "—"}<span style="color:var(--text-3);font-weight:500">/10</span></span>
+        ${m.year ? `<span class="pill">${m.year}</span>` : ""}
+        ${m.runtime ? `<span class="pill">${m.runtime} min</span>` : ""}
+        ${m.ageRating ? `<span class="pill">${esc(m.ageRating)}</span>` : ""}
+        ${m.rating >= 7.5 ? '<span class="pill" style="color:var(--gold);border-color:rgba(245,197,24,.4)">4K</span>' : '<span class="pill">HD</span>'}
+      </div>
+      <div class="genre-tags">${(m.genres || []).map(g => `<a href="genres.html?genre=${encodeURIComponent(g)}">${esc(g)}</a>`).join("")}</div>
+      <div class="detail-actions">
+        <button class="btn btn-red" data-trailer="${m.id}"><i class="fa-solid fa-play"></i> Watch Trailer</button>
+        <button class="btn btn-glass ${inW ? "active" : ""}" data-watchlist="${m.id}"><i class="fa-solid fa-plus"></i> Add to Watchlist</button>
+        <button class="btn btn-glass ${inF ? "active" : ""}" data-fav="${m.id}"><i class="fa-solid fa-heart"></i> Favorite</button>
+        <a class="btn btn-gold" href="#watch"><i class="fa-solid fa-ticket"></i> Watch / Rent / Buy</a>
+      </div>
+    </div>`;
+  bindCardButtons(document.getElementById("detail-grid"));
+
+  /* ---------- review score ---------- */
+  const scorePanel = document.getElementById("review-panel");
+  const rv = m.review;
+  const overall = rv ? ((rv.story + rv.acting + rv.direction + rv.cinematography + rv.music + rv.vfx + rv.entertainment) / 7) : (m.rating || 0);
+  const stars = n => "★".repeat(Math.round(n / 2)) + "☆".repeat(5 - Math.round(n / 2));
+  scorePanel.innerHTML = `
+    <h2><i class="fa-solid fa-star-half-stroke"></i> MOVIES WORLD Review</h2>
+    <div class="score-ring">
+      <div class="ring" style="--p:${(overall * 10).toFixed(0)}"><span>${overall.toFixed(1)}</span></div>
+      <div>
+        <div class="stars-lg" aria-hidden="true">${stars(overall)}</div>
+        <div class="score-note"><b style="color:var(--text)">MOVIE SCORE ${overall.toFixed(1)}/10</b> · based on ${m.votes ? m.votes.toLocaleString() + " votes" : "editorial rating"}</div>
       </div>
     </div>
-  </header>
+    ${rv ? `<div class="score-bars">
+      ${[["Story", rv.story], ["Acting", rv.acting], ["Direction", rv.direction], ["Cinematography", rv.cinematography], ["Music", rv.music], ["Visual Effects", rv.vfx], ["Entertainment", rv.entertainment]].map(([k, v]) =>
+        `<div class="sbar"><span>${k}</span><div class="track"><div class="fill" data-w="${v * 10}"></div></div><b>${v.toFixed(1)}</b></div>`).join("")}
+    </div>` : `<p class="story">Full editorial breakdown coming soon. Community rating: <b style="color:var(--gold)">${m.rating}/10</b>.</p>`}
+    <p class="story" style="margin-top:16px">${rv ? esc(rv.body) : esc(m.overview || "")}</p>
+    ${rv ? `<div class="verdict"><h4><i class="fa-solid fa-gavel"></i> MOVIES WORLD Verdict</h4><p>${esc(rv.verdict)}</p></div>` : ""}`;
+  requestAnimationFrame(() => setTimeout(() =>
+    scorePanel.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%"), 120));
 
-  <main id="main" style="max-width: 1100px; margin: 40px auto; padding: 0 20px;">
-    
-    <!-- Movie Details Wrapper (Loaded dynamically or rendered) -->
-    <div id="movie-details-container">
-      
-      <!-- Section 1: Unique Editorial Review (Distinct from the story) -->
-      <section class="editorial-review-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 28px; border-radius: 16px; margin-bottom: 30px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
-          <div>
-            <span style="background: #e50914; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px;">MOVIES WORLD VERDICT</span>
-            <h2 style="color: #f8fafc; font-size: 22px; margin-top: 6px;"><i class="fa-solid fa-award" style="color: #f59e0b; margin-right: 8px;"></i> Critical Analysis & Verdict</h2>
-          </div>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 55px; height: 55px; border-radius: 50%; border: 3px solid #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #f8fafc; background: rgba(245, 158, 11, 0.1);">
-              8.8
-            </div>
-            <div>
-              <div style="color: #f59e0b; font-size: 14px;"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i></div>
-              <span style="color: #94a3b8; font-size: 12px;">Editorial Rating</span>
-            </div>
-          </div>
-        </div>
+  /* ---------- facts + cast ---------- */
+  document.getElementById("facts-panel").innerHTML = `
+    <h2><i class="fa-solid fa-circle-info"></i> Movie Details</h2>
+    <dl class="facts">${facts.map(([k, v]) => `<div class="fact"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
+  document.getElementById("cast-panel").innerHTML = `
+    <h2><i class="fa-solid fa-users"></i> Cast & Crew</h2>
+    <div class="cast-list">${cast.map(c => `<span class="cast-chip"><span class="avatar">${esc(c.trim()[0])}</span>${esc(c)}</span>`).join("") || '<p class="story">Cast information unavailable.</p>'}</div>`;
 
-        <!-- Custom Review Content -->
-        <div style="color: #cbd5e1; font-size: 15px; line-height: 1.8;">
-          <p style="margin-bottom: 14px;">
-            <strong>Cinematic Execution:</strong> This title delivers an exceptionally well-crafted narrative that balances intense character dynamics with remarkable pacing. Unlike typical genre releases, the direction focuses heavily on emotional tension and subtle storytelling details that keep audiences engaged from start to finish.
-          </p>
-          <p style="margin-bottom: 14px;">
-            <strong>Performances & Technical Brilliance:</strong> The lead performances drive the film's core impact, supported by immersive sound engineering and sharp cinematography. The atmosphere created by the visual style elevates the emotional stakes significantly.
-          </p>
-          <p style="margin: 0; color: #f8fafc; font-weight: 600;">
-            <i class="fa-solid fa-check-circle" style="color: #10b981; margin-right: 6px;"></i> <strong>Final Recommendation:</strong> A must-watch cinematic experience for fans seeking high-stakes drama and profound character growth.
-          </p>
-        </div>
-      </section>
+  /* ---------- story ---------- */
+  document.getElementById("story-panel").innerHTML = `
+    <h2><i class="fa-solid fa-book-open"></i> Story</h2><p class="story">${esc(m.overview || "Story unavailable.")}</p>`;
 
-      <!-- Section 2: Storyline / Plot Overview (Distinct from Review) -->
-      <section class="story-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 28px; border-radius: 16px;">
-        <h3 style="color: #f8fafc; font-size: 20px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
-          <i class="fa-solid fa-book-open" style="color: #e50914;"></i> Plot Summary
-        </h3>
-        <p id="movie-overview" style="color: #cbd5e1; font-size: 15px; line-height: 1.8; margin: 0;">
-          Two women discover they were both scammed by the same man (who also got them pregnant). They form an alliance to take revenge.
-        </p>
-      </section>
+  /* ---------- where to watch ---------- */
+  const watchPanel = document.getElementById("watch-panel");
+  const LOGO_COLORS = { "netflix": "#e50914", "prime": "#00a8e1", "disney": "#113ccf", "max": "#8a2be2", "apple": "#333", "google": "#4285f4", "peacock": "#000", "paramount": "#0064ff", "hulu": "#1ce783" };
+  const logoColor = name => { const k = Object.keys(LOGO_COLORS).find(k => name.toLowerCase().includes(k)); return LOGO_COLORS[k] || "#5b6472"; };
+  let watchHTML = `<h2 id="watch"><i class="fa-solid fa-ticket"></i> Where to Watch</h2>`;
+  const watchList = (m.watch || []).map(w => typeof w === "string" ? { name: w, type: "rent" } : w);
+  if (watchList.length) {
+    watchHTML += `<div class="watch-list">${watchList.map(w => `
+      <div class="watch-item">
+        <span class="wname"><span class="wlogo" style="background:${logoColor(w.name)}">${esc(w.name[0])}</span>${esc(w.name)}</span>
+        <button class="wbtn ${w.type === "stream" ? "stream" : "rentbuy"}" data-provider="${esc(w.name)}" data-movie="${esc(m.title)}">${w.type === "stream" ? "WATCH" : "RENT / BUY"}</button>
+      </div>`).join("")}</div>`;
+  } else {
+    watchHTML += `<p class="story">Availability varies by country. Connect a TMDB API key (see README) for live, region-accurate streaming data.</p>`;
+  }
+  watchHTML += `<p class="legal-note"><i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> MOVIES WORLD never hosts pirated content. Buttons open official, licensed platforms only.</p>`;
+  watchPanel.innerHTML = watchHTML;
+  watchPanel.querySelectorAll("[data-provider]").forEach(b => b.addEventListener("click", () => {
+    // search the official platform for the title — legal destination only
+    const q = encodeURIComponent(b.dataset.movie);
+    const urls = {
+      "netflix": `https://www.netflix.com/search?q=${q}`,
+      "prime video": `https://www.primevideo.com/search?phrase=${q}`,
+      "apple": `https://tv.apple.com/search?term=${q}`,
+      "google": `https://play.google.com/store/search?q=${q}&c=movies`,
+      "disney": `https://www.disneyplus.com/search?q=${q}`,
+      "max": `https://www.max.com/search?q=${q}`,
+      "hulu": `https://www.hulu.com/search?q=${q}`,
+      "peacock": `https://www.peacocktv.com/search?q=${q}`,
+      "paramount": `https://www.paramountplus.com/search/?query=${q}`
+    };
+    const k = Object.keys(urls).find(k => b.dataset.provider.toLowerCase().includes(k));
+    window.open(urls[k] || `https://www.google.com/search?q=${encodeURIComponent(b.dataset.movie + " " + b.dataset.provider + " official")}`, "_blank", "noopener");
+    toast("Opening official platform…", "fa-arrow-up-right-from-square");
+  }));
 
-    </div>
+  /* ---------- similar ---------- */
+  try {
+    const sim = await MW_API.similar(m.id, 12);
+    if (sim.length) {
+      const sec = document.getElementById("similar-section");
+      sec.innerHTML = `<div class="section-head"><h2 class="section-title">More Like This</h2></div><div class="movie-grid"></div>`;
+      renderGrid(sec.querySelector(".movie-grid"), sim);
+    }
+  } catch (e) {}
 
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="movies.html">Movies</a></li>
-            <li><a href="reviews.html">Reviews</a></li>
-            <li><a href="genres.html">Genres</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
-</body>
-</html>
+  function errorBox(msg) {
+    return `<div class="page-hero"><div class="empty-state"><i class="fa-solid fa-film"></i><h3>${esc(msg)}</h3><p><a href="movies.html" style="color:var(--accent-2);font-weight:600">Browse all movies →</a></p></div></div>`;
+  }
+  function setMeta(name, content) {
+    let el = document.querySelector(`meta[name="${name}"]`);
+    if (!el) { el = document.createElement("meta"); el.name = name; document.head.appendChild(el); }
+    el.content = content;
+  }
+  function injectMovieSchema(m) {
+    const s = document.createElement("script");
+    s.type = "application/ld+json";
+    s.textContent = JSON.stringify({
+      "@context": "https://schema.org", "@type": "Movie",
+      name: m.title, datePublished: String(m.year),
+      description: m.overview, image: m.poster || undefined,
+      director: m.director ? { "@type": "Person", name: m.director } : undefined,
+      aggregateRating: m.rating ? { "@type": "AggregateRating", ratingValue: m.rating, bestRating: 10, ratingCount: m.votes || 1 } : undefined
+    });
+    document.head.appendChild(s);
+  }
+});
