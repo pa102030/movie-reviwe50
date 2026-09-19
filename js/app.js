@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Theme Toggle Setup
+  // 1. Theme Toggle Logic
   const themeToggleBtn = document.querySelector('[data-theme-toggle]');
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener('click', () => {
@@ -10,14 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Search Modal & Live Search Logic
+  // 2. TMDB API Key Check
+  const TMDB_API_KEY = (typeof CONFIG !== 'undefined' && CONFIG.TMDB_API_KEY) 
+    ? CONFIG.TMDB_API_KEY 
+    : '';
+
+  // 3. Search Modal Elements
   const searchModal = document.getElementById('search-modal');
   const openSearchBtns = document.querySelectorAll('[data-open-search]');
   const closeSearchBtn = document.getElementById('close-search');
   const searchInput = document.getElementById('search-input');
   const searchResultsGrid = document.getElementById('search-results-grid');
 
-  // Open Search Modal
+  // Open Search Popup
   openSearchBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Close Search Modal
+  // Close Search Popup
   if (closeSearchBtn) {
     closeSearchBtn.addEventListener('click', () => {
       if (searchModal) searchModal.style.display = 'none';
@@ -60,23 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Show Loading State
       searchResultsGrid.innerHTML = '<p style="color:#94a3b8; text-align:center; grid-column:1/-1; padding:20px;"><i class="fa-solid fa-spinner fa-spin"></i> Searching movies...</p>';
 
       debounceTimer = setTimeout(async () => {
-        // Safe fallback for API Key check
-        const apiKey = (typeof CONFIG !== 'undefined' && CONFIG.TMDB_API_KEY) ? CONFIG.TMDB_API_KEY : '';
-
-        if (!apiKey) {
-          searchResultsGrid.innerHTML = '<p style="color:#e50914; text-align:center; grid-column:1/-1; padding:20px;">API Key Error! Check js/config.js file.</p>';
+        if (!TMDB_API_KEY) {
+          searchResultsGrid.innerHTML = '<p style="color:#e50914; text-align:center; grid-column:1/-1; padding:20px;">API Key Missing! Please check js/config.js file.</p>';
           return;
         }
 
         try {
-          const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}&include_adult=false`);
+          const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=false`);
           
           if (!response.ok) {
-            throw new Error('API request failed');
+            throw new Error('API Request Failed');
           }
 
           const data = await response.json();
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
 
               return `
-                <div class="search-movie-card" onclick="window.location.href='movie.html?id=${movie.id}'" style="cursor:pointer; background:rgba(255,255,255,0.04); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); transition:transform 0.2s ease;">
+                <div class="search-movie-card" onclick="window.location.href='movie.html?id=${movie.id}'" style="cursor:pointer; background:rgba(255,255,255,0.04); border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08);">
                   <img src="${poster}" alt="${movie.title}" style="width:100%; aspect-ratio:2/3; object-fit:cover; display:block;">
                   <div style="padding:10px;">
                     <h4 style="color:#f8fafc; font-size:13px; font-weight:600; margin:0 0 4px 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${movie.title}</h4>
@@ -103,11 +104,11 @@ document.addEventListener('DOMContentLoaded', () => {
               `;
             }).join('');
           } else {
-            searchResultsGrid.innerHTML = '<p style="color:#94a3b8; text-align:center; grid-column:1/-1; padding:20px;">No movies found matching your query.</p>';
+            searchResultsGrid.innerHTML = '<p style="color:#94a3b8; text-align:center; grid-column:1/-1; padding:20px;">No movies found.</p>';
           }
         } catch (error) {
           console.error('Search Fetch Error:', error);
-          searchResultsGrid.innerHTML = '<p style="color:#e50914; text-align:center; grid-column:1/-1; padding:20px;">Failed to fetch movies. Please try again.</p>';
+          searchResultsGrid.innerHTML = '<p style="color:#e50914; text-align:center; grid-column:1/-1; padding:20px;">Failed to fetch movies. Check your internet or API Key.</p>';
         }
       }, 400);
     });
