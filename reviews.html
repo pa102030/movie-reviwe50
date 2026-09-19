@@ -136,7 +136,7 @@
             line-height: 1.4;
         }
 
-        /* MOVIE DETAILS PAGE (EXACT SCREENSHOT LAYOUT) */
+        /* MOVIE DETAILS PAGE */
         #detailsPage {
             display: none;
             position: relative;
@@ -195,6 +195,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
         .movie-title {
             font-size: 2.3rem;
@@ -456,15 +457,18 @@
                 document.getElementById('yearVal').innerText = movie.release_date ? movie.release_date.split('-')[0] : "----";
                 document.getElementById('runtimeVal').innerText = movie.runtime ? `${movie.runtime} min` : "N/A";
                 
-                // Poster & Backdrop Images
+                // Poster Image (Fixed link to load properly)
                 if (movie.poster_path) {
-                    document.getElementById('posterImg').src = `https://image.ti.org/t/p/w500${movie.poster_path}`.replace('ti.org', 'image.tmdb.org');
+                    document.getElementById('posterImg').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                 } else {
                     document.getElementById('posterImg').src = 'https://via.placeholder.com/320x480?text=No+Image';
                 }
 
+                // Backdrop Image
                 if (movie.backdrop_path) {
                     detailsPage.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                } else {
+                    detailsPage.style.backgroundImage = 'none';
                 }
 
                 // Genres Badges
