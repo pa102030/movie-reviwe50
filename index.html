@@ -21,26 +21,49 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
   
   <style>
-    /* Google Translate Dropdown Custom Styling */
+    /* Styled Language Dropdown for Dark Theme */
     #google_translate_element {
-      display: inline-block;
-      margin-left: 10px;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
     }
+
     .goog-te-gadget-simple {
-      background-color: rgba(255, 255, 255, 0.08) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      padding: 6px 10px !important;
-      border-radius: 6px !important;
-      color: #fff !important;
+      background-color: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      padding: 6px 12px !important;
+      border-radius: 8px !important;
+      color: #e2e8f0 !important;
       font-size: 13px !important;
+      font-family: 'Inter', sans-serif !important;
       cursor: pointer;
+      display: flex !important;
+      align-items: center !important;
+      gap: 6px;
+      transition: all 0.2s ease;
     }
+
+    .goog-te-gadget-simple:hover {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      border-color: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    .goog-te-gadget-simple img {
+      display: none !important; /* Hide ugly default Google icon */
+    }
+
     .goog-te-gadget-simple span {
-      color: #fff !important;
+      color: #e2e8f0 !important;
     }
+
+    .goog-te-menu-value span:first-child {
+      font-weight: 500;
+    }
+
     .goog-te-banner-frame {
       display: none !important;
     }
+
     body {
       top: 0px !important;
     }
@@ -66,7 +89,7 @@
         <a href="watchlist.html">Watchlist</a>
       </nav>
       <div class="header-actions">
-        <!-- Google Translate Button -->
+        <!-- Styled Language Translator -->
         <div id="google_translate_element"></div>
 
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -146,15 +169,16 @@
   <script src="js/app.js"></script>
   <script src="js/home.js"></script>
 
-  <!-- Google Translate Integration Script (All Available Languages) -->
+  <!-- Google Translate Integration Script (English Default Force) -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'en',
+        autoDisplay: false,
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
     }
   </script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
