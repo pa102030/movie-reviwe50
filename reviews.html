@@ -9,238 +9,232 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background-color: #0d0d0d;
+            background-color: #0b0b0b;
             color: #ffffff;
             min-height: 100vh;
         }
 
         /* ----- REVIEWS LIST PAGE ----- */
         #reviewsPage {
-            padding: 20px;
-        }
-        h1.page-title {
-            text-align: center;
-            margin: 20px 0 30px;
-            color: #e50914;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        .reviews-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            padding: 30px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
+        h1.page-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #e50914;
+            letter-spacing: 1px;
+        }
+        .reviews-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
         .review-card {
-            background-color: #1f1f1f;
-            border-radius: 10px;
+            background-color: #161616;
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            border-left: 4px solid #e50914;
-            transition: transform 0.2s ease-in-out;
+            border: 1px solid #262626;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         .review-card:hover {
-            transform: translateY(-5px);
-            background-color: #282828;
+            transform: translateY(-4px);
+            border-color: #e50914;
+            background-color: #1f1f1f;
         }
         .card-title {
-            font-size: 1.3rem;
-            color: #fff;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
         .card-genre {
-            display: inline-block;
-            background-color: #333;
             color: #e50914;
             font-size: 0.8rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-bottom: 12px;
-            font-weight: bold;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
         }
         .card-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #ccc;
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.4;
         }
 
-        /* ----- MOVIE DETAILS PAGE (EXACT DESIGN MATCH) ----- */
+        /* ----- DETAILS PAGE (EXACT SCREENSHOT LAYOUT) ----- */
         #detailsPage {
             display: none;
             position: relative;
             min-height: 100vh;
+            width: 100%;
             background-size: cover;
             background-position: center;
+            background-repeat: no-repeat;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(11, 11, 11, 0.75) 0%, rgba(11, 11, 11, 0.95) 80%, #0b0b0b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 20px;
         }
         .back-btn {
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 10;
-            background-color: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
-            border: 1px solid #444;
-            padding: 10px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            backdrop-filter: blur(5px);
+            font-weight: 600;
+            backdrop-filter: blur(8px);
         }
         .back-btn:hover {
-            background-color: #e50914;
+            background: #e50914;
             border-color: #e50914;
         }
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+
+        /* MATCHING EXACT LAYOUT IN YOUR IMAGE */
+        .content-box {
+            max-width: 420px;
+            margin: 0 auto;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(13, 13, 13, 0.95) 35%, rgba(13, 13, 13, 0.65) 100%),
-                        linear-gradient(to top, #0d0d0d 10%, transparent 100%);
-            display: flex;
-            align-items: center;
-            padding: 50px 8%;
         }
-        .details-wrapper {
-            display: flex;
-            gap: 40px;
-            align-items: center;
-            max-width: 1100px;
-            z-index: 2;
-            flex-wrap: wrap;
-        }
-        .poster-card {
-            width: 280px;
-            height: 380px;
-            border-radius: 20px;
+        .poster-wrapper {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 2/3;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-            flex-shrink: 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            margin-bottom: 25px;
         }
-        .poster-card img {
+        .poster-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .info-section {
-            max-width: 650px;
-        }
-        .movie-heading {
-            font-size: 3rem;
+        .movie-title {
+            font-size: 2.5rem;
             font-weight: 800;
+            line-height: 1.1;
             margin-bottom: 8px;
             color: #ffffff;
         }
         .tagline {
+            font-size: 1.05rem;
+            color: #b3b3b3;
             font-style: italic;
-            font-size: 1.2rem;
-            color: #bbb;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        .pills-row {
+        .meta-pills {
             display: flex;
-            gap: 10px;
             align-items: center;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+        }
+        .rating {
+            color: #ffcc00;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .rating-max {
+            color: #777;
+            font-weight: 400;
         }
         .pill {
-            background-color: rgba(255, 255, 255, 0.12);
-            color: #ddd;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #e0e0e0;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
             font-weight: 600;
-        }
-        .pill-rating {
-            color: #f5c518;
-            background-color: transparent;
-            padding: 0;
-            font-size: 1.1rem;
-            font-weight: bold;
         }
         .pill-gold {
             border: 1px solid #f5c518;
             color: #f5c518;
-            background: transparent;
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: 700;
         }
-        .genre-tags {
+        .genre-row {
             display: flex;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        .tag-red {
-            background-color: #8b0000;
-            color: #ffcccc;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
+        .genre-badge {
+            background-color: #990000;
+            color: #ffffff;
+            padding: 6px 16px;
+            border-radius: 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
         }
-        .action-btns {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        .btn-play {
+        .trailer-btn {
+            display: inline-block;
             background-color: #e50914;
             color: #fff;
-            padding: 12px 26px;
+            padding: 12px 28px;
             border-radius: 25px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1rem;
             text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: background 0.2s;
         }
-        .btn-play:hover {
+        .trailer-btn:hover {
             background-color: #b80710;
         }
     </style>
 </head>
 <body>
 
-    <!-- REVIEWS LIST -->
+    <!-- REVIEWS LIST PAGE -->
     <div id="reviewsPage">
         <h1 class="page-title">Movie Reviews</h1>
         <div class="reviews-container" id="reviewsContainer"></div>
     </div>
 
-    <!-- MOVIE DETAILS (MATCHING YOUR SCREENSHOT EXACTLY) -->
+    <!-- MOVIE DETAILS PAGE (EXACT DESIGN MATCH) -->
     <div id="detailsPage">
         <button class="back-btn" onclick="showReviewsList()">← Back</button>
-        <div class="hero-overlay">
-            <div class="details-wrapper">
-                <div class="poster-card">
-                    <img id="posterImg" src="" alt="Movie Poster">
+        <div class="overlay">
+            <div class="content-box">
+                <div class="poster-wrapper">
+                    <img id="posterImg" src="" alt="Poster">
                 </div>
-                <div class="info-section">
-                    <h1 class="movie-heading" id="detailTitle">Top Gun: Maverick</h1>
-                    <p class="tagline" id="detailTagline">Feel the need... The need for speed.</p>
-                    
-                    <div class="pills-row">
-                        <span class="pill-rating" id="detailRating">★ 8.2 <span style="color:#aaa; font-weight:normal;">/10</span></span>
-                        <span class="pill" id="detailYear">2022</span>
-                        <span class="pill" id="detailRuntime">131 min</span>
-                        <span class="pill" id="detailPG">PG-13</span>
-                        <span class="pill-gold">4K</span>
-                    </div>
+                <h1 class="movie-title" id="movieTitle">Top Gun: Maverick</h1>
+                <p class="tagline" id="tagline">Feel the need... The need for speed.</p>
+                
+                <div class="meta-pills">
+                    <div class="rating">★ <span id="ratingVal">8.2</span> <span class="rating-max">/10</span></div>
+                    <span class="pill" id="yearVal">2022</span>
+                    <span class="pill" id="runtimeVal">131 min</span>
+                    <span class="pill" id="pgVal">PG-13</span>
+                    <span class="pill-gold">4K</span>
+                </div>
 
-                    <div class="genre-tags" id="genreContainer"></div>
+                <div class="genre-row" id="genreContainer"></div>
 
-                    <div class="action-btns">
-                        <a id="trailerBtn" href="#" target="_blank" class="btn-play">▶ Watch Trailer</a>
-                    </div>
+                <div>
+                    <a id="trailerBtn" href="#" target="_blank" class="trailer-btn">▶ Watch Trailer</a>
                 </div>
             </div>
         </div>
@@ -249,7 +243,7 @@
     <script>
         const moviesData = [
             {
-                id: 361743,
+                id: 1,
                 title: "Top Gun: Maverick",
                 tagline: "Feel the need... The need for speed.",
                 rating: "8.2",
@@ -263,7 +257,7 @@
                 review: "The perfect sequel that seamlessly blends nostalgia with cutting-edge real jet aerial sequences."
             },
             {
-                id: 27205,
+                id: 2,
                 title: "Inception",
                 tagline: "Your mind is the scene of the crime.",
                 rating: "8.8",
@@ -275,26 +269,12 @@
                 backdrop: "https://image.tmdb.org/t/p/original/8ZTVqvKDQ8emSGUEMjsS4yHA34p.jpg",
                 trailer: "https://www.youtube.com/watch?v=YoHD9XEInc0",
                 review: "A mind-bending cinematic experience that dives deep into the sub-conscious."
-            },
-            {
-                id: 245891,
-                title: "John Wick",
-                tagline: "Don't set him off.",
-                rating: "7.4",
-                year: "2014",
-                runtime: "101 min",
-                pg: "R",
-                genres: ["Action", "Thriller"],
-                poster: "https://image.tmdb.org/t/p/w500/fZAaw23J9f21R2f54uL23423.jpg",
-                backdrop: "https://image.tmdb.org/t/p/original/umC043L8d23Atm93P93R41A933L.jpg",
-                trailer: "https://www.youtube.com/watch?v=C0BMx-qxsP4",
-                review: "A game-changer for the gun-fu action genre with stylish choreography."
             }
         ];
 
         const container = document.getElementById('reviewsContainer');
 
-        // Render Cards
+        // Render Review Cards
         moviesData.forEach(item => {
             const card = document.createElement('div');
             card.className = 'review-card';
@@ -308,7 +288,7 @@
             container.appendChild(card);
         });
 
-        // Open details matching exact design from image
+        // Open exact details page when clicked
         function openMovieDetails(movie) {
             document.getElementById('reviewsPage').style.display = 'none';
             const detailsPage = document.getElementById('detailsPage');
@@ -316,21 +296,21 @@
             detailsPage.style.backgroundImage = `url('${movie.backdrop}')`;
 
             document.getElementById('posterImg').src = movie.poster;
-            document.getElementById('detailTitle').innerText = movie.title;
-            document.getElementById('detailTagline').innerText = movie.tagline;
-            document.getElementById('detailRating').innerHTML = `★ ${movie.rating} <span style="color:#aaa; font-weight:normal;">/10</span>`;
-            document.getElementById('detailYear').innerText = movie.year;
-            document.getElementById('detailRuntime').innerText = movie.runtime;
-            document.getElementById('detailPG').innerText = movie.pg;
+            document.getElementById('movieTitle').innerText = movie.title;
+            document.getElementById('tagline').innerText = movie.tagline;
+            document.getElementById('ratingVal').innerText = movie.rating;
+            document.getElementById('yearVal').innerText = movie.year;
+            document.getElementById('runtimeVal').innerText = movie.runtime;
+            document.getElementById('pgVal').innerText = movie.pg;
             document.getElementById('trailerBtn').href = movie.trailer;
 
             const genreContainer = document.getElementById('genreContainer');
             genreContainer.innerHTML = '';
             movie.genres.forEach(g => {
-                const tag = document.createElement('span');
-                tag.className = 'tag-red';
-                tag.innerText = g;
-                genreContainer.appendChild(tag);
+                const badge = document.createElement('span');
+                badge.className = 'genre-badge';
+                badge.innerText = g;
+                genreContainer.appendChild(badge);
             });
 
             window.scrollTo(0, 0);
