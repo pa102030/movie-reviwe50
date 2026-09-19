@@ -1,613 +1,427 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <title>MOVIES WORLD | Movie Reviews, Ratings, Editorial Guides & Where to Watch</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0d12">
-  <meta name="description" content="Discover, review, and read editorial guides on the best movies from 1970 to 2026. Detailed ratings, trailers, release news, and official streaming guides.">
-  <meta name="robots" content="index, follow">
-  
-  <meta property="og:site_name" content="MOVIES WORLD">
-  <meta property="og:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
-  <meta property="og:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
-  <meta name="twitter:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+  <title>MOVIES WORLD | Movie Reviews, Ratings, Editorial Guides & Where to Watch</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0d12">
+  <meta name="description" content="Discover, review, and read editorial guides on the best movies from 1970 to 2026. Detailed ratings, trailers, release news, and official streaming guides.">
+  <meta name="robots" content="index, follow">
+  
+  <meta property="og:site_name" content="MOVIES WORLD">
+  <meta property="og:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
+  <meta property="og:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MOVIES WORLD | Movie Reviews, Ratings & Where to Watch">
+  <meta name="twitter:description" content="Discover, review and watch the best movies from 1970 to 2026. Ratings, trailers, editorial reviews and legal streaming links.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
 
-  <!-- Google AdSense Code -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <!-- Google AdSense Code (ඔබේ Publisher ID එක මෙතැනට යොදන්න) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
-  <!-- Structured Data (SEO / Schema.org) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "MOVIES WORLD",
-    "url": "https://yourdomain.com/",
-    "description": "Independent Movie Reviews, Editorial Recommendations, and Legal Streaming Information."
-  }
-  </script>
+  <!-- Structured Data (SEO / Schema.org) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MOVIES WORLD",
+    "url": "https://yourdomain.com/",
+    "description": "Independent Movie Reviews, Editorial Recommendations, and Legal Streaming Information."
+  }
+  </script>
 
-  <style>
-    /* Global Dropdown Styling */
-    .nav-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .nav-dropdown-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #e2e8f0;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      padding: 7px 12px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-    .nav-dropdown-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.25);
-      color: #fff;
-    }
-    .nav-dropdown-content {
-      display: none;
-      position: absolute;
-      top: 110%;
-      right: 0;
-      background-color: #0f172a;
-      min-width: 150px;
-      max-height: 280px;
-      overflow-y: auto;
-      box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      z-index: 1000;
-      padding: 6px 0;
-    }
-    .nav-dropdown-content a, .nav-dropdown-content button {
-      color: #cbd5e1;
-      padding: 8px 14px;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      width: 100%;
-      background: none;
-      border: none;
-      text-align: left;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .nav-dropdown-content a:hover, .nav-dropdown-content button:hover {
-      background-color: rgba(229, 9, 20, 0.15);
-      color: #e50914;
-    }
-    .nav-dropdown:hover .nav-dropdown-content { 
-      display: block; 
-    }
+  <style>
+    /* Global Dropdown Styling */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropdown-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 7px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-dropdown-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background-color: #0f172a;
+      min-width: 150px;
+      max-height: 280px;
+      overflow-y: auto;
+      box-shadow: 0px 10px 25px rgba(0,0,0,0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      z-index: 1000;
+      padding: 6px 0;
+    }
+    .nav-dropdown-content a, .nav-dropdown-content button {
+      color: #cbd5e1;
+      padding: 8px 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-dropdown-content a:hover, .nav-dropdown-content button:hover {
+      background-color: rgba(229, 9, 20, 0.15);
+      color: #e50914;
+    }
+    .nav-dropdown:hover .nav-dropdown-content { 
+      display: block; 
+    }
 
-    /* Modern Search Box & History Dropdown Styling */
-    .search-box-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-    .header-search-input {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      padding: 7px 12px 7px 35px;
-      border-radius: 8px;
-      font-size: 13px;
-      width: 200px;
-      transition: all 0.3s ease;
-    }
-    .header-search-input:focus {
-      width: 260px;
-      border-color: #e50914;
-      background: rgba(0, 0, 0, 0.4);
-      outline: none;
-    }
-    .search-box-container i.fa-magnifying-glass {
-      position: absolute;
-      left: 12px;
-      color: #9ca3af;
-      font-size: 13px;
-      pointer-events: none;
-    }
-    .search-results-dropdown {
-      position: absolute;
-      top: 120%;
-      right: 0;
-      width: 320px;
-      background: #0f172a;
-      border-radius: 10px;
-      max-height: 380px;
-      overflow-y: auto;
-      z-index: 2000;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      display: none;
-    }
-    .dropdown-header {
-      padding: 10px 15px;
-      font-size: 0.75rem;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      background: #111827;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .clear-history {
-      color: #e50914;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    .clear-history:hover {
-      text-decoration: underline;
-    }
-    .dropdown-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      transition: background 0.2s;
-    }
-    .dropdown-item:hover {
-      background-color: rgba(229, 9, 20, 0.15);
-    }
-    .dropdown-item img {
-      width: 40px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
+    /* Custom Pagination Styling */
+    .pagination-wrapper {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .page-status {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .pagination-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #111827;
+      padding: 6px;
+      border-radius: 8px;
+    }
+    .page-btn {
+      background: #1f2937;
+      border: none;
+      color: #9ca3af;
+      min-width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      padding: 0 10px;
+    }
+    .page-btn:hover {
+      background: #374151;
+      color: #fff;
+    }
+    .page-btn.active {
+      background: #e50914;
+      color: #fff;
+    }
+    .page-btn.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
 
-    /* Custom Pagination Styling */
-    .pagination-wrapper {
-      text-align: center;
-      margin: 40px 0;
-    }
-    .page-status {
-      color: #64748b;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    .pagination-container {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #111827;
-      padding: 6px;
-      border-radius: 8px;
-    }
-    .page-btn {
-      background: #1f2937;
-      border: none;
-      color: #9ca3af;
-      min-width: 38px;
-      height: 38px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      padding: 0 10px;
-    }
-    .page-btn:hover {
-      background: #374151;
-      color: #fff;
-    }
-    .page-btn.active {
-      background: #e50914;
-      color: #fff;
-    }
-    .page-btn.disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-    }
+    /* Unique Content / Editorial Section for AdSense Approval */
+    .editorial-section {
+      max-width: 1200px;
+      margin: 50px auto 20px auto;
+      padding: 24px;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+    }
+    .editorial-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .editorial-title i {
+      color: #e50914;
+    }
+    .editorial-desc {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.6;
+    }
 
-    /* Editorial Section */
-    .editorial-section {
-      max-width: 1200px;
-      margin: 50px auto 20px auto;
-      padding: 24px;
-      background: #111827;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-    }
-    .editorial-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #f8fafc;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .editorial-title i {
-      color: #e50914;
-    }
-    .editorial-desc {
-      color: #94a3b8;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    #google_translate_element {
-      display: none;
-    }
-    body { top: 0px !important; }
-    .goog-te-banner-frame { display: none !important; }
-  </style>
+    /* Hidden Native Google Element */
+    #google_translate_element {
+      display: none;
+    }
+    body { top: 0px !important; }
+    .goog-te-banner-frame { display: none !important; }
+  </style>
 </head>
 <body>
 
-  <a href="#main" class="skip-link">Skip to content</a>
-  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
-  
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
-        <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
-        MOVIES<b>WORLD</b>
-      </a>
-      
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="movies.html">Movies</a>
-        <a href="reviews.html">Reviews</a>
-        <a href="genres.html">Genres</a>
-        <a href="movies.html?sort=rating">Top Rated</a>
-        <a href="movies.html?sort=newest">Latest</a>
-        
-        <!-- Years Dropdown -->
-        <div class="nav-dropdown">
-          <button class="nav-dropdown-btn">Years <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
-          <div class="nav-dropdown-content" id="years-dropdown"></div>
-        </div>
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
+  
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
+        <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
+        MOVIES<b>WORLD</b>
+      </a>
+      
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="movies.html">Movies</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="genres.html">Genres</a>
+        <a href="movies.html?sort=rating">Top Rated</a>
+        <a href="movies.html?sort=newest">Latest</a>
+        
+        <!-- 1970 to 2026 Years Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">Years <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></button>
+          <div class="nav-dropdown-content" id="years-dropdown"></div>
+        </div>
 
-        <a href="watchlist.html">Watchlist</a>
-      </nav>
+        <a href="watchlist.html">Watchlist</a>
+      </nav>
 
-      <div class="header-actions">
-        <!-- Language Dropdown -->
-        <div class="nav-dropdown">
-          <button class="nav-dropdown-btn" id="current-lang-btn">
-            <i class="fa-solid fa-globe"></i> <span>Language</span> <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
-          </button>
-          <div class="nav-dropdown-content">
-            <button onclick="changeLanguage('en')">English</button>
-            <button onclick="changeLanguage('si')">Sinhala (සිංහල)</button>
-            <button onclick="changeLanguage('ta')">Tamil (தமிழ்)</button>
-            <button onclick="changeLanguage('hi')">Hindi (हिंदी)</button>
-            <button onclick="changeLanguage('es')">Spanish (Español)</button>
-            <button onclick="changeLanguage('fr')">French (Français)</button>
-            <button onclick="changeLanguage('de')">German (Deutsch)</button>
-            <button onclick="changeLanguage('ja')">Japanese (日本語)</button>
-            <button onclick="changeLanguage('zh-CN')">Chinese (中文)</button>
-            <button onclick="changeLanguage('ru')">Russian (Русский)</button>
-            <button onclick="changeLanguage('ar')">Arabic (العربية)</button>
-            <button onclick="changeLanguage('ko')">Korean (한국어)</button>
-          </div>
-        </div>
+      <div class="header-actions">
+        <!-- Professional Theme-Matched Language Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn" id="current-lang-btn">
+            <i class="fa-solid fa-globe"></i> <span>Language</span> <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i>
+          </button>
+          <div class="nav-dropdown-content">
+            <button onclick="changeLanguage('en')">English</button>
+            <button onclick="changeLanguage('si')">Sinhala (සිංහල)</button>
+            <button onclick="changeLanguage('ta')">Tamil (தமிழ்)</button>
+            <button onclick="changeLanguage('hi')">Hindi (हिंदी)</button>
+            <button onclick="changeLanguage('es')">Spanish (Español)</button>
+            <button onclick="changeLanguage('fr')">French (Français)</button>
+            <button onclick="changeLanguage('de')">German (Deutsch)</button>
+            <button onclick="changeLanguage('ja')">Japanese (日本語)</button>
+            <button onclick="changeLanguage('zh-CN')">Chinese (中文)</button>
+            <button onclick="changeLanguage('ru')">Russian (Русский)</button>
+            <button onclick="changeLanguage('ar')">Arabic (العربية)</button>
+            <button onclick="changeLanguage('ko')">Korean (한국어)</button>
+          </div>
+        </div>
 
-        <!-- Interactive Search Bar & History Dropdown -->
-        <div class="search-box-container">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" id="movieSearchInput" class="header-search-input" placeholder="Search movies..." autocomplete="off">
-          <div id="searchHistoryDropdown" class="search-results-dropdown"></div>
-        </div>
+        <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
+        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
 
-        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
-        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
-        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
-      </div>
-    </div>
-  </header>
+  <!-- Native Element (Background running) -->
+  <div id="google_translate_element"></div>
 
-  <div id="google_translate_element"></div>
+  <main id="main">
+    <section class="hero" aria-label="Featured movie">
+      <div class="hero-bg" id="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content" id="hero-content"></div>
+      <div class="hero-fade"></div>
+    </section>
 
-  <main id="main">
-    <section class="hero" aria-label="Featured movie">
-      <div class="hero-bg" id="hero-bg"></div>
-      <div class="hero-overlay"></div>
-      <div class="hero-content" id="hero-content"></div>
-      <div class="hero-fade"></div>
-    </section>
+    <!-- Main Home Movie Lists Grid Container -->
+    <div id="home-sections"></div>
 
-    <div id="home-sections"></div>
+    <!-- Pagination Controls (Page 1 of 500) -->
+    <div class="pagination-wrapper">
+      <div class="page-status" id="page-status">Page 1 of 500</div>
+      <div class="pagination-container">
+        <button class="page-btn" id="prev-btn" onclick="changeHomePage(currentHomePg - 1)"><i class="fa-solid fa-chevron-left"></i></button>
+        <div id="page-numbers" style="display: flex; gap: 6px;"></div>
+        <button class="page-btn" id="next-btn" onclick="changeHomePage(currentHomePg + 1)"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+    </div>
 
-    <div class="pagination-wrapper">
-      <div class="page-status" id="page-status">Page 1 of 500</div>
-      <div class="pagination-container">
-        <button class="page-btn" id="prev-btn" onclick="changeHomePage(currentHomePg - 1)"><i class="fa-solid fa-chevron-left"></i></button>
-        <div id="page-numbers" style="display: flex; gap: 6px;"></div>
-        <button class="page-btn" id="next-btn" onclick="changeHomePage(currentHomePg + 1)"><i class="fa-solid fa-chevron-right"></i></button>
-      </div>
-    </div>
+    <!-- Editorial Overview Section (Essential for Unique Content & AdSense) -->
+    <section class="editorial-section">
+      <h3 class="editorial-title"><i class="fa-solid fa-film"></i> About MOVIES WORLD Editorial Reviews</h3>
+      <p class="editorial-desc">
+        Welcome to MOVIES WORLD, your ultimate source for independent movie analysis, curated watchlists, and streaming guides. 
+        Our team reviews cinema releases from 1970 to 2026, offering honest critiques, audience ratings, and legal streaming destination links 
+        such as Netflix, Amazon Prime Video, Apple TV, and Disney+. Explore top-rated titles, upcoming trailers, and genre breakdowns updated daily.
+      </p>
+    </section>
+  </main>
 
-    <section class="editorial-section">
-      <h3 class="editorial-title"><i class="fa-solid fa-film"></i> About MOVIES WORLD Editorial Reviews</h3>
-      <p class="editorial-desc">
-        Welcome to MOVIES WORLD, your ultimate source for independent movie analysis, curated watchlists, and streaming guides. 
-        Our team reviews cinema releases from 1970 to 2026, offering honest critiques, audience ratings, and legal streaming destination links 
-        such as Netflix, Amazon Prime Video, Apple TV, and Disney+. Explore top-rated titles, upcoming trailers, and genre breakdowns updated daily.
-      </p>
-    </section>
-  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
+          <p>Your trusted destination for discovering great movies, in-depth reviews, and official streaming options.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="movies.html">Movies</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
+            <li><a href="genres.html">Genres</a></li>
+            <li><a href="movies.html?sort=rating">Top Rated</a></li>
+            <li><a href="movies.html?sort=newest">Latest</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Years</h4>
+          <ul>
+            <li><a href="movies.html?year=2026">Best of 2026</a></li>
+            <li><a href="movies.html?year=2025">Best of 2025</a></li>
+            <li><a href="movies.html?year=2020">Best of 2020</a></li>
+            <li><a href="movies.html?year=2010">Best of 2010</a></li>
+            <li><a href="movies.html?year=1990">Best of 1990</a></li>
+            <li><a href="movies.html?year=1970">Best of 1970</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company & Legal</h4>
+          <ul>
+            <li><a href="watchlist.html">Watchlist</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
+        <span>All movie metadata courtesy of TMDB · This site is an independent film database & review platform.</span>
+      </div>
+    </div>
+  </footer>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your trusted destination for discovering great movies, in-depth reviews, and official streaming options.</p>
-          <div class="socials">
-            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="movies.html">Movies</a></li>
-            <li><a href="reviews.html">Reviews</a></li>
-            <li><a href="genres.html">Genres</a></li>
-            <li><a href="movies.html?sort=rating">Top Rated</a></li>
-            <li><a href="movies.html?sort=newest">Latest</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Years</h4>
-          <ul>
-            <li><a href="movies.html?year=2026">Best of 2026</a></li>
-            <li><a href="movies.html?year=2025">Best of 2025</a></li>
-            <li><a href="movies.html?year=2020">Best of 2020</a></li>
-            <li><a href="movies.html?year=2010">Best of 2010</a></li>
-            <li><a href="movies.html?year=1990">Best of 1990</a></li>
-            <li><a href="movies.html?year=1970">Best of 1970</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Company & Legal</h4>
-          <ul>
-            <li><a href="watchlist.html">Watchlist</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact Us</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>All movie metadata courtesy of TMDB · This site is an independent film database & review platform.</span>
-      </div>
-    </div>
-  </footer>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/home.js"></script>
 
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/home.js"></script>
+  <!-- Auto Generate 1970-2026 Years Dropdown -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const dropdown = document.getElementById("years-dropdown");
+      if (dropdown) {
+        let html = "";
+        for (let y = 2026; y >= 1970; y--) {
+          html += `<a href="movies.html?year=${y}">${y}</a>`;
+        }
+        dropdown.innerHTML = html;
+      }
+    });
+  </script>
 
-  <!-- Auto Generate 1970-2026 Years Dropdown -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const dropdown = document.getElementById("years-dropdown");
-      if (dropdown) {
-        let html = "";
-        for (let y = 2026; y >= 1970; y--) {
-          html += `<a href="movies.html?year=${y}">${y}</a>`;
-        }
-        dropdown.innerHTML = html;
-      }
-    });
-  </script>
+  <!-- Custom Professional Language Switcher Engine -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
 
-  <!-- Custom Professional Language Switcher Engine -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
+    function changeLanguage(langCode) {
+      document.cookie = "googtrans=/en/" + langCode + "; path=/; domain=" + window.location.hostname;
+      document.cookie = "googtrans=/en/" + langCode + "; path=/";
+      window.location.reload();
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    function changeLanguage(langCode) {
-      document.cookie = "googtrans=/en/" + langCode + "; path=/; domain=" + window.location.hostname;
-      document.cookie = "googtrans=/en/" + langCode + "; path=/";
-      window.location.reload();
-    }
-  </script>
-  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- Dynamic Pagination & Live Film Loading Logic -->
+  <script>
+    let currentHomePg = 1;
+    const maxHomePg = 500;
 
-  <!-- Dynamic Pagination & Live Film Loading Logic -->
-  <script>
-    let currentHomePg = 1;
-    const maxHomePg = 500;
+    function renderPagination() {
+      const pageNumbersContainer = document.getElementById("page-numbers");
+      const pageStatus = document.getElementById("page-status");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
 
-    function renderPagination() {
-      const pageNumbersContainer = document.getElementById("page-numbers");
-      const pageStatus = document.getElementById("page-status");
-      const prevBtn = document.getElementById("prev-btn");
-      const nextBtn = document.getElementById("next-btn");
+      if (!pageNumbersContainer) return;
+      pageNumbersContainer.innerHTML = "";
+      pageStatus.innerText = `Page ${currentHomePg} of ${maxHomePg}`;
 
-      if (!pageNumbersContainer) return;
-      pageNumbersContainer.innerHTML = "";
-      pageStatus.innerText = `Page ${currentHomePg} of ${maxHomePg}`;
+      if (currentHomePg === 1) prevBtn.classList.add("disabled");
+      else prevBtn.classList.remove("disabled");
 
-      if (currentHomePg === 1) prevBtn.classList.add("disabled");
-      else prevBtn.classList.remove("disabled");
+      if (currentHomePg === maxHomePg) nextBtn.classList.add("disabled");
+      else nextBtn.classList.remove("disabled");
 
-      if (currentHomePg === maxHomePg) nextBtn.classList.add("disabled");
-      else nextBtn.classList.remove("disabled");
+      let start = Math.max(1, currentHomePg - 1);
+      let end = Math.min(maxHomePg, currentHomePg + 1);
 
-      let start = Math.max(1, currentHomePg - 1);
-      let end = Math.min(maxHomePg, currentHomePg + 1);
+      if (currentHomePg === 1) end = Math.min(maxHomePg, 3);
+      if (currentHomePg === maxHomePg) start = Math.max(1, maxHomePg - 2);
 
-      if (currentHomePg === 1) end = Math.min(maxHomePg, 3);
-      if (currentHomePg === maxHomePg) start = Math.max(1, maxHomePg - 2);
+      for (let i = start; i <= end; i++) {
+        const btn = document.createElement("button");
+        btn.className = `page-btn ${i === currentHomePg ? "active" : ""}`;
+        btn.innerText = i;
+        btn.onclick = () => changeHomePage(i);
+        pageNumbersContainer.appendChild(btn);
+      }
+    }
 
-      for (let i = start; i <= end; i++) {
-        const btn = document.createElement("button");
-        btn.className = `page-btn ${i === currentHomePg ? "active" : ""}`;
-        btn.innerText = i;
-        btn.onclick = () => changeHomePage(i);
-        pageNumbersContainer.appendChild(btn);
-      }
-    }
+    function changeHomePage(page) {
+      if (page < 1 || page > maxHomePg || page === currentHomePg) return;
+      currentHomePg = page;
+      renderPagination();
+      
+      if (typeof loadHomeMovies === "function") {
+        loadHomeMovies(currentHomePg);
+      } else if (typeof fetchMovies === "function") {
+        fetchMovies(currentHomePg);
+      }
+      
+      // Smooth scroll to movie grid container instead of top of window
+      const movieGrid = document.getElementById('home-sections');
+      if (movieGrid) {
+        movieGrid.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
 
-    function changeHomePage(page) {
-      if (page < 1 || page > maxHomePg || page === currentHomePg) return;
-      currentHomePg = page;
-      renderPagination();
-      
-      if (typeof loadHomeMovies === "function") {
-        loadHomeMovies(currentHomePg);
-      } else if (typeof fetchMovies === "function") {
-        fetchMovies(currentHomePg);
-      }
-      
-      const movieGrid = document.getElementById('home-sections');
-      if (movieGrid) {
-        movieGrid.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      renderPagination();
-    });
-  </script>
-
-  <!-- Movie Search Bar & Last 10 History Logic -->
-  <script>
-    // Save movie to LocalStorage (Max 10 items)
-    function saveMovieToHistory(movie) {
-      let history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
-      history = history.filter(item => item.id !== movie.id);
-      history.unshift(movie);
-      if (history.length > 10) {
-        history = history.slice(0, 10);
-      }
-      localStorage.setItem('recentSearchedMovies', JSON.stringify(history));
-    }
-
-    // Display recent search history dropdown when input is focused/clicked
-    function showRecentSearches() {
-      const history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
-      const dropdown = document.getElementById('searchHistoryDropdown');
-
-      if (history.length === 0) {
-        dropdown.style.display = 'none';
-        return;
-      }
-
-      dropdown.innerHTML = `
-        <div class="dropdown-header">
-          <span>Recent Searched Movies</span>
-          <span class="clear-history" onclick="clearHistory(event)">Clear All</span>
-        </div>
-      `;
-
-      history.forEach(movie => {
-        const item = document.createElement('div');
-        item.className = 'dropdown-item';
-        item.onclick = () => {
-          dropdown.style.display = 'none';
-          if (typeof loadMovieDetails === 'function') {
-            loadMovieDetails(movie.id, movie.title);
-          } else {
-            window.location.href = `movies.html?id=${movie.id}`;
-          }
-        };
-        const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://via.placeholder.com/40x60';
-        item.innerHTML = `
-          <img src="${posterPath}" alt="Poster">
-          <div>
-            <div style="font-weight: bold; font-size: 0.95rem; color: #fff;">${movie.title}</div>
-            <div style="font-size: 0.8rem; color: #94a3b8;">${movie.year || 'N/A'}</div>
-          </div>
-        `;
-        dropdown.appendChild(item);
-      });
-
-      dropdown.style.display = 'block';
-    }
-
-    function clearHistory(e) {
-      e.stopPropagation();
-      localStorage.removeItem('recentSearchedMovies');
-      document.getElementById('searchHistoryDropdown').style.display = 'none';
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      const searchInput = document.getElementById('movieSearchInput');
-      const dropdown = document.getElementById('searchHistoryDropdown');
-
-      if (searchInput) {
-        // Show history when input is clicked/focused and empty
-        searchInput.addEventListener('focus', function() {
-          if (this.value.trim() === '') {
-            showRecentSearches();
-          }
-        });
-
-        searchInput.addEventListener('click', function(e) {
-          e.stopPropagation();
-          if (this.value.trim() === '') {
-            showRecentSearches();
-          }
-        });
-
-        // Live typing search event or search trigger on Enter key
-        searchInput.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
-            const query = this.value.trim();
-            if (query !== '') {
-              dropdown.style.display = 'none';
-              // If your API supports search redirection, handle it here
-              window.location.href = `movies.html?search=${encodeURIComponent(query)}`;
-            }
-          }
-        });
-      }
-
-      // Hide dropdown when clicking outside
-      document.addEventListener('click', function(e) {
-        const container = document.querySelector('.search-box-container');
-        if (container && !container.contains(e.target)) {
-          dropdown.style.display = 'none';
-        }
-      });
-    });
-  </script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderPagination();
+    });
+  </script>
 </body>
 </html>
