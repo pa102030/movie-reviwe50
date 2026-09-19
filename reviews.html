@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies World - Reviews & Details</title>
+    <title>Movies World - Search & Reviews</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,19 +17,86 @@
             min-height: 100vh;
         }
 
-        /* ----- REVIEWS LIST PAGE ----- */
-        #reviewsPage {
+        /* HEADER & SEARCH BAR */
+        header {
+            padding: 20px;
+            background-color: #121212;
+            border-bottom: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .app-title {
+            color: #e50914;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid #333;
+            background-color: #1f1f1f;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: #e50914;
+        }
+        .search-results-dropdown {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            background: #181818;
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #252525;
+        }
+        .dropdown-item:hover {
+            background-color: #252525;
+        }
+        .dropdown-item img {
+            width: 40px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        /* MAIN HOME / REVIEWS SECTION */
+        #homePage {
             padding: 30px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
-        h1.page-title {
-            text-align: center;
-            margin-bottom: 30px;
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
             color: #e50914;
-            letter-spacing: 1px;
+            border-left: 4px solid #e50914;
+            padding-left: 10px;
         }
-        .reviews-container {
+        .reviews-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
@@ -48,7 +115,7 @@
             background-color: #1f1f1f;
         }
         .card-title {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 6px;
         }
@@ -66,11 +133,11 @@
             line-height: 1.4;
         }
 
-        /* ----- DETAILS PAGE (EXACT SCREENSHOT LAYOUT) ----- */
+        /* MOVIE DETAILS PAGE (EXACT SCREENSHOT LAYOUT) */
         #detailsPage {
             display: none;
             position: relative;
-            min-height: 100vh;
+            min-height: 90vh;
             width: 100%;
             background-size: cover;
             background-position: center;
@@ -82,7 +149,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(11, 11, 11, 0.75) 0%, rgba(11, 11, 11, 0.95) 80%, #0b0b0b 100%);
+            background: linear-gradient(180deg, rgba(11, 11, 11, 0.8) 0%, rgba(11, 11, 11, 0.95) 80%, #0b0b0b 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -106,8 +173,6 @@
             background: #e50914;
             border-color: #e50914;
         }
-
-        /* MATCHING EXACT LAYOUT IN YOUR IMAGE */
         .content-box {
             max-width: 420px;
             margin: 0 auto;
@@ -121,6 +186,7 @@
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             margin-bottom: 25px;
+            background-color: #1f1f1f;
         }
         .poster-wrapper img {
             width: 100%;
@@ -179,6 +245,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .genre-badge {
             background-color: #990000;
@@ -206,27 +273,36 @@
 </head>
 <body>
 
-    <!-- REVIEWS LIST PAGE -->
-    <div id="reviewsPage">
-        <h1 class="page-title">Movie Reviews</h1>
-        <div class="reviews-container" id="reviewsContainer"></div>
+    <!-- HEADER / SEARCH -->
+    <header>
+        <h1 class="app-title" onclick="showHomePage()">Movies World</h1>
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search any movie..." oninput="handleSearch()">
+            <div id="dropdown" class="search-results-dropdown" style="display: none;"></div>
+        </div>
+    </header>
+
+    <!-- HOME / REVIEWS LIST -->
+    <div id="homePage">
+        <h2 class="section-title">Latest Reviews</h2>
+        <div class="reviews-grid" id="reviewsContainer"></div>
     </div>
 
-    <!-- MOVIE DETAILS PAGE (EXACT DESIGN MATCH) -->
+    <!-- MOVIE DETAILS PAGE (DIRECT FROM API) -->
     <div id="detailsPage">
-        <button class="back-btn" onclick="showReviewsList()">← Back</button>
+        <button class="back-btn" onclick="showHomePage()">← Back</button>
         <div class="overlay">
             <div class="content-box">
                 <div class="poster-wrapper">
                     <img id="posterImg" src="" alt="Poster">
                 </div>
-                <h1 class="movie-title" id="movieTitle">Top Gun: Maverick</h1>
-                <p class="tagline" id="tagline">Feel the need... The need for speed.</p>
+                <h1 class="movie-title" id="movieTitle">Loading...</h1>
+                <p class="tagline" id="tagline"></p>
                 
                 <div class="meta-pills">
-                    <div class="rating">★ <span id="ratingVal">8.2</span> <span class="rating-max">/10</span></div>
-                    <span class="pill" id="yearVal">2022</span>
-                    <span class="pill" id="runtimeVal">131 min</span>
+                    <div class="rating">★ <span id="ratingVal">--</span> <span class="rating-max">/10</span></div>
+                    <span class="pill" id="yearVal">----</span>
+                    <span class="pill" id="runtimeVal">-- min</span>
                     <span class="pill" id="pgVal">PG-13</span>
                     <span class="pill-gold">4K</span>
                 </div>
@@ -241,84 +317,135 @@
     </div>
 
     <script>
-        const moviesData = [
-            {
-                id: 1,
-                title: "Top Gun: Maverick",
-                tagline: "Feel the need... The need for speed.",
-                rating: "8.2",
-                year: "2022",
-                runtime: "131 min",
-                pg: "PG-13",
-                genres: ["Action", "Drama"],
-                poster: "https://image.tmdb.org/t/p/w500/628Dep6AxEtA32L2C80491L8Y8.jpg",
-                backdrop: "https://image.tmdb.org/t/p/original/AaV1YIdWKnjA92923C2L8L_8eL.jpg",
-                trailer: "https://www.youtube.com/watch?v=giXco2jaZ_4",
-                review: "The perfect sequel that seamlessly blends nostalgia with cutting-edge real jet aerial sequences."
-            },
-            {
-                id: 2,
-                title: "Inception",
-                tagline: "Your mind is the scene of the crime.",
-                rating: "8.8",
-                year: "2010",
-                runtime: "148 min",
-                pg: "PG-13",
-                genres: ["Action", "Sci-Fi"],
-                poster: "https://image.tmdb.org/t/p/w500/oYuLE1311oA8h3M291o2A31o3.jpg",
-                backdrop: "https://image.tmdb.org/t/p/original/8ZTVqvKDQ8emSGUEMjsS4yHA34p.jpg",
-                trailer: "https://www.youtube.com/watch?v=YoHD9XEInc0",
-                review: "A mind-bending cinematic experience that dives deep into the sub-conscious."
-            }
+        const API_KEY = '8ee66710f2f840fe7b6a29bc84db0629';
+
+        // Reviews array connected with real TMDB IDs
+        const movieReviews = [
+            { tmdbId: 361743, title: "Top Gun: Maverick", review: "An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
+            { tmdbId: 27205, title: "Inception", review: "A mind-bending cinematic experience that dives deep into the sub-conscious." },
+            { tmdbId: 155, title: "The Dark Knight", review: "An absolute masterclass in superhero cinema with an iconic performance." },
+            { tmdbId: 157336, title: "Interstellar", review: "A breathtaking fusion of complex science and emotional storytelling." },
+            { tmdbId: 245891, title: "John Wick", review: "A game-changer for the gun-fu action genre with relentless fight choreography." },
+            { tmdbId: 693134, title: "Dune: Part Two", review: "A modern masterpiece of visual and sound design that sets a new benchmark." }
         ];
 
-        const container = document.getElementById('reviewsContainer');
-
-        // Render Review Cards
-        moviesData.forEach(item => {
+        // Render Reviews list on Home Page
+        const reviewsContainer = document.getElementById('reviewsContainer');
+        movieReviews.forEach(item => {
             const card = document.createElement('div');
             card.className = 'review-card';
-            card.onclick = () => openMovieDetails(item);
-
+            card.onclick = () => loadMovieDetails(item.tmdbId);
             card.innerHTML = `
                 <h3 class="card-title">${item.title}</h3>
-                <span class="card-genre">${item.genres.join(' / ')}</span>
+                <span class="card-genre">Review</span>
                 <p class="card-text">"${item.review}"</p>
             `;
-            container.appendChild(card);
+            reviewsContainer.appendChild(card);
         });
 
-        // Open exact details page when clicked
-        function openMovieDetails(movie) {
-            document.getElementById('reviewsPage').style.display = 'none';
-            const detailsPage = document.getElementById('detailsPage');
-            detailsPage.style.display = 'block';
-            detailsPage.style.backgroundImage = `url('${movie.backdrop}')`;
+        // Search Bar logic via TMDB API
+        async function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const dropdown = document.getElementById('dropdown');
 
-            document.getElementById('posterImg').src = movie.poster;
-            document.getElementById('movieTitle').innerText = movie.title;
-            document.getElementById('tagline').innerText = movie.tagline;
-            document.getElementById('ratingVal').innerText = movie.rating;
-            document.getElementById('yearVal').innerText = movie.year;
-            document.getElementById('runtimeVal').innerText = movie.runtime;
-            document.getElementById('pgVal').innerText = movie.pg;
-            document.getElementById('trailerBtn').href = movie.trailer;
+            if (query.length < 2) {
+                dropdown.style.display = 'none';
+                return;
+            }
 
-            const genreContainer = document.getElementById('genreContainer');
-            genreContainer.innerHTML = '';
-            movie.genres.forEach(g => {
-                const badge = document.createElement('span');
-                badge.className = 'genre-badge';
-                badge.innerText = g;
-                genreContainer.appendChild(badge);
-            });
-
-            window.scrollTo(0, 0);
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                
+                dropdown.innerHTML = '';
+                if (data.results && data.results.length > 0) {
+                    dropdown.style.display = 'block';
+                    data.results.slice(0, 6).forEach(movie => {
+                        const item = document.createElement('div');
+                        item.className = 'dropdown-item';
+                        item.onclick = () => {
+                            dropdown.style.display = 'none';
+                            document.getElementById('searchInput').value = '';
+                            loadMovieDetails(movie.id);
+                        };
+                        const posterPath = movie.poster_path ? `https://image.tmdb.org/t/p/w92${movie.poster_path}` : 'https://via.placeholder.com/40x60';
+                        item.innerHTML = `
+                            <img src="${posterPath}" alt="Poster">
+                            <div>
+                                <div style="font-weight: bold; font-size: 0.95rem;">${movie.title}</div>
+                                <div style="font-size: 0.8rem; color: #888;">${movie.release_date ? movie.release_date.split('-')[0] : 'N/A'}</div>
+                            </div>
+                        `;
+                        dropdown.appendChild(item);
+                    });
+                } else {
+                    dropdown.style.display = 'none';
+                }
+            } catch (err) {
+                console.error("Search error:", err);
+            }
         }
 
-        function showReviewsList() {
+        // FETCH & OPEN MOVIE DETAILS (Works for both Search Results & Review clicks)
+        async function loadMovieDetails(movieId) {
+            document.getElementById('homePage').style.display = 'none';
+            const detailsPage = document.getElementById('detailsPage');
+            detailsPage.style.display = 'block';
+            window.scrollTo(0, 0);
+
+            // Reset UI Loading
+            document.getElementById('movieTitle').innerText = "Loading...";
+            document.getElementById('tagline').innerText = "";
+            document.getElementById('posterImg').src = "";
+
+            try {
+                const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&append_to_response=videos`);
+                const movie = await res.json();
+
+                // Fill Movie Data
+                document.getElementById('movieTitle').innerText = movie.title || "Untitled";
+                document.getElementById('tagline').innerText = movie.tagline || movie.overview || "";
+                document.getElementById('ratingVal').innerText = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
+                document.getElementById('yearVal').innerText = movie.release_date ? movie.release_date.split('-')[0] : "----";
+                document.getElementById('runtimeVal').innerText = movie.runtime ? `${movie.runtime} min` : "N/A";
+                
+                // Poster & Backdrop Image URLs
+                if (movie.poster_path) {
+                    document.getElementById('posterImg').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+                }
+                if (movie.backdrop_path) {
+                    detailsPage.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                }
+
+                // Genres Badges
+                const genreContainer = document.getElementById('genreContainer');
+                genreContainer.innerHTML = '';
+                if (movie.genres) {
+                    movie.genres.forEach(g => {
+                        const badge = document.createElement('span');
+                        badge.className = 'genre-badge';
+                        badge.innerText = g.name;
+                        genreContainer.appendChild(badge);
+                    });
+                }
+
+                // Youtube Trailer Link
+                const trailer = movie.videos && movie.videos.results ? movie.videos.results.find(vid => vid.type === 'Trailer' && vid.site === 'YouTube') : null;
+                const trailerBtn = document.getElementById('trailerBtn');
+                if (trailer) {
+                    trailerBtn.href = `https://www.youtube.com/watch?v=${trailer.key}`;
+                } else {
+                    trailerBtn.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title)}+trailer`;
+                }
+
+            } catch (err) {
+                console.error("API Fetch Error:", err);
+            }
+        }
+
+        function showHomePage() {
             document.getElementById('detailsPage').style.display = 'none';
-            document.getElementById('reviewsPage').style.display = 'block';
+            document.getElementById('homePage').style.display = 'block';
             window.scrollTo(0, 0);
         }
     </script>
