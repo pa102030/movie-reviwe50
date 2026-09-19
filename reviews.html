@@ -102,7 +102,7 @@
             display: flex;
             align-items: flex-end;
             padding: 40px;
-            transition: background-image 0.3s ease-in-out;
+            transition: background-image 0.4s ease-in-out;
         }
         .hero-overlay {
             position: absolute;
@@ -209,9 +209,9 @@
                 <div class="meta-info">
                     <span class="rating" id="rating">★ --/10</span>
                     <span id="releaseYear">----</span>
-                    <span class="quality-badge">4K</span>
+                    <span class="quality-badge" id="genres">--</span>
                 </div>
-                <p class="overview" id="overview">Loading details...</p>
+                <p class="overview" id="overview">Loading movie details...</p>
                 <div class="btn-group">
                     <button class="btn btn-red">📖 Read Review</button>
                     <button class="btn btn-outline" id="trailerBtn">▶ Watch Trailer</button>
@@ -222,17 +222,30 @@
     </div>
 
     <script>
+        // TMDB API Key Included Directly
+        const API_KEY = '8ee66710f2f840fe7b6a29bc84db0629';
+
         const movieReviews = [
-            { id: 27205, title: "Inception", genre: "Action / Sci-Fi", rating: "8.8", year: "2010", backdrop: "https://image.tmdb.org/t/p/original/8ZTVqvKDQ8emSGUEMjsS4yHA34p.jpg", review: "A mind-bending cinematic experience that dives deep into the sub-conscious. Stunning visual effects and Hans Zimmer's haunting score make it an absolute masterpiece that leaves you questioning reality." },
-            { id: 76341, title: "Mad Max: Fury Road", genre: "Action / Sci-Fi", rating: "8.1", year: "2015", backdrop: "https://image.tmdb.org/t/p/original/8tZYtuWezp8R3Ut2Viy89vhLSuP.jpg", review: "A non-stop high-octane action spectacle. A prime example of how to tell a compelling story purely through relentless cinematic action without wasting a single second." },
-            { id: 245891, title: "John Wick", genre: "Action / Thriller", rating: "7.4", year: "2014", backdrop: "https://image.tmdb.org/t/p/original/umC043L8d23Atm93P93R41A933L.jpg", review: "A game-changer for the gun-fu action genre. Keanu Reeves delivers an iconic performance backed by stylish cinematography and relentless fight choreography." },
-            { id: 155, title: "The Dark Knight", genre: "Action / Crime", rating: "9.0", year: "2008", backdrop: "https://image.tmdb.org/t/p/original/nMK28193fR_N2vD4bJ6aB0988L.jpg", review: "An absolute masterclass in superhero cinema. Heath Ledger's legendary performance as the Joker steals the show and elevates the entire film into a timeless masterpiece." },
-            { id: 361743, title: "Top Gun: Maverick", genre: "Action / Drama", rating: "8.3", year: "2022", backdrop: "https://image.tmdb.org/t/p/original/AaV1YIdWKnjA92923C2L8L_8eL.jpg", review: "The perfect sequel that seamlessly blends nostalgia with cutting-edge real jet aerial sequences. An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
-            { id: 98, title: "Gladiator", genre: "Action / Drama", rating: "8.5", year: "2000", backdrop: "https://image.tmdb.org/t/p/original/vI3a8M_9vF1179v4H1G4i898v3.jpg", review: "An epic tale of vengeance, honor, and redemption. Russell Crowe gives a powerful performance, perfectly complemented by Hans Zimmer’s emotional soundtrack." },
-            { id: 299534, title: "Avengers: Endgame", genre: "Action / Sci-Fi", rating: "8.4", year: "2019", backdrop: "https://image.tmdb.org/t/p/original/7RyG193Az3B211786523.jpg", review: "A deeply satisfying and emotional conclusion to a decade-long cinematic journey. Gives every core character their fitting moment to shine." },
-            { id: 36557, title: "Casino Royale", genre: "Action / Thriller", rating: "8.0", year: "2006", backdrop: "https://image.tmdb.org/t/p/original/q37s193a02795860.jpg", review: "A gritty, grounded reboot that successfully redefined James Bond. Daniel Craig captivated audiences right from his debut with raw intensity." },
-            { id: 353081, title: "Mission: Impossible - Fallout", genre: "Action / Thriller", rating: "7.9", year: "2018", backdrop: "https://image.tmdb.org/t/p/original/aw422919532.jpg", review: "Tom Cruise proves why he is a true cinema icon. The real, jaw-dropping stunts deliver a level of suspense and thrill that CGI can never replicate." },
-            { id: 603, title: "The Matrix", genre: "Action / Sci-Fi", rating: "8.7", year: "1999", backdrop: "https://image.tmdb.org/t/p/original/82405829.jpg", review: "A revolutionary milestone in film history. Blends philosophical questions with ground-breaking visual effects and iconic action sequences." }
+            { id: 27205, title: "Inception", genre: "Action / Sci-Fi", review: "A mind-bending cinematic experience that dives deep into the sub-conscious. Stunning visual effects and Hans Zimmer's haunting score make it an absolute masterpiece that leaves you questioning reality." },
+            { id: 76341, title: "Mad Max: Fury Road", genre: "Action / Sci-Fi", review: "A non-stop high-octane action spectacle. A prime example of how to tell a compelling story purely through relentless cinematic action without wasting a single second." },
+            { id: 245891, title: "John Wick", genre: "Action / Thriller", review: "A game-changer for the gun-fu action genre. Keanu Reeves delivers an iconic performance backed by stylish cinematography and relentless fight choreography." },
+            { id: 155, title: "The Dark Knight", genre: "Action / Crime", review: "An absolute masterclass in superhero cinema. Heath Ledger's legendary performance as the Joker steals the show and elevates the entire film into a timeless masterpiece." },
+            { id: 361743, title: "Top Gun: Maverick", genre: "Action / Drama", review: "The perfect sequel that seamlessly blends nostalgia with cutting-edge real jet aerial sequences. An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
+            { id: 98, title: "Gladiator", genre: "Action / Drama", review: "An epic tale of vengeance, honor, and redemption. Russell Crowe gives a powerful performance, perfectly complemented by Hans Zimmer’s emotional soundtrack." },
+            { id: 299534, title: "Avengers: Endgame", genre: "Action / Sci-Fi", review: "A deeply satisfying and emotional conclusion to a decade-long cinematic journey. Gives every core character their fitting moment to shine." },
+            { id: 36557, title: "Casino Royale", genre: "Action / Thriller", review: "A gritty, grounded reboot that successfully redefined James Bond. Daniel Craig captivated audiences right from his debut with raw intensity." },
+            { id: 353081, title: "Mission: Impossible - Fallout", genre: "Action / Thriller", review: "Tom Cruise proves why he is a true cinema icon. The real, jaw-dropping stunts deliver a level of suspense and thrill that CGI can never replicate." },
+            { id: 603, title: "The Matrix", genre: "Action / Sci-Fi", review: "A revolutionary milestone in film history. Blends philosophical questions with ground-breaking visual effects and iconic action sequences." },
+            { id: 157336, title: "Interstellar", genre: "Sci-Fi / Drama", review: "A breathtaking fusion of complex science, deep space exploration, and emotional father-daughter love. Christopher Nolan's finest cinematic poem." },
+            { id: 1124, title: "The Prestige", genre: "Sci-Fi / Mystery", review: "A brilliant story about obsession that keeps you in the dark until the final frame. The final twist leaves you completely speechless." },
+            { id: 329865, title: "Arrival", genre: "Sci-Fi / Drama", review: "Proves that Sci-Fi isn't just about explosions and alien wars, but about empathy, communication, and human connection. Deeply emotional and thought-provoking." },
+            { id: 335984, title: "Blade Runner 2049", genre: "Sci-Fi / Mystery", review: "Every single frame looks like a fine art painting. Slowly paced, yet its immersive sound design and visual world pull you completely into another reality." },
+            { id: 11324, title: "Shutter Island", genre: "Psychological Thriller", review: "A psychological maze that plays tricks on your mind. Scorsese creates a chilling atmosphere that leaves you questioning what is real until the very end." },
+            { id: 545611, title: "Everything Everywhere All at Once", genre: "Sci-Fi / Comedy", review: "An insanely creative, heartwarming, and chaotic journey through the multiverse. Completely unique and wildly entertaining from start to finish." },
+            { id: 693134, title: "Dune: Part Two", genre: "Sci-Fi / Adventure", review: "A modern masterpiece of visual and sound design. Sets a new benchmark for how realistic and immersive a sci-fi world can be built on screen." },
+            { id: 264660, title: "Ex Machina", genre: "Sci-Fi / Drama", review: "A slick, tense, and thought-provoking look at the dark side of AI and human manipulation. Simple setting, but intensely gripping execution." },
+            { id: 220289, title: "Coherence", genre: "Sci-Fi / Mystery", review: "Proof that you don't need a massive budget to make a mind-blowing film. A dinner party turns into a terrifying multiverse puzzle." },
+            { id: 577922, title: "Tenet", genre: "Sci-Fi / Action", review: "Complex and hard to grasp on the first watch, but the time-inversion concept and booming soundtrack make it an unforgettable ride." }
         ];
 
         const container = document.getElementById('reviewsContainer');
@@ -240,7 +253,7 @@
         movieReviews.forEach(item => {
             const card = document.createElement('div');
             card.className = 'review-card';
-            card.onclick = () => openMovieDetails(item);
+            card.onclick = () => openMovieDetails(item.id, item.review);
 
             card.innerHTML = `
                 <h3 class="movie-title">${item.title}</h3>
@@ -250,24 +263,48 @@
             container.appendChild(card);
         });
 
-        function openMovieDetails(movie) {
+        async function openMovieDetails(id, localReview) {
             document.getElementById('reviewsPage').style.display = 'none';
             document.getElementById('detailsPage').style.display = 'block';
             window.scrollTo(0, 0);
 
-            document.getElementById('movieTitle').innerText = movie.title;
-            document.getElementById('overview').innerText = movie.review;
-            document.getElementById('rating').innerText = `★ ${movie.rating} /10`;
-            document.getElementById('releaseYear').innerText = movie.year;
-            document.getElementById('badge').innerText = movie.genre;
+            document.getElementById('movieTitle').innerText = "Loading...";
+            document.getElementById('overview').innerText = "Fetching details from TMDB...";
 
-            if (movie.backdrop) {
-                document.getElementById('heroBanner').style.backgroundImage = `url('${movie.backdrop}')`;
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&append_to_response=videos`);
+                
+                if (!response.ok) {
+                    throw new Error("Failed to fetch movie details.");
+                }
+
+                const movie = await response.json();
+
+                document.getElementById('movieTitle').innerText = movie.title || "Untitled";
+                document.getElementById('overview').innerText = movie.overview || localReview;
+                document.getElementById('rating').innerText = `★ ${movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A'}/10`;
+                document.getElementById('releaseYear').innerText = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+                document.getElementById('genres').innerText = movie.genres && movie.genres.length > 0 ? movie.genres[0].name : '4K';
+
+                if (movie.backdrop_path) {
+                    document.getElementById('heroBanner').style.backgroundImage = `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
+                } else {
+                    document.getElementById('heroBanner').style.backgroundImage = 'none';
+                }
+
+                const trailer = movie.videos && movie.videos.results ? movie.videos.results.find(vid => vid.type === 'Trailer' && vid.site === 'YouTube') : null;
+                const trailerBtn = document.getElementById('trailerBtn');
+                if (trailer) {
+                    trailerBtn.onclick = () => window.open(`https://www.youtube.com/watch?v=${trailer.key}`, '_blank');
+                } else {
+                    trailerBtn.onclick = () => alert("Trailer not available for this movie.");
+                }
+
+            } catch (error) {
+                console.error("API Fetch Error:", error);
+                document.getElementById('movieTitle').innerText = "Details Loaded (Offline)";
+                document.getElementById('overview').innerText = localReview;
             }
-
-            document.getElementById('trailerBtn').onclick = () => {
-                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(movie.title)}+trailer`, '_blank');
-            };
         }
 
         function showReviewsList() {
