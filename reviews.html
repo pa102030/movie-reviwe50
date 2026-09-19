@@ -72,11 +72,9 @@
 
     <h1>Movie Reviews Collection</h1>
 
-    <!-- Reviews පෙන්වන Main Container එක -->
     <div class="reviews-container" id="reviewsContainer"></div>
 
     <script>
-        // Movie Reviews Data Array with accurate TMDB Movie IDs
         const movieReviews = [
             { id: 27205, title: "Inception", genre: "Action / Sci-Fi", review: "A mind-bending cinematic experience that dives deep into the sub-conscious. Stunning visual effects and Hans Zimmer's haunting score make it an absolute masterpiece that leaves you questioning reality." },
             { id: 76341, title: "Mad Max: Fury Road", genre: "Action / Sci-Fi", review: "A non-stop high-octane action spectacle. A prime example of how to tell a compelling story purely through relentless cinematic action without wasting a single second." },
@@ -136,7 +134,7 @@
             const card = document.createElement('a');
             card.className = 'review-card';
             
-            // Movie Details Page එකට Redirect කිරීම
+            // Movie details page එකට ID එක pass කරයි
             card.href = `movie_2.html?id=${item.id}`;
 
             card.innerHTML = `
