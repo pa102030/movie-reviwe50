@@ -232,10 +232,7 @@
           </div>
         </div>
 
-        <!-- Search Bar Container (Using your site's standard ID/Class) -->
-        <div class="search-box-container" style="position: relative; display: inline-flex; align-items: center;">
-          <input type="text" id="movieSearchInput" class="header-search-input" placeholder="Search movies..." autocomplete="off">
-        </div>
+        <!-- Note: Search bar will be dynamically and cleanly initialized via JS below to prevent any duplication -->
 
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
@@ -422,7 +419,7 @@
     });
   </script>
 
-  <!-- Search History & Dropdown Control Logic (Attached cleanly to existing search bar) -->
+  <!-- Single Clean Search Bar & History Dropdown Engine (Zero Duplication) -->
   <script>
     function saveMovieToHistory(movie) {
       let history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
@@ -435,36 +432,27 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-      const searchInput = document.getElementById('movieSearchInput');
-      if (!searchInput) return;
+      // Remove any existing duplicate custom search bars to keep it strictly single
+      document.querySelectorAll('.custom-auto-search-box').forEach(el => el.remove());
 
-      const parent = searchInput.parentElement;
-      if (window.getComputedStyle(parent).position === 'static') {
-        parent.style.position = 'relative';
-      }
+      const headerActions = document.querySelector('.header-actions');
+      if (!headerActions) return;
 
-      let dropdown = document.getElementById('searchHistoryDropdown');
-      if (!dropdown) {
-        dropdown = document.createElement('div');
-        dropdown.id = 'searchHistoryDropdown';
-        dropdown.className = 'search-results-dropdown';
-        parent.appendChild(dropdown);
-      }
-
-      dropdown.style.cssText = `
-        position: absolute;
-        top: 120%;
-        right: 0;
-        width: 320px;
-        background: #0f172a;
-        border-radius: 10px;
-        max-height: 380px;
-        overflow-y: auto;
-        z-index: 999999;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.9);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        display: none;
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'custom-auto-search-box';
+      searchContainer.style.cssText = 'position: relative; display: inline-flex; align-items: center; margin-right: 10px;';
+      
+      searchContainer.innerHTML = `
+        <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 12px; color: #9ca3af; font-size: 13px; pointer-events: none;"></i>
+        <input type="text" id="movieSearchInput" placeholder="Search movies..." autocomplete="off" style="background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 7px 12px 7px 35px; border-radius: 8px; font-size: 13px; width: 200px; outline: none; transition: width 0.3s;">
+        <div id="searchHistoryDropdown" style="position: absolute; top: 120%; right: 0; width: 320px; background: #0f172a; border-radius: 10px; max-height: 380px; overflow-y: auto; z-index: 999999; box-shadow: 0 15px 30px rgba(0,0,0,0.9); border: 1px solid rgba(255, 255, 255, 0.2); display: none;"></div>
       `;
+      
+      // Insert right before theme toggle / profile button in header
+      headerActions.insertBefore(searchContainer, headerActions.firstChild);
+
+      const searchInput = document.getElementById('movieSearchInput');
+      const dropdown = document.getElementById('searchHistoryDropdown');
 
       function renderDropdown() {
         const history = JSON.parse(localStorage.getItem('recentSearchedMovies')) || [];
@@ -538,7 +526,7 @@
       });
 
       document.addEventListener('click', function(e) {
-        if (dropdown && !parent.contains(e.target)) {
+        if (dropdown && !searchContainer.contains(e.target)) {
           dropdown.style.display = 'none';
         }
       });
