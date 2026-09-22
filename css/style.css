@@ -366,8 +366,8 @@ input,select{font-family:inherit;color:var(--text)}
   .detail-poster{max-width:240px}
   .genre-grid{grid-template-columns:repeat(2,1fr)}
   .score-bars{grid-template-columns:1fr}
-  .btn-profile span{display:none}
-  .btn-profile{padding:10px 13px}
+  .btn-profile span{display:inline-block !important;} /* මෙතනින් profile අකුරු පෙන්වයි */
+  .btn-profile{padding:8px 12px !important; display:flex !important;} /* මෙතනින් button එක පෙන්වයි */
   .header-inner{width:calc(100% - 28px)}
   .section{width:calc(100% - 28px)}
   .hero-content{width:calc(100% - 28px);padding-bottom:60px}
