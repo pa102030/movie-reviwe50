@@ -20,6 +20,62 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive-fix.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+  <style>
+    /* Google Translate Notification Banner සහ iframe සම්පූර්ණයෙන්ම සැඟවීමට */
+    .goog-te-banner-frame.skiptranslate, 
+    .goog-te-gadget-icon,
+    .skiptranslate iframe {
+      display: none !important;
+    }
+    body {
+      top: 0px !important;
+      position: static !important;
+    }
+
+    .header-actions {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+    .lang-selector-wrap select {
+      background: rgba(15, 20, 25, 0.85) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 6px 12px !important;
+      border-radius: 8px !important;
+      font-family: inherit !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: all 0.2s ease !important;
+    }
+    .lang-selector-wrap select:hover {
+      border-color: #e50914 !important;
+    }
+    .lang-selector-wrap select option {
+      background-color: #0f1419 !important;
+      color: #ffffff !important;
+      padding: 10px !important;
+    }
+    @media (max-width: 768px) {
+      .lang-selector-wrap select {
+        background: rgba(15, 20, 25, 0.95) !important;
+        backdrop-filter: blur(15px) !important;
+        -webkit-backdrop-filter: blur(15px) !important;
+        color: #ffffff !important;
+        padding: 5px 8px !important;
+        font-size: 12px !important;
+        max-width: 115px !important;
+      }
+      .lang-selector-wrap select option {
+        background-color: #0f1419 !important;
+        color: #ffffff !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -41,6 +97,22 @@
         <a href="watchlist.html">Watchlist</a>
       </nav>
       <div class="header-actions">
+        <!-- භාෂා මෙනුව එකතු කරන ලදී -->
+        <div class="lang-selector-wrap" style="display: inline-block;">
+          <select id="custom-translate-select" aria-label="Select Language" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="si">සිංහල</option>
+            <option value="ta">தமிழ்</option>
+            <option value="hi">हिन्दी</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="zh-CN">中文</option>
+            <option value="ja">日本語</option>
+            <option value="ar">العربية</option>
+          </select>
+        </div>
+
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
@@ -126,6 +198,40 @@
       </div>
     </div>
   </footer>
+
+  <!-- භාෂාව තබාගැනීමට අවශ්‍ය කුකී ස්ක්‍රිප්ට් එක -->
+  <script type="text/javascript">
+    function changeLanguage(lang) {
+      let hostname = window.location.hostname;
+      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
+      document.cookie = "googtrans=/en/" + lang + "; path=/;";
+      location.reload();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+      if (match) {
+        const currentLang = match[2].split('/')[2];
+        const select = document.getElementById('custom-translate-select');
+        if (select && currentLang) {
+          select.value = currentLang;
+        }
+      }
+    });
+  </script>
+
+  <div id="google_translate_element" style="display:none;"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,si,ta,hi,es,fr,de,zh-CN,ja,ar',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
