@@ -103,12 +103,24 @@
 
   <main id="main"><div class="page-hero"><h1>Contact Us</h1><p>Questions, corrections or partnership inquiries? We read everything.</p></div>
     <section class="section" style="padding-top:0;max-width:720px">
-      <form class="panel" onsubmit="event.preventDefault();this.reset();window.toast&&toast('Message sent! We will reply soon.','fa-paper-plane');">
-        <div class="fgroup" style="margin-bottom:14px"><label for="c-name">Name</label><input id="c-name" required style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border)"></div>
-        <div class="fgroup" style="margin-bottom:14px"><label for="c-email">Email</label><input id="c-email" type="email" required style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border)"></div>
-        <div class="fgroup" style="margin-bottom:20px"><label for="c-msg">Message</label><textarea id="c-msg" required rows="5" style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-family:inherit"></textarea></div>
+      
+      <!-- ඔබගේ Formspree ලින්ක් එක මෙහි නිවැරදිව සම්බන්ධ කර ඇත -->
+      <form class="panel" action="https://formspree.io/f/xkjgrakd" method="POST">
+        <div class="fgroup" style="margin-bottom:14px">
+          <label for="c-name">Name</label>
+          <input id="c-name" name="name" required style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);">
+        </div>
+        <div class="fgroup" style="margin-bottom:14px">
+          <label for="c-email">Email</label>
+          <input id="c-email" name="email" type="email" required style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);">
+        </div>
+        <div class="fgroup" style="margin-bottom:20px">
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" name="message" required rows="5" style="width:100%;padding:12px 14px;border-radius:10px;background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-family:inherit"></textarea>
+        </div>
         <button class="btn btn-red" type="submit"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
       </form>
+
     </section></main>
 
   <footer class="site-footer">
