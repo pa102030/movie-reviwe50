@@ -2,7 +2,7 @@
 "use strict";
 
 const MW_API = (() => {
-  let DB = [];           // demo database
+  let DB = [];         // demo database
   let cache = new Map(); // simple in-memory cache
 
   async function init() {
@@ -46,7 +46,7 @@ const MW_API = (() => {
       list = list.filter(m =>
         m.title.toLowerCase().includes(q) ||
         (m.director || "").toLowerCase().includes(q) ||
-        (m.cast || []).some(c => c.toLowerCase().includes(q)) ||
+        (m.cast || []).some(c => (typeof c === "object" ? c.name : c).toLowerCase().includes(q)) ||
         (m.genres || []).some(g => g.toLowerCase().includes(q)) ||
         String(m.year) === q
       );
@@ -91,7 +91,7 @@ const MW_API = (() => {
     const params = { page: opts.page || 1, "vote_count.gte": 200 };
     if (opts.year)        params["primary_release_year"] = opts.year;
     if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
-    if (opts.sort === "rating")     params.sort_by = "vote_average.desc";
+    if (opts.sort === "rating")      params.sort_by = "vote_average.desc";
     else if (opts.sort === "newest")  params.sort_by = "primary_release_date.desc";
     else if (opts.sort === "oldest")  params.sort_by = "primary_release_date.asc";
     else if (opts.sort === "title")   params.sort_by = "title.asc";
@@ -135,7 +135,14 @@ const MW_API = (() => {
       const cert = (m.release_dates.results || []).find(r => r.iso_3166_1 === MW_CONFIG.REGION);
       const movie = tmdbToMovie(m);
       movie.director = director ? director.name : null;
-      movie.cast = (m.credits.cast || []).slice(0, 8).map(c => c.name);
+      
+      // Updated to map full cast object including profile_path, name, and character
+      movie.cast = (m.credits.cast || []).slice(0, 10).map(c => ({
+        name: c.name,
+        character: c.character,
+        profile_path: c.profile_path
+      }));
+
       movie.trailer = trailer ? "https://www.youtube.com/embed/" + trailer.key : null;
       movie.ageRating = cert && cert.release_dates[0] ? cert.release_dates[0].certification : null;
       movie.watch = await getWatchProviders(id);
