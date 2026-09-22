@@ -371,3 +371,21 @@ input,select{font-family:inherit;color:var(--text)}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+@media (max-width: 1024px) {
+  .main-nav {
+    display: none;
+  }
+  .main-nav.open {
+    display: flex !important;
+    flex-direction: column;
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: var(--bg-2);
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+  }
+}
