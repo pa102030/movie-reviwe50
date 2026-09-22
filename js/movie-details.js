@@ -86,13 +86,13 @@ document.addEventListener("mw:ready", async () => {
     topCast.forEach(c => {
       const name = typeof c === "object" ? (c.name || c.original_name || "") : c;
       const character = typeof c === "object" ? (c.character || "") : "";
-      const profilePath = typeof c === "object" ? c.profile_path : null;
+      const profilePath = typeof c === "object" ? (c.profile_path || c.image || c.poster) : null;
       
       const profileImg = profilePath 
-        ? `https://image.tmdb.org/t/p/w185${profilePath}` 
+        ? (profilePath.startsWith("http") ? profilePath : `https://image.tmdb.org/t/p/w185${profilePath}`) 
         : `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150" viewBox="0 0 100 150"><rect width="100" height="150" fill="%23222"/><text x="50" y="75" fill="%23aaa" font-size="14" text-anchor="middle">${encodeURIComponent(name ? name[0] : "C")}</text></svg>`;
 
-      castHTML +=`
+      castHTML += `
         <div class="cast-card">
           <div class="cast-img-wrap">
             <img src="${profileImg}" alt="${esc(name)}" loading="lazy">
