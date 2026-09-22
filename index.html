@@ -20,6 +20,28 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/responsive-fix.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+  <style>
+    .lang-selector-wrap select {
+      background: var(--bg-card, #161b22);
+      color: var(--text-main, #c9d1d9);
+      border: 1px solid var(--border-color, #30363d);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .lang-selector-wrap select:hover {
+      border-color: var(--accent, #e50914);
+    }
+    .lang-selector-wrap select option {
+      background: #161b22;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
 
@@ -41,9 +63,13 @@
         <a href="watchlist.html">Watchlist</a>
       </nav>
       <div class="header-actions">
-        <!-- Google Translate Widget Added Here -->
-        <div id="google_translate_element" style="display: inline-block; margin-right: 8px;"></div>
-
+        <div class="lang-selector-wrap" style="display: inline-block; margin-right: 8px;">
+          <select id="custom-translate-select" aria-label="Select Language" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="si">සිංහල</option>
+            <option value="ta">தமிழ்</option>
+          </select>
+        </div>
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
@@ -118,14 +144,28 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"MOVIES WORLD","url":"https://moviesworld.example/","potentialAction":{"@type":"SearchAction","target":"https://moviesworld.example/movies.html?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 
-  <!-- Google Translate Initialization Script -->
+  <script type="text/javascript">
+    function changeLanguage(lang) {
+      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + document.domain;
+      location.reload();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+      if (match) {
+        const currentLang = match[2].split('/')[2];
+        const select = document.getElementById('custom-translate-select');
+        if (select && currentLang) {
+          select.value = currentLang;
+        }
+      }
+    });
+  </script>
+
+  <div id="google_translate_element" style="display:none;"></div>
   <script type="text/javascript">
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'si,ta,en',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
+      new google.translate.TranslateElement({pageLanguage: 'en', includedLanguages: 'si,ta,en', autoDisplay: false}, 'google_translate_element');
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
