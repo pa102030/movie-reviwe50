@@ -8,7 +8,8 @@ document.addEventListener("mw:ready", async () => {
   let m;
   try { m = await MW_API.getMovie(id); }
   catch (e) { root.innerHTML = errorBox("Movie not found or unavailable."); return; }
-
+console.log("Movie Data:", m);
+console.log("Cast List:", m.cast);
   document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
   const desc = (m.overview || "").slice(0, 155);
   setMeta("description", `${m.title} (${m.year}) — rating, review, trailer and where to watch legally. ${desc}`);
