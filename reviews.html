@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies World - 50 Movie Reviews</title>
     <style>
+        /* Google Translate Notification Banner සහ iframe සම්පූර්ණයෙන්ම සැඟවීමට */
+        .goog-te-banner-frame.skiptranslate, 
+        .goog-te-gadget-icon,
+        .skiptranslate iframe {
+          display: none !important;
+        }
+        body {
+          top: 0px !important;
+          position: static !important;
+        }
+
+        /* භාෂා මෙනුව සඳහා Dark & Blur විලාසය */
+        .lang-selector-wrap select {
+          background: rgba(15, 20, 25, 0.85) !important;
+          backdrop-filter: blur(12px) !important;
+          -webkit-backdrop-filter: blur(12px) !important;
+          color: #ffffff !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+          padding: 8px 14px !important;
+          border-radius: 20px !important;
+          font-family: inherit !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          cursor: pointer !important;
+          outline: none !important;
+          transition: all 0.2s ease !important;
+        }
+        .lang-selector-wrap select:hover {
+          border-color: #e50914 !important;
+        }
+        .lang-selector-wrap select option {
+          background-color: #0f1419 !important;
+          color: #ffffff !important;
+          padding: 10px !important;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -29,6 +65,13 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
         }
         .app-title {
             color: #e50914;
@@ -279,7 +322,24 @@
 
     <!-- HEADER / SEARCH -->
     <header>
-        <h1 class="app-title" onclick="showHomePage()">Movies World</h1>
+        <div class="header-top">
+            <h1 class="app-title" onclick="showHomePage()">Movies World</h1>
+            <!-- භාෂා මෙනුව එකතු කරන ලදී -->
+            <div class="lang-selector-wrap">
+                <select id="custom-translate-select" aria-label="Select Language" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="si">සිංහල</option>
+                    <option value="ta">தமிழ்</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="zh-CN">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+        </div>
         <div class="search-box">
             <input type="text" id="searchInput" class="search-input" placeholder="Search any movie..." oninput="handleSearch()">
             <div id="dropdown" class="search-results-dropdown" style="display: none;"></div>
@@ -319,6 +379,39 @@
             </div>
         </div>
     </div>
+
+    <!-- භාෂාව තබාගැනීමට අවශ්‍ය කුකී ස්ක්‍රිප්ට් එක -->
+    <script type="text/javascript">
+      function changeLanguage(lang) {
+        let hostname = window.location.hostname;
+        document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
+        document.cookie = "googtrans=/en/" + lang + "; path=/;";
+        location.reload();
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        const match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+        if (match) {
+          const currentLang = match[2].split('/')[2];
+          const select = document.getElementById('custom-translate-select');
+          if (select && currentLang) {
+            select.value = currentLang;
+          }
+        }
+      });
+    </script>
+
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          includedLanguages: 'en,si,ta,hi,es,fr,de,zh-CN,ja,ar',
+          autoDisplay: false
+        }, 'google_translate_element');
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
         const API_KEY = '8ee66710f2f840fe7b6a29bc84db0629';
