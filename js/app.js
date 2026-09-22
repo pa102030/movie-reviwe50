@@ -218,7 +218,7 @@ function initSearch() {
   });
 }
 
-/* ---------- global chrome: header, theme, mobile menu, back-to-top ---------- */
+/* ---------- global chrome: header, theme, back-to-top ---------- */
 function initChrome() {
   // theme
   const saved = localStorage.getItem("mw_theme") || "dark";
@@ -230,7 +230,7 @@ function initChrome() {
     toast(next === "dark" ? "Dark mode on" : "Light mode on", "fa-circle-half-stroke");
   }));
 
-  // --- MOBILE MENU TOGGLE (অලුතින් ඇතුළත් කළ කොටස) ---
+  // --- MOBILE MENU TOGGLE ---
   const hamburger = document.querySelector(".hamburger");
   const mainNav = document.querySelector(".main-nav");
   if (hamburger && mainNav) {
@@ -242,7 +242,8 @@ function initChrome() {
         icon.classList.toggle("fa-xmark");
       }
     });
-    // මෙනුවේ ලින්ක් එකක් ක්ලික් කළ විට මෙනුව වැසීමට
+    
+    // Close menu when clicking a nav link
     mainNav.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", () => {
         mainNav.classList.remove("open");
@@ -254,7 +255,7 @@ function initChrome() {
       });
     });
   }
-  // ----------------------------------------------------
+  // --------------------------
 
   // header scroll
   const header = document.querySelector(".site-header");
