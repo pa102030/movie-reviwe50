@@ -77,9 +77,37 @@ document.addEventListener("mw:ready", async () => {
   document.getElementById("facts-panel").innerHTML = `
     <h2><i class="fa-solid fa-circle-info"></i> Movie Details</h2>
     <dl class="facts">${facts.map(([k, v]) => `<div class="fact"><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`;
-  document.getElementById("cast-panel").innerHTML = `
-    <h2><i class="fa-solid fa-users"></i> Cast & Crew</h2>
-    <div class="cast-list">${cast.map(c => `<span class="cast-chip"><span class="avatar">${esc(c.trim()[0])}</span>${esc(c)}</span>`).join("") || '<p class="story">Cast information unavailable.</p>'}</div>`;
+
+  // Render cast list with photos and character names
+  const topCast = cast.slice(0, 10);
+  let castHTML = `<h2><i class="fa-solid fa-users"></i> Cast & Crew</h2>`;
+  if (topCast.length > 0) {
+    castHTML += `<div class="cast-grid">`;
+    topCast.forEach(c => {
+      const name = typeof c === "object" ? (c.name || c.original_name || "") : c;
+      const character = typeof c === "object" ? (c.character || "") : "";
+      const profilePath = typeof c === "object" ? c.profile_path : null;
+      
+      const profileImg = profilePath 
+        ? `https://image.tmdb.org/t/p/w185${profilePath}` 
+        : `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150" viewBox="0 0 100 150"><rect width="100" height="150" fill="%23222"/><text x="50" y="75" fill="%23aaa" font-size="14" text-anchor="middle">${encodeURIComponent(name ? name[0] : "C")}</text></svg>`;
+
+      castHTML +=`
+        <div class="cast-card">
+          <div class="cast-img-wrap">
+            <img src="${profileImg}" alt="${esc(name)}" loading="lazy">
+          </div>
+          <div class="cast-info">
+            <span class="cast-name">${esc(name)}</span>
+            ${character ? `<span class="cast-character">${esc(character)}</span>` : ""}
+          </div>
+        </div>`;
+    });
+    castHTML += `</div>`;
+  } else {
+    castHTML += `<p class="story">Cast information unavailable.</p>`;
+  }
+  document.getElementById("cast-panel").innerHTML = castHTML;
 
   /* ---------- story ---------- */
   document.getElementById("story-panel").innerHTML = `
@@ -103,7 +131,6 @@ document.addEventListener("mw:ready", async () => {
   watchHTML += `<p class="legal-note"><i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> MOVIES WORLD never hosts pirated content. Buttons open official, licensed platforms only.</p>`;
   watchPanel.innerHTML = watchHTML;
   watchPanel.querySelectorAll("[data-provider]").forEach(b => b.addEventListener("click", () => {
-    // search the official platform for the title — legal destination only
     const q = encodeURIComponent(b.dataset.movie);
     const urls = {
       "netflix": `https://www.netflix.com/search?q=${q}`,
