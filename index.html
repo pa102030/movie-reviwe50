@@ -21,16 +21,15 @@
   <link rel="stylesheet" href="css/responsive-fix.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
   <style>
-    /* Google Translate ඉහළින් පෙන්වන Notification Banner එක සම්පූර්ණයෙන්ම සඟවා තැබීමට */
-    .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon {
+    /* Google Translate ඉහළින් පෙන්වන Notification Banner සහ iframe සම්පූර්ණයෙන්ම සැඟවීමට */
+    .goog-te-banner-frame.skiptranslate, 
+    .goog-te-gadget-icon,
+    .skiptranslate iframe {
       display: none !important;
     }
     body {
       top: 0px !important;
-    }
-    /* iframe හෝ අමතර translate මූලද්‍රව්‍ය මඟින් screen එක උඩට තල්ලු වීම වැළැක්වීමට */
-    .skiptranslate {
-      display: none !important;
+      position: static !important;
     }
 
     .header-actions {
@@ -187,12 +186,12 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"MOVIES WORLD","url":"https://moviesworld.example/","potentialAction":{"@type":"SearchAction","target":"https://moviesworld.example/movies.html?q={search_term_string}","query-input":"required name=search_term_string"}}
   </script>
 
-  <!-- ඕනෑම පිටුවකට ගියත් භාෂාව රැඳී පවතින අයුරින් Cookie සැකසීම -->
+  <!-- වෙබ් අඩවියේ ඕනෑම පිටුවකට ගියත් භාෂාව එලෙසම රඳවා ගැනීමට සහ Cookies සැකසීමට -->
   <script type="text/javascript">
     function changeLanguage(lang) {
-      // path=/ මඟින් වෙබ් අඩවියේ ඕනෑම ෆෝල්ඩර් එකක/පිටුවක මෙම කූකී එක ක්‍රියාත්මක වේ
-      let domain = window.location.hostname;
-      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + domain;
+      let hostname = window.location.hostname;
+      // Domain එකේ සියලුම sub-pages වලට එකම විදිහට cookie එක වැඩ කිරීමට සකස් කර ඇත
+      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
       document.cookie = "googtrans=/en/" + lang + "; path=/;";
       location.reload();
     }
