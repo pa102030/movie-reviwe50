@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies World - Discover. Review. Watch.</title>
+    <title>MOVIES WORLD - Premium Cinematic Stylesheet</title>
+    <!-- FontAwesome සඳහා (Icons පෙන්වීමට) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         /* ============================================================
-           MOVIES WORLD - Premium Cinematic Stylesheet (With Mobile Nav Fix)
+           MOVIES WORLD - Premium Cinematic Stylesheet
            ============================================================ */
         :root{
           --bg:#0a0d12;
           --bg-2:#0f141c;
           --surface:#151b26;
           --surface-2:#1c2431;
-          --glass:rgba(21,27,38,.85);
+          --glass:rgba(21,27,38,.72);
           --border:rgba(255,255,255,.08);
           --text:#f2f5f9;
           --text-2:#9aa7b8;
@@ -37,7 +39,7 @@
           --bg-2:#ffffff;
           --surface:#ffffff;
           --surface-2:#eef1f6;
-          --glass:rgba(255,255,255,.9);
+          --glass:rgba(255,255,255,.8);
           --border:rgba(10,15,25,.1);
           --text:#10151f;
           --text-2:#4b586c;
@@ -60,8 +62,14 @@
         a{color:inherit;text-decoration:none}
         img{display:block;max-width:100%}
         button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+        input,select{font-family:inherit;color:var(--text)}
         ::selection{background:var(--accent);color:#fff}
-        
+        ::-webkit-scrollbar{width:10px;height:8px}
+        ::-webkit-scrollbar-track{background:var(--bg-2)}
+        ::-webkit-scrollbar-thumb{background:#2c3648;border-radius:6px}
+        ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+        :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
         /* ---------- Header ---------- */
         .site-header{
           position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--header-h);
@@ -74,79 +82,76 @@
         [data-theme="light"] .site-header{background:rgba(255,255,255,.85)}
         .site-header.scrolled{background:var(--glass);box-shadow:var(--shadow-sm)}
         .header-inner{width:min(1400px,100% - 48px);margin:0 auto;display:flex;align-items:center;gap:26px}
-        
         .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-head);font-weight:800;font-size:21px;letter-spacing:.5px;color:#fff;flex-shrink:0}
         [data-theme="light"] .logo{color:#10151f}
         .logo-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--accent),#7a0412);display:grid;place-items:center;color:#fff;font-size:17px;box-shadow:0 6px 18px rgba(229,9,20,.45)}
         .logo b{color:var(--accent-2)}
-        
-        /* Main Navigation */
         .main-nav{display:flex;gap:4px;margin-left:8px}
         .main-nav a{padding:9px 13px;border-radius:9px;color:#c6cfdd;font-weight:500;font-size:14px;transition:.25s;position:relative}
         [data-theme="light"] .main-nav a{color:#3c485c}
         .main-nav a:hover,.main-nav a.active{color:#fff;background:rgba(255,255,255,.08)}
         [data-theme="light"] .main-nav a:hover,[data-theme="light"] .main-nav a.active{color:#10151f;background:rgba(10,15,25,.07)}
-        
         .header-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
         .icon-btn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#c6cfdd;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);transition:.25s;font-size:16px}
         [data-theme="light"] .icon-btn{color:#3c485c;background:rgba(10,15,25,.05);border-color:rgba(10,15,25,.08)}
-        .icon-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-        
+        .icon-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px)}
         .btn-profile{padding:10px 20px;border-radius:12px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(135deg,var(--accent),#a30a14);box-shadow:0 6px 18px rgba(229,9,20,.4);transition:.25s}
+        .btn-profile:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(229,9,20,.55)}
         
-        /* Hamburger Button (Mobile) */
+        /* ඔයාගේ මුල් CSS එකේ තිබුණු hamburger එකට අදාළ කොටස මෙන්න */
         .hamburger{
           display:none;
           width:42px;height:42px;border-radius:12px;
           background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);
-          color:#fff;font-size:18px;place-items:center;cursor:pointer;
+          color:#c6cfdd;font-size:18px;place-items:center;cursor:pointer;transition:.25s;
         }
-        [data-theme="light"] .hamburger{color:#10151f;background:rgba(10,15,25,.05)}
+        [data-theme="light"] .hamburger{color:#3c485c;background:rgba(10,15,25,.05)}
+        .hamburger:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 
-        /* ---------- Hero Section ---------- */
-        .hero{position:relative;min-height:90vh;display:flex;align-items:center;padding-top:var(--header-h);text-align:center;justify-content:center}
+        /* ---------- Hero ---------- */
+        .hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;padding-top:var(--header-h)}
         .hero-content{width:min(1000px,100% - 48px);z-index:2}
-        .hero-title{font-family:var(--font-head);font-size:clamp(32px, 5vw, 60px);font-weight:800;margin-bottom:15px;line-height:1.2}
+        .hero-title{font-family:var(--font-head);font-size:clamp(35px, 5vw, 65px);font-weight:800;margin-bottom:15px;line-height:1.1}
         .hero-desc{color:var(--text-2);font-size:16px;margin-bottom:25px}
-        .btn-red{background:var(--accent);color:#fff;padding:12px 24px;border-radius:12px;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+        .btn-red{background:linear-gradient(135deg,var(--accent),#a30a14);color:#fff;padding:14px 28px;border-radius:13px;font-weight:700;display:inline-flex;align-items:center;gap:10px}
 
-        /* ---------- Responsive Media Queries for Navigation ---------- */
-        @media (max-width: 1024px) {
+        /* ---------- Responsive Media Queries (මෙතැනදී ෆෝන් එක සඳහා අවශ්‍ය corrections ටික යෙදුවා) ---------- */
+        @media (max-width:1024px){
           .main-nav {
-            display: none;
+            display: none; /* ෆෝන් එකේදී මුලින් මෙනු එක සඟවයි */
             position: absolute;
             top: var(--header-h);
             left: 0;
             right: 0;
             background: var(--surface);
+            border-bottom: 1px solid var(--border);
             flex-direction: column;
             padding: 20px;
-            border-bottom: 1px solid var(--border);
+            gap: 8px;
             box-shadow: var(--shadow);
-            gap: 10px;
           }
+          /* ජාවාස්ක්‍රිප්ට් හරහා active ක්ලාස් එක එකතු වූ විට මෙනු එක පෙන්වයි */
           .main-nav.active {
-            display: flex;
+            display: flex !important;
           }
           .main-nav a {
             padding: 12px 16px;
-            font-size: 16px;
+            font-size: 15px;
           }
           .hamburger {
-            display: grid;
+            display: grid !important; /* ෆෝන් එකේදී හැම්බර්ගර් අයිකන් එක පෙන්වයි */
           }
         }
-
-        @media (max-width: 768px) {
-          .btn-profile span { display: none; }
-          .btn-profile { padding: 10px 14px; }
-          .header-inner { width: calc(100% - 24px); }
+        @media (max-width:768px){
+          .btn-profile span{display:none}
+          .btn-profile{padding:10px 13px}
+          .header-inner{width:calc(100% - 28px)}
         }
     </style>
 </head>
 <body>
 
-    <!-- Header Section -->
+    <!-- Site Header -->
     <header class="site-header" id="siteHeader">
         <div class="header-inner">
             <a href="#" class="logo">
@@ -173,7 +178,7 @@
                     <i class="fa-solid fa-user"></i> <span>Sign In</span>
                 </a>
 
-                <!-- Mobile Hamburger Menu Button -->
+                <!-- Hamburger Menu Button -->
                 <button class="hamburger" id="hamburgerBtn" aria-label="Toggle Menu">
                     <i class="fa-solid fa-bars" id="hamburgerIcon"></i>
                 </button>
@@ -184,13 +189,13 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Unlimited Movies, TV Shows, & More.</h1>
-            <p class="hero-desc">Discover top-rated movies, check reviews, and watch trailers instantly anywhere, anytime.</p>
-            <a href="#" class="btn-red"><i class="fa-solid fa-play"></i> Explore Now</a>
+            <h1 class="hero-title">Discover. Review. Watch.</h1>
+            <p class="hero-desc">Explore your favorite movies and TV shows with a seamless cinematic experience on any device.</p>
+            <a href="#" class="btn-red"><i class="fa-solid fa-play"></i> Explore Movies</a>
         </div>
     </section>
 
-    <!-- JavaScript for Mobile Navigation & Theme Toggle -->
+    <!-- JavaScript for Mobile Menu & Theme Toggle -->
     <script>
         // Mobile Menu Toggle
         const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -208,7 +213,7 @@
             }
         });
 
-        // Theme Toggle (Dark / Light)
+        // Theme Toggle
         const themeToggle = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         
@@ -224,10 +229,10 @@
             }
         });
 
-        // Header scroll effect
+        // Header Scroll Effect
         window.addEventListener('scroll', () => {
             const header = document.getElementById('siteHeader');
-            if (window.scrollY > 40) {
+            if (window.scrollY > 30) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
