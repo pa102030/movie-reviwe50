@@ -218,7 +218,7 @@ function initSearch() {
   });
 }
 
-/* ---------- global chrome: header, theme, back-to-top ---------- */
+/* ---------- global chrome: header, theme, back-to-top, auth sync ---------- */
 function initChrome() {
   // theme
   const saved = localStorage.getItem("mw_theme") || "dark";
@@ -255,22 +255,35 @@ function initChrome() {
       });
     });
   }
-  // --------------------------
+
+  // Profile button / Session name sync across all pages if logged in
+  const loggedUserStr = localStorage.getItem('mw_logged_user');
+  if (loggedUserStr) {
+    try {
+      const user = JSON.parse(loggedUserStr);
+      document.querySelectorAll('.btn-profile span').forEach(span => {
+        span.innerText = user.name;
+      });
+    } catch(e) {}
+  }
 
   // header scroll
   const header = document.querySelector(".site-header");
   const onScroll = () => {
     header && header.classList.toggle("scrolled", window.scrollY > 24);
-    bt && bt.classList.toggle("show", window.scrollY > 600);
+    bt && bt.classList.show("show", window.scrollY > 600); // fixed syntax safety below
   };
-  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("scroll", () => {
+    header && header.classList.toggle("scrolled", window.scrollY > 24);
+    if (bt) bt.classList.toggle("show", window.scrollY > 600);
+  }, { passive: true });
+
   // back to top
   const bt = document.createElement("button");
   bt.className = "back-top"; bt.setAttribute("aria-label", "Back to top");
   bt.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
   bt.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
   document.body.appendChild(bt);
-  onScroll();
 }
 
 /* ---------- boot ---------- */
