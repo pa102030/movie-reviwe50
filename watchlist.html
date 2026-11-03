@@ -1,50 +1,585 @@
-<!-- Login / Signup Modal with Social Logins -->
-<div id="auth-modal">
-  <div class="auth-box">
-    <h3 id="auth-modal-title">Sign In to MOVIES WORLD</h3>
-    <div id="auth-error"></div>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <title>My Watchlist | MOVIES WORLD</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0d12">
+  <meta name="description" content="Your personal movie watchlist and favorites.">
+  <meta property="og:site_name" content="MOVIES WORLD">
+  <meta property="og:title" content="My Watchlist | MOVIES WORLD">
+  <meta property="og:description" content="Your personal movie watchlist and favorites.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="My Watchlist | MOVIES WORLD">
+  <meta name="twitter:description" content="Your personal movie watchlist and favorites.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23e50914'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>M</text></svg>">
+  
+  <style>
+    /* Google Translate Notification Banner සහ iframe සම්පූර්ණයෙන්ම සැඟවීමට */
+    .goog-te-banner-frame.skiptranslate, 
+    .goog-te-gadget-icon,
+    .skiptranslate iframe {
+      display: none !important;
+    }
+    body {
+      top: 0px !important;
+      position: static !important;
+    }
 
-    <!-- Social Login Buttons -->
-    <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-      <button onclick="socialLogin('Google')" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px; background: #fff; color: #333; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-        <i class="fa-brands fa-google" style="color: #ea4335;"></i> Continue with Google
-      </button>
-      <button onclick="socialLogin('Facebook')" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px; background: #1877f2; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-        <i class="fa-brands fa-facebook-f"></i> Continue with Facebook
-      </button>
-      <button onclick="socialLogin('Twitter')" style="display: flex; align-items: center; justify-content: center; gap: 10px; padding: 11px; background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;">
-        <i class="fa-brands fa-x-twitter"></i> Continue with X (Twitter)
-      </button>
+    /* භාෂා මෙනුව සඳහා Dark & Blur විලාසය */
+    .lang-selector-wrap select {
+      background: rgba(15, 20, 25, 0.85) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 6px 12px !important;
+      border-radius: 20px !important;
+      font-family: inherit !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      cursor: pointer !important;
+      outline: none !important;
+      transition: all 0.2s ease !important;
+    }
+    .lang-selector-wrap select:hover {
+      border-color: #e50914 !important;
+    }
+    .lang-selector-wrap select option {
+      background-color: #0f1419 !important;
+      color: #ffffff !important;
+      padding: 10px !important;
+    }
+
+    /* --- Auth Modal Styling (Theme Matching) --- */
+    #auth-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 13, 18, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .auth-box {
+      background: #0f1419;
+      padding: 30px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 380px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    }
+
+    .auth-field {
+      margin-bottom: 16px;
+    }
+
+    .auth-field label {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 6px;
+      color: #e6edf3;
+      font-weight: 500;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .auth-field input:focus {
+      border-color: #388bfd;
+      box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.25);
+    }
+
+    /* Primary Sign In Button (Theme Red Accent) */
+    .auth-btn {
+      width: 100%;
+      padding: 10px;
+      background: #e50914;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+      margin-top: 6px;
+    }
+
+    .auth-btn:hover {
+      background: #f40612;
+    }
+
+    /* Divider Line with 'or' */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: #8b949e;
+      font-size: 13px;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .auth-divider span {
+      padding: 0 12px;
+    }
+
+    /* Social Buttons Styling */
+    .social-login-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 9px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #e6edf3;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Footer Links */
+    .auth-footer-text {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #8b949e;
+    }
+
+    .auth-footer-text a {
+      color: #388bfd;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .auth-footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-close-btn {
+      width: 100%;
+      padding: 8px;
+      background: transparent;
+      color: #8b949e;
+      border: none;
+      margin-top: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .auth-close-btn:hover {
+      color: #ffffff;
+    }
+
+    #auth-error {
+      color: #f85149;
+      font-size: 13px;
+      margin-bottom: 14px;
+      background: rgba(248, 81, 73, 0.1);
+      border: 1px solid rgba(248, 81, 73, 0.3);
+      padding: 8px 12px;
+      border-radius: 6px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to content</a>
+  <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
+  
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
+        <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
+        MOVIES<b>WORLD</b>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="movies.html">Movies</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="genres.html">Genres</a>
+        <a href="movies.html?sort=rating">Top Rated</a>
+        <a href="movies.html?sort=newest">Latest</a>
+        <a href="watchlist.html">Watchlist</a>
+      </nav>
+      <div class="header-actions">
+        <!-- භාෂා මෙනුව එකතු කරන ලදී -->
+        <div class="lang-selector-wrap">
+            <select id="custom-translate-select" aria-label="Select Language" onchange="changeLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="si">සිංහල</option>
+                <option value="ta">தமிழ்</option>
+                <option value="hi">हिन्दी</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="zh-CN">中文</option>
+                <option value="ja">日本語</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+        <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
+        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span id="profile-nav-text">Profile</span></a>
+        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-hero">
+      <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> <i class="fa-solid fa-chevron-right" style="font-size:10px"></i> <span>Watchlist</span></nav>
+      <h1 id="page-title-heading">My Watchlist</h1>
+      
+      <!-- User Account Session Box inside Hero if logged in -->
+      <div id="user-session-card" style="display:none; margin-top: 15px; background: rgba(255,255,255,0.06); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); max-width: 450px; display:inline-flex; align-items:center; justify-content:space-between;">
+        <div>
+          <span style="font-size:14px; color:#aaa; display:block;">Logged in as:</span>
+          <strong id="session-user-name" style="font-size:16px; color:#fff;">User</strong>
+        </div>
+        <button onclick="handleLogout()" style="background: rgba(229, 9, 20, 0.2); color: #e50914; border: 1px solid #e50914; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;">Sign Out</button>
+      </div>
+
+      <div id="watchlist-controls-wrap">
+        <p><b id="wl-count">0</b> saved movies · stored privately in your browser.</p>
+        <label style="display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;color:var(--text-2);cursor:pointer">
+          <input type="checkbox" id="show-favorites" style="width:17px;height:17px;accent-color:var(--accent)"> Show favorites only
+        </label>
+        <button class="btn-clear" id="clear-watchlist" style="display:none;margin-left:18px"><i class="fa-solid fa-trash-can"></i> Clear list</button>
+      </div>
     </div>
 
-    <div style="display: flex; align-items: center; text-align: center; margin-bottom: 20px; color: #666;">
-      <div style="flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
-      <span style="padding: 0 10px; font-size: 12px; text-transform: uppercase;">Or with email</span>
-      <div style="flex: 1; border-bottom: 1px solid rgba(255,255,255,0.1);"></div>
+    <section class="section" style="padding-top:0">
+      <div class="movie-grid" id="watchlist-grid"></div>
+      <div class="empty-state" id="watchlist-empty" style="display:none">
+        <i class="fa-solid fa-bookmark"></i>
+        <h3 id="empty-state-title">Your watchlist is empty.</h3>
+        <p id="empty-state-desc">Browse movies and tap the <b>+</b> button to save them here.</p>
+        <p style="margin-top:18px"><a href="movies.html" class="btn btn-red" style="display:inline-flex"><i class="fa-solid fa-film"></i> Discover Movies</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Login / Signup Modal (GitHub Style Matching Theme) -->
+  <div id="auth-modal">
+    <div class="auth-box">
+      <h3 id="auth-modal-title" style="margin-bottom: 22px; font-size: 20px; font-weight: 600; text-align: center;">Sign in to MOVIES WORLD</h3>
+      
+      <div id="auth-error"></div>
+
+      <div class="auth-field" id="auth-name-group" style="display:none;">
+        <label for="auth-name-input">Your Name</label>
+        <input type="text" id="auth-name-input" placeholder="Enter your name">
+      </div>
+
+      <div class="auth-field">
+        <label for="auth-email-input">Username or email address</label>
+        <input type="email" id="auth-email-input" placeholder="name@example.com">
+      </div>
+
+      <div class="auth-field">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label for="auth-password-input" style="margin-bottom: 0;">Password</label>
+          <a href="#" onclick="alert('Password reset link has been sent to your email.'); return false;" style="font-size: 12px; color: #388bfd; text-decoration: none;">Forgot password?</a>
+        </div>
+        <input type="password" id="auth-password-input" placeholder="••••••••">
+      </div>
+
+      <button class="auth-btn" id="auth-submit-btn" onclick="submitAuthForm()">Sign in</button>
+
+      <div class="auth-divider">
+        <span>or</span>
+      </div>
+
+      <div class="social-login-group">
+        <button type="button" class="social-btn" onclick="socialLogin('Google')">
+          <i class="fa-brands fa-google" style="color: #ea4335;"></i> Continue with Google
+        </button>
+        <button type="button" class="social-btn" onclick="socialLogin('Apple')">
+          <i class="fa-brands fa-apple" style="color: #fff;"></i> Continue with Apple
+        </button>
+        <button type="button" class="social-btn" onclick="socialLogin('Facebook')">
+          <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i> Continue with Facebook
+        </button>
+        <button type="button" class="social-btn" onclick="socialLogin('Twitter')">
+          <i class="fa-brands fa-x-twitter" style="color: #fff;"></i> Continue with X (Twitter)
+        </button>
+      </div>
+
+      <p class="auth-footer-text">
+        <span id="auth-toggle-label">New to MOVIES WORLD?</span> 
+        <a href="#" onclick="toggleAuthMode(); return false;" id="auth-toggle-link">Create an account</a>
+      </p>
+
+      <button class="auth-close-btn" onclick="closeAuthModal()">Cancel</button>
     </div>
-
-    <div class="auth-field" id="auth-name-group" style="display:none;">
-      <label>Your Name</label>
-      <input type="text" id="auth-name-input" placeholder="Enter your name">
-    </div>
-
-    <div class="auth-field">
-      <label>Email Address</label>
-      <input type="email" id="auth-email-input" placeholder="name@example.com">
-    </div>
-
-    <div class="auth-field">
-      <label>Password</label>
-      <input type="password" id="auth-password-input" placeholder="••••••••">
-    </div>
-
-    <button class="auth-btn" id="auth-submit-btn" onclick="submitAuthForm()">Sign In</button>
-
-    <p class="auth-footer-text">
-      <span id="auth-toggle-label">Don't have an account?</span> 
-      <a href="#" onclick="toggleAuthMode(); return false;" id="auth-toggle-link">Sign Up</a>
-    </p>
-
-    <button class="auth-close-btn" onclick="closeAuthModal()">Cancel</button>
   </div>
-</div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
+          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="movies.html">Movies</a></li>
+            <li><a href="reviews.html">Reviews</a></li>
+            <li><a href="genres.html">Genres</a></li>
+            <li><a href="movies.html?sort=rating">Top Rated</a></li>
+            <li><a href="movies.html?sort=newest">Latest</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Years</h4>
+          <ul>
+            <li><a href="movies.html?year=2026">Best of 2026</a></li>
+            <li><a href="movies.html?year=2025">Best of 2025</a></li>
+            <li><a href="movies.html?year=2024">Best of 2024</a></li>
+            <li><a href="movies.html?year=2020">Best of 2020</a></li>
+            <li><a href="movies.html?year=2010">Best of 2010</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="watchlist.html">Watchlist</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="privacy.html#terms">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
+        <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- භාෂාව තබාගැනීමට අවශ්‍ය කුකී ස්ක්‍රිප්ට් එක සහ ගූගල් ට්‍රාන්ස්ලේට් කෝඩ් එක -->
+  <script type="text/javascript">
+    function changeLanguage(lang) {
+      let hostname = window.location.hostname;
+      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
+      document.cookie = "googtrans=/en/" + lang + "; path=/;";
+      location.reload();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
+      if (match) {
+        const currentLang = match[2].split('/')[2];
+        const select = document.getElementById('custom-translate-select');
+        if (select && currentLang) {
+          select.value = currentLang;
+        }
+      }
+    });
+  </script>
+
+  <div id="google_translate_element" style="display:none;"></div>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,si,ta,hi,es,fr,de,zh-CN,ja,ar',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- Auth & Session Management Script -->
+  <script>
+    let isRegisterMode = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkUserSession();
+
+      const profileBtn = document.querySelector('.btn-profile');
+      if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => {
+          const loggedUser = localStorage.getItem('mw_logged_user');
+          if (!loggedUser) {
+            e.preventDefault();
+            openAuthModal();
+          }
+        });
+      }
+    });
+
+    function checkUserSession() {
+      const loggedUserStr = localStorage.getItem('mw_logged_user');
+      const profileSpan = document.getElementById('profile-nav-text');
+      const sessionCard = document.getElementById('user-session-card');
+      const sessionName = document.getElementById('session-user-name');
+
+      if (loggedUserStr) {
+        const user = JSON.parse(loggedUserStr);
+        if (profileSpan) profileSpan.innerText = user.name;
+        if (sessionCard) sessionCard.style.display = 'inline-flex';
+        if (sessionName) sessionName.innerText = user.name + ' (' + user.email + ')';
+      } else {
+        if (profileSpan) profileSpan.innerText = 'Profile';
+        if (sessionCard) sessionCard.style.display = 'none';
+      }
+    }
+
+    function openAuthModal() {
+      document.getElementById('auth-modal').style.display = 'flex';
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      const title = document.getElementById('auth-modal-title');
+      const nameGroup = document.getElementById('auth-name-group');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const toggleLabel = document.getElementById('auth-toggle-label');
+      const toggleLink = document.getElementById('auth-toggle-link');
+      const errorDiv = document.getElementById('auth-error');
+
+      errorDiv.style.display = 'none';
+
+      if (isRegisterMode) {
+        title.innerText = 'Create an account';
+        nameGroup.style.display = 'block';
+        submitBtn.innerText = 'Create account';
+        toggleLabel.innerText = 'Already have an account?';
+        toggleLink.innerText = 'Sign in';
+      } else {
+        title.innerText = 'Sign in to MOVIES WORLD';
+        nameGroup.style.display = 'none';
+        submitBtn.innerText = 'Sign in';
+        toggleLabel.innerText = 'New to MOVIES WORLD?';
+        toggleLink.innerText = 'Create an account';
+      }
+    }
+
+    function submitAuthForm() {
+      const email = document.getElementById('auth-email-input').value.trim();
+      const password = document.getElementById('auth-password-input').value.trim();
+      const name = document.getElementById('auth-name-input').value.trim();
+      const errorDiv = document.getElementById('auth-error');
+
+      if (!email || !password || (isRegisterMode && !name)) {
+        errorDiv.innerText = 'Please fill in all required fields.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      if (isRegisterMode) {
+        const userObj = { name, email, password };
+        localStorage.setItem('mw_user_account_' + email, JSON.stringify(userObj));
+        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+        alert('Account created successfully!');
+      } else {
+        const storedUser = localStorage.getItem('mw_user_account_' + email);
+        if (!storedUser) {
+          errorDiv.innerText = 'Account not found. Please create an account first.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        const userObj = JSON.parse(storedUser);
+        if (userObj.password !== password) {
+          errorDiv.innerText = 'Incorrect password. Please try again.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+      }
+
+      closeAuthModal();
+      checkUserSession();
+      window.location.reload();
+    }
+
+    function socialLogin(provider) {
+      const userObj = {
+        name: provider + " User",
+        email: "user." + provider.toLowerCase() + "@moviesworld.com",
+        provider: provider
+      };
+      localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+      alert('Successfully signed in with ' + provider + '!');
+      closeAuthModal();
+      checkUserSession();
+      window.location.reload();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('mw_logged_user');
+      checkUserSession();
+      window.location.reload();
+    }
+  </script>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/watchlist.js"></script>
+</body>
+</html>
