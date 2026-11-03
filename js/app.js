@@ -1,10 +1,40 @@
 /* MOVIES WORLD - shared UI: cards, header, search overlay, modals, toasts, watchlist */
 "use strict";
 
-/* ---------- storage: watchlist & favorites ---------- */
+// Helper to get active user unique ID from Firebase or fallback to guest
+function MWGetActiveUserId() {
+  let uid = "guest";
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("firebase:authUser:")) {
+        const userData = JSON.parse(localStorage.getItem(key));
+        if (userData && userData.uid) {
+          uid = userData.uid;
+          break;
+        }
+      }
+    }
+  } catch (e) {}
+  return uid;
+}
+
+/* ---------- storage: watchlist & favorites (User Specific) ---------- */
 const MWStore = {
-  get(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } },
-  set(key, val) { localStorage.setItem(key, JSON.stringify(val)); },
+  get(key) { 
+    try { 
+      const uid = MWGetActiveUserId();
+      const userSpecificKey = `${key}_${uid}`;
+      return JSON.parse(localStorage.getItem(userSpecificKey)) || []; 
+    } catch { 
+      return []; 
+    } 
+  },
+  set(key, val) { 
+    const uid = MWGetActiveUserId();
+    const userSpecificKey = `${key}_${uid}`;
+    localStorage.setItem(userSpecificKey, JSON.stringify(val)); 
+  },
   inWatchlist(id) { return MWStore.get("mw_watchlist").includes(+id); },
   inFavorites(id) { return MWStore.get("mw_favorites").includes(+id); },
   toggle(key, id) {
@@ -230,7 +260,7 @@ function initChrome() {
     toast(next === "dark" ? "Dark mode on" : "Light mode on", "fa-circle-half-stroke");
   }));
 
-  // --- MOBILE MENU TOGGLE ---
+  // mobile menu toggle
   const hamburger = document.querySelector(".hamburger");
   const mainNav = document.querySelector(".main-nav");
   if (hamburger && mainNav) {
@@ -243,7 +273,6 @@ function initChrome() {
       }
     });
     
-    // Close menu when clicking a nav link
     mainNav.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", () => {
         mainNav.classList.remove("open");
@@ -256,7 +285,7 @@ function initChrome() {
     });
   }
 
-  // Profile button / Session name sync across all pages if logged in
+  // Profile name sync across all pages from logged user or firebase session
   const loggedUserStr = localStorage.getItem('mw_logged_user');
   if (loggedUserStr) {
     try {
@@ -269,10 +298,6 @@ function initChrome() {
 
   // header scroll
   const header = document.querySelector(".site-header");
-  const onScroll = () => {
-    header && header.classList.toggle("scrolled", window.scrollY > 24);
-    bt && bt.classList.show("show", window.scrollY > 600); // fixed syntax safety below
-  };
   window.addEventListener("scroll", () => {
     header && header.classList.toggle("scrolled", window.scrollY > 24);
     if (bt) bt.classList.toggle("show", window.scrollY > 600);
@@ -292,6 +317,3 @@ document.addEventListener("DOMContentLoaded", async () => {
   initChrome();
   initSearch();
   await MW_API.init();
-  if (loader) { loader.classList.add("done"); setTimeout(() => loader.remove(), 600); }
-  document.dispatchEvent(new CustomEvent("mw:ready"));
-});
