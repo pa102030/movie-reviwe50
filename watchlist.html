@@ -439,11 +439,13 @@
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- Core Scripts & Fully Fixed Auth Toggle Logic -->
+  <!-- Core Scripts -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/watchlist.js"></script>
 
+  <!-- Fully Fixed Auth & Google Account Picker Script -->
   <script>
     setTimeout(() => {
       const loader = document.querySelector(".loader");
@@ -457,7 +459,6 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       checkUserSession();
-      loadWatchlistPageData();
 
       const profileBtn = document.querySelector('.btn-profile');
       if (profileBtn) {
@@ -469,25 +470,6 @@
           }
         });
       }
-
-      const showFavCheckbox = document.getElementById('show-favorites');
-      if (showFavCheckbox) {
-        showFavCheckbox.addEventListener('change', () => loadWatchlistPageData());
-      }
-      const clearBtn = document.getElementById('clear-watchlist');
-      if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-          if (confirm('Are you sure you want to clear your watchlist?')) {
-            MWStore.set("mw_watchlist", []);
-            loadWatchlistPageData();
-            toast('Watchlist cleared', 'fa-circle-check');
-          }
-        });
-      }
-
-      document.addEventListener("mw:watchlist-changed", () => {
-        loadWatchlistPageData();
-      });
     });
 
     function checkUserSession() {
@@ -509,67 +491,16 @@
       }
     }
 
-    async function loadWatchlistPageData() {
-      const grid = document.getElementById('watchlist-grid');
-      const emptyState = document.getElementById('watchlist-empty');
-      const countEl = document.getElementById('wl-count');
-      const clearBtn = document.getElementById('clear-watchlist');
-      const showFavs = document.getElementById('show-favorites')?.checked;
-
-      if (!grid) return;
-
-      const ids = MWStore.get("mw_watchlist");
-      if (countEl) countEl.textContent = ids.length;
-      if (clearBtn) clearBtn.style.display = ids.length ? 'inline-flex' : 'none';
-
-      if (!ids.length) {
-        grid.innerHTML = '';
-        if (emptyState) emptyState.style.display = 'block';
-        return;
-      }
-      if (emptyState) emptyState.style.display = 'none';
-
-      if (typeof skeletons === 'function') {
-        skeletons(grid, ids.length);
-      }
-
-      try {
-        let movies = [];
-        for (const id of ids) {
-          try {
-            const m = await MW_API.getMovie(id);
-            if (m) movies.push(m);
-          } catch(err) {}
-        }
-
-        if (showFavs) {
-          movies = movies.filter(m => MWStore.inFavorites(m.id));
-        }
-
-        if (!movies.length) {
-          grid.innerHTML = '';
-          if (emptyState) {
-            emptyState.style.display = 'block';
-            document.getElementById('empty-state-title').innerText = 'No favorites found in your watchlist.';
-          }
-          return;
-        }
-
-        if (typeof renderGrid === 'function') {
-          renderGrid(grid, movies);
-        }
-      } catch (e) {
-        grid.innerHTML = `<p style="padding:20px;color:var(--text-2)">Unable to load watchlist movies.</p>`;
-      }
-    }
-
     function openAuthModal() {
-      document.getElementById('auth-modal').style.display = 'flex';
-      document.getElementById('auth-error').style.display = 'none';
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.style.display = 'flex';
+      const errorDiv = document.getElementById('auth-error');
+      if (errorDiv) errorDiv.style.display = 'none';
     }
 
     function closeAuthModal() {
-      document.getElementById('auth-modal').style.display = 'none';
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.style.display = 'none';
     }
 
     // FIXED Toggle Auth Mode (Sign In <-> Create Account)
@@ -722,3 +653,25 @@
     }
 
     function promptAnotherGoogleAccount() {
+      const customEmail = prompt("Enter your Gmail address:");
+      if (customEmail && customEmail.includes('@')) {
+        const nameFromEmail = customEmail.split('@')[0];
+        selectGoogleAccount(nameFromEmail, customEmail);
+      } else if (customEmail) {
+        alert("Please enter a valid email address.");
+      }
+    }
+
+    function closeGooglePicker() {
+      const picker = document.getElementById('google-picker-modal');
+      if (picker) picker.remove();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('mw_logged_user');
+      checkUserSession();
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
