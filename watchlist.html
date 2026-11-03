@@ -272,9 +272,12 @@
       <h1 id="page-title-heading">My Watchlist</h1>
       
       <div id="user-session-card" style="display:none; margin-top: 15px; background: rgba(255,255,255,0.06); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); max-width: 450px; align-items:center; justify-content:space-between;">
-        <div>
-          <span style="font-size:14px; color:#aaa; display:block;">Logged in as:</span>
-          <strong id="session-user-name" style="font-size:16px; color:#fff;">User</strong>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <img id="session-user-photo" src="" style="width:38px; height:38px; border-radius:50%; display:none;">
+          <div>
+            <span style="font-size:12px; color:#aaa; display:block;">Logged in as:</span>
+            <strong id="session-user-name" style="font-size:15px; color:#fff;">User</strong>
+          </div>
         </div>
         <button onclick="handleLogout()" style="background: rgba(229, 9, 20, 0.2); color: #e50914; border: 1px solid #e50914; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;">Sign Out</button>
       </div>
@@ -312,7 +315,7 @@
       </div>
 
       <div class="auth-field">
-        <label for="auth-email-input">Username or email address</label>
+        <label for="auth-email-input">Email address</label>
         <input type="email" id="auth-email-input" placeholder="name@example.com">
       </div>
 
@@ -331,17 +334,8 @@
       </div>
 
       <div class="social-login-group">
-        <button type="button" class="social-btn" onclick="socialLogin('Google')">
+        <button type="button" class="social-btn" onclick="realGoogleLogin()">
           <i class="fa-brands fa-google" style="color: #ea4335;"></i> Continue with Google
-        </button>
-        <button type="button" class="social-btn" onclick="socialLogin('Apple')">
-          <i class="fa-brands fa-apple" style="color: #fff;"></i> Continue with Apple
-        </button>
-        <button type="button" class="social-btn" onclick="socialLogin('Facebook')">
-          <i class="fa-brands fa-facebook-f" style="color: #1877f2;"></i> Continue with Facebook
-        </button>
-        <button type="button" class="social-btn" onclick="socialLogin('Twitter')">
-          <i class="fa-brands fa-x-twitter" style="color: #fff;"></i> Continue with X (Twitter)
         </button>
       </div>
 
@@ -360,53 +354,14 @@
         <div class="footer-brand">
           <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
           <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
-          <div class="socials">
-            <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="movies.html">Movies</a></li>
-            <li><a href="reviews.html">Reviews</a></li>
-            <li><a href="genres.html">Genres</a></li>
-            <li><a href="movies.html?sort=rating">Top Rated</a></li>
-            <li><a href="movies.html?sort=newest">Latest</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Years</h4>
-          <ul>
-            <li><a href="movies.html?year=2026">Best of 2026</a></li>
-            <li><a href="movies.html?year=2025">Best of 2025</a></li>
-            <li><a href="movies.html?year=2024">Best of 2024</a></li>
-            <li><a href="movies.html?year=2020">Best of 2020</a></li>
-            <li><a href="movies.html?year=2010">Best of 2010</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Company</h4>
-          <ul>
-            <li><a href="watchlist.html">Watchlist</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="privacy.html#terms">Terms</a></li>
-          </ul>
         </div>
       </div>
       <div class="footer-bottom">
         <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
       </div>
     </div>
   </footer>
 
-  <!-- Translation Scripts -->
   <script type="text/javascript">
     function changeLanguage(lang) {
       let hostname = window.location.hostname;
@@ -414,82 +369,126 @@
       document.cookie = "googtrans=/en/" + lang + "; path=/;";
       location.reload();
     }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const match = document.cookie.match(new RegExp('(^| )googtrans=([^;]+)'));
-      if (match) {
-        const currentLang = match[2].split('/')[2];
-        const select = document.getElementById('custom-translate-select');
-        if (select && currentLang) {
-          select.value = currentLang;
-        }
-      }
-    });
   </script>
-
   <div id="google_translate_element" style="display:none;"></div>
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,si,ta,hi,es,fr,de,zh-CN,ja,ar',
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- Core Scripts -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script src="js/watchlist.js"></script>
 
-  <!-- Fully Fixed Auth & Google Account Picker Script -->
-  <script>
+  <!-- FIREBASE REAL GOOGLE AUTHENTICATION MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwrFXNjcaDyzcaz58Nbgqw4BSMapw63yw",
+      authDomain: "movies-world-9e4fd.firebaseapp.com",
+      projectId: "movies-world-9e4fd",
+      storageBucket: "movies-world-9e4fd.firebasestorage.app",
+      messagingSenderId: "937197990910",
+      appId: "1:937197990910:web:9eede9e6d915e4822046af",
+      measurementId: "G-8RYLEQ6JSL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
     setTimeout(() => {
       const loader = document.querySelector(".loader");
-      if (loader) {
-        loader.classList.add("done");
-        setTimeout(() => loader.remove(), 600);
-      }
-    }, 1200);
+      if (loader) loader.remove();
+    }, 1000);
 
-    let isRegisterMode = false;
+    // Track Authentication State
+    onAuthStateChanged(auth, (user) => {
+      const profileSpan = document.getElementById('profile-nav-text');
+      const sessionCard = document.getElementById('user-session-card');
+      const sessionName = document.getElementById('session-user-name');
+      const sessionPhoto = document.getElementById('session-user-photo');
+
+      if (user) {
+        const nameToShow = user.displayName || user.email.split('@')[0];
+        if (profileSpan) profileSpan.innerText = nameToShow;
+        if (sessionCard) sessionCard.style.display = 'inline-flex';
+        if (sessionName) sessionName.innerText = nameToShow + ' (' + user.email + ')';
+        
+        if (user.photoURL && sessionPhoto) {
+          sessionPhoto.src = user.photoURL;
+          sessionPhoto.style.display = 'block';
+        }
+      } else {
+        if (profileSpan) profileSpan.innerText = 'Profile';
+        if (sessionCard) sessionCard.style.display = 'none';
+        if (sessionPhoto) sessionPhoto.style.display = 'none';
+      }
+    });
+
+    // Real Google Sign-In Popup
+    window.realGoogleLogin = async function() {
+      try {
+        await signInWithPopup(auth, googleProvider);
+        closeAuthModal();
+      } catch (error) {
+        const errorDiv = document.getElementById('auth-error');
+        if (errorDiv) {
+          errorDiv.innerText = error.message;
+          errorDiv.style.display = 'block';
+        }
+      }
+    };
+
+    // Firebase Email & Password Authentication
+    window.submitAuthForm = async function() {
+      const email = document.getElementById('auth-email-input').value.trim();
+      const password = document.getElementById('auth-password-input').value.trim();
+      const name = document.getElementById('auth-name-input').value.trim();
+      const errorDiv = document.getElementById('auth-error');
+
+      if (!email || !password || (window.isRegisterMode && !name)) {
+        errorDiv.innerText = 'Please fill in all required fields.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      try {
+        if (window.isRegisterMode) {
+          const res = await createUserWithEmailAndPassword(auth, email, password);
+          await updateProfile(res.user, { displayName: name });
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
+        closeAuthModal();
+      } catch (err) {
+        errorDiv.innerText = err.message.replace("Firebase: ", "");
+        errorDiv.style.display = 'block';
+      }
+    };
+
+    window.handleLogout = function() {
+      signOut(auth).then(() => window.location.reload());
+    };
+  </script>
+
+  <script>
+    window.isRegisterMode = false;
 
     document.addEventListener('DOMContentLoaded', () => {
-      checkUserSession();
-
       const profileBtn = document.querySelector('.btn-profile');
       if (profileBtn) {
         profileBtn.addEventListener('click', (e) => {
-          const loggedUser = localStorage.getItem('mw_logged_user');
-          if (!loggedUser) {
+          const sessionCard = document.getElementById('user-session-card');
+          if (sessionCard && sessionCard.style.display === 'none') {
             e.preventDefault();
             openAuthModal();
           }
         });
       }
     });
-
-    function checkUserSession() {
-      const loggedUserStr = localStorage.getItem('mw_logged_user');
-      const profileSpan = document.getElementById('profile-nav-text');
-      const sessionCard = document.getElementById('user-session-card');
-      const sessionName = document.getElementById('session-user-name');
-
-      if (loggedUserStr) {
-        try {
-          const user = JSON.parse(loggedUserStr);
-          if (profileSpan) profileSpan.innerText = user.name;
-          if (sessionCard) sessionCard.style.display = 'inline-flex';
-          if (sessionName) sessionName.innerText = user.name + ' (' + user.email + ')';
-        } catch(e) {}
-      } else {
-        if (profileSpan) profileSpan.innerText = 'Profile';
-        if (sessionCard) sessionCard.style.display = 'none';
-      }
-    }
 
     function openAuthModal() {
       const modal = document.getElementById('auth-modal');
@@ -503,9 +502,8 @@
       if (modal) modal.style.display = 'none';
     }
 
-    // FIXED Toggle Auth Mode (Sign In <-> Create Account)
     function toggleAuthMode() {
-      isRegisterMode = !isRegisterMode;
+      window.isRegisterMode = !window.isRegisterMode;
       const title = document.getElementById('auth-modal-title');
       const nameGroup = document.getElementById('auth-name-group');
       const submitBtn = document.getElementById('auth-submit-btn');
@@ -515,7 +513,7 @@
 
       if (errorDiv) errorDiv.style.display = 'none';
 
-      if (isRegisterMode) {
+      if (window.isRegisterMode) {
         if (title) title.innerText = 'Create an account';
         if (nameGroup) nameGroup.style.display = 'block';
         if (submitBtn) submitBtn.innerText = 'Create account';
@@ -528,149 +526,6 @@
         if (toggleLabel) toggleLabel.innerText = 'New to MOVIES WORLD?';
         if (toggleLink) toggleLink.innerText = 'Create an account';
       }
-    }
-
-    function submitAuthForm() {
-      const email = document.getElementById('auth-email-input').value.trim();
-      const password = document.getElementById('auth-password-input').value.trim();
-      const name = document.getElementById('auth-name-input').value.trim();
-      const errorDiv = document.getElementById('auth-error');
-
-      if (!email || !password || (isRegisterMode && !name)) {
-        errorDiv.innerText = 'Please fill in all required fields.';
-        errorDiv.style.display = 'block';
-        return;
-      }
-
-      if (isRegisterMode) {
-        const userObj = { name, email, password };
-        localStorage.setItem('mw_user_account_' + email, JSON.stringify(userObj));
-        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
-        alert('Account created successfully!');
-      } else {
-        const storedUser = localStorage.getItem('mw_user_account_' + email);
-        if (!storedUser) {
-          errorDiv.innerText = 'Account not found. Please create an account first.';
-          errorDiv.style.display = 'block';
-          return;
-        }
-        const userObj = JSON.parse(storedUser);
-        if (userObj.password !== password) {
-          errorDiv.innerText = 'Incorrect password. Please try again.';
-          errorDiv.style.display = 'block';
-          return;
-        }
-        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
-      }
-
-      closeAuthModal();
-      checkUserSession();
-      window.location.reload();
-    }
-
-    function socialLogin(provider) {
-      if (provider === 'Google') {
-        openGoogleAccountPicker();
-      } else {
-        const userObj = {
-          name: provider + " User",
-          email: "user." + provider.toLowerCase() + "@moviesworld.com",
-          provider: provider
-        };
-        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
-        alert('Successfully signed in with ' + provider + '!');
-        closeAuthModal();
-        checkUserSession();
-        window.location.reload();
-      }
-    }
-
-    function openGoogleAccountPicker() {
-      const pickerHTML = `
-        <div id="google-picker-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); z-index:100000; display:flex; justify-content:center; align-items:center; font-family:'Inter', sans-serif;">
-          <div style="background:#ffffff; color:#1f1f1f; width:100%; max-width:400px; border-radius:16px; padding:32px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.3); text-align:center;">
-            
-            <svg width="40" height="40" viewBox="0 0 48 48" style="margin-bottom:12px;">
-              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-            </svg>
-            
-            <h2 style="font-size:20px; font-weight:500; margin-bottom:4px; color:#1f1f1f;">Choose an account</h2>
-            <p style="font-size:14px; color:#5f6368; margin-bottom:24px;">to continue to <strong style="color:#1f1f1f;">MOVIES WORLD</strong></p>
-
-            <div style="text-align:left; border-top:1px solid #e0e0e0;">
-              
-              <div onclick="selectGoogleAccount('User Name', 'user.gmail@gmail.com')" style="display:flex; align-items:center; padding:14px 8px; border-bottom:1px solid #f0f0f0; cursor:pointer; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
-                <div style="width:40px; height:40px; border-radius:50%; background:#e50914; color:#fff; display:flex; justify-content:center; align-items:center; font-weight:600; font-size:16px; margin-right:12px;">U</div>
-                <div style="flex:1;">
-                  <div style="font-size:14px; font-weight:600; color:#1f1f1f;">User Name</div>
-                  <div style="font-size:12px; color:#5f6368;">user.gmail@gmail.com</div>
-                </div>
-              </div>
-
-              <div onclick="selectGoogleAccount('Personal Account', 'myaccount@gmail.com')" style="display:flex; align-items:center; padding:14px 8px; border-bottom:1px solid #f0f0f0; cursor:pointer; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
-                <div style="width:40px; height:40px; border-radius:50%; background:#1a73e8; color:#fff; display:flex; justify-content:center; align-items:center; font-weight:600; font-size:16px; margin-right:12px;">P</div>
-                <div style="flex:1;">
-                  <div style="font-size:14px; font-weight:600; color:#1f1f1f;">Personal Account</div>
-                  <div style="font-size:12px; color:#5f6368;">myaccount@gmail.com</div>
-                </div>
-              </div>
-
-              <div onclick="promptAnotherGoogleAccount()" style="display:flex; align-items:center; padding:14px 8px; cursor:pointer; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
-                <div style="width:40px; height:40px; border-radius:50%; background:#f1f3f4; color:#5f6368; display:flex; justify-content:center; align-items:center; margin-right:12px;">
-                  <i class="fa-solid fa-user-plus" style="font-size:14px;"></i>
-                </div>
-                <div style="font-size:14px; font-weight:500; color:#3c4043;">Use another account</div>
-              </div>
-
-            </div>
-
-            <p style="font-size:12px; color:#70757a; margin-top:24px; text-align:left; line-height:1.4;">
-              To continue, Google will share your name, email address, and profile picture with MOVIES WORLD.
-            </p>
-            
-            <button onclick="closeGooglePicker()" style="margin-top:16px; background:none; border:none; color:#5f6368; font-size:13px; cursor:pointer; font-weight:500;">Cancel</button>
-          </div>
-        </div>
-      `;
-
-      document.body.insertAdjacentHTML('beforeend', pickerHTML);
-    }
-
-    function selectGoogleAccount(name, email) {
-      const userObj = {
-        name: name,
-        email: email,
-        provider: 'Google'
-      };
-      localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
-      closeGooglePicker();
-      closeAuthModal();
-      checkUserSession();
-      window.location.reload();
-    }
-
-    function promptAnotherGoogleAccount() {
-      const customEmail = prompt("Enter your Gmail address:");
-      if (customEmail && customEmail.includes('@')) {
-        const nameFromEmail = customEmail.split('@')[0];
-        selectGoogleAccount(nameFromEmail, customEmail);
-      } else if (customEmail) {
-        alert("Please enter a valid email address.");
-      }
-    }
-
-    function closeGooglePicker() {
-      const picker = document.getElementById('google-picker-modal');
-      if (picker) picker.remove();
-    }
-
-    function handleLogout() {
-      localStorage.removeItem('mw_logged_user');
-      checkUserSession();
-      window.location.reload();
     }
   </script>
 </body>
