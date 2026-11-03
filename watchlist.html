@@ -56,12 +56,116 @@
       color: #ffffff !important;
       padding: 10px !important;
     }
+
+    /* Auth Modal Styling */
+    #auth-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+    }
+    .auth-box {
+      background: #0f1419;
+      padding: 35px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 420px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .auth-box h3 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .auth-field {
+      margin-bottom: 18px;
+    }
+    .auth-field label {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 6px;
+      color: #aaa;
+    }
+    .auth-field input {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .auth-field input:focus {
+      border-color: #e50914;
+    }
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      background: #e50914;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+    .auth-btn:hover {
+      background: #f40612;
+    }
+    .auth-footer-text {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    .auth-footer-text a {
+      color: #e50914;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .auth-close-btn {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: #888;
+      border: none;
+      margin-top: 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .auth-close-btn:hover {
+      color: #fff;
+    }
+    #auth-error {
+      color: #e50914;
+      font-size: 13px;
+      margin-bottom: 15px;
+      background: rgba(229, 9, 20, 0.1);
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <a href="#main" class="skip-link">Skip to content</a>
   <div class="loader" aria-hidden="true"><div><div class="loader-reel"><i class="fa-solid fa-clapperboard"></i></div><p>MOVIES WORLD</p></div></div>
+  
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
@@ -95,7 +199,7 @@
         </div>
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
-        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
+        <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span id="profile-nav-text">Profile</span></a>
         <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
       </div>
     </div>
@@ -104,23 +208,68 @@
   <main id="main">
     <div class="page-hero">
       <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a> <i class="fa-solid fa-chevron-right" style="font-size:10px"></i> <span>Watchlist</span></nav>
-      <h1>My Watchlist</h1>
-      <p><b id="wl-count">0</b> saved movies · stored privately in your browser.</p>
-      <label style="display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;color:var(--text-2);cursor:pointer">
-        <input type="checkbox" id="show-favorites" style="width:17px;height:17px;accent-color:var(--accent)"> Show favorites only
-      </label>
-      <button class="btn-clear" id="clear-watchlist" style="display:none;margin-left:18px"><i class="fa-solid fa-trash-can"></i> Clear list</button>
+      <h1 id="page-title-heading">My Watchlist</h1>
+      
+      <!-- User Account Session Box inside Hero if logged in -->
+      <div id="user-session-card" style="display:none; margin-top: 15px; background: rgba(255,255,255,0.06); padding: 15px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); max-width: 450px; display:inline-flex; align-items:center; justify-content:space-between;">
+        <div>
+          <span style="font-size:14px; color:#aaa; display:block;">Logged in as:</span>
+          <strong id="session-user-name" style="font-size:16px; color:#fff;">User</strong>
+        </div>
+        <button onclick="handleLogout()" style="background: rgba(229, 9, 20, 0.2); color: #e50914; border: 1px solid #e50914; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;">Sign Out</button>
+      </div>
+
+      <div id="watchlist-controls-wrap">
+        <p><b id="wl-count">0</b> saved movies · stored privately in your browser.</p>
+        <label style="display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-size:14px;color:var(--text-2);cursor:pointer">
+          <input type="checkbox" id="show-favorites" style="width:17px;height:17px;accent-color:var(--accent)"> Show favorites only
+        </label>
+        <button class="btn-clear" id="clear-watchlist" style="display:none;margin-left:18px"><i class="fa-solid fa-trash-can"></i> Clear list</button>
+      </div>
     </div>
+
     <section class="section" style="padding-top:0">
       <div class="movie-grid" id="watchlist-grid"></div>
       <div class="empty-state" id="watchlist-empty" style="display:none">
         <i class="fa-solid fa-bookmark"></i>
-        <h3>Your watchlist is empty.</h3>
-        <p>Browse movies and tap the <b>+</b> button to save them here.</p>
+        <h3 id="empty-state-title">Your watchlist is empty.</h3>
+        <p id="empty-state-desc">Browse movies and tap the <b>+</b> button to save them here.</p>
         <p style="margin-top:18px"><a href="movies.html" class="btn btn-red" style="display:inline-flex"><i class="fa-solid fa-film"></i> Discover Movies</a></p>
       </div>
     </section>
   </main>
+
+  <!-- Login / Signup Modal -->
+  <div id="auth-modal">
+    <div class="auth-box">
+      <h3 id="auth-modal-title">Sign In to MOVIES WORLD</h3>
+      <div id="auth-error"></div>
+
+      <div class="auth-field" id="auth-name-group" style="display:none;">
+        <label>Your Name</label>
+        <input type="text" id="auth-name-input" placeholder="Enter your name">
+      </div>
+
+      <div class="auth-field">
+        <label>Email Address</label>
+        <input type="email" id="auth-email-input" placeholder="name@example.com">
+      </div>
+
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="auth-password-input" placeholder="••••••••">
+      </div>
+
+      <button class="auth-btn" id="auth-submit-btn" onclick="submitAuthForm()">Sign In</button>
+
+      <p class="auth-footer-text">
+        <span id="auth-toggle-label">Don't have an account?</span> 
+        <a href="#" onclick="toggleAuthMode(); return false;" id="auth-toggle-link">Sign Up</a>
+      </p>
+
+      <button class="auth-close-btn" onclick="closeAuthModal()">Cancel</button>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -206,6 +355,125 @@
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <!-- Auth & Session Management Script -->
+  <script>
+    let isRegisterMode = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkUserSession();
+
+      // Profile button click intercept if not logged in
+      const profileBtn = document.querySelector('.btn-profile');
+      if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => {
+          const loggedUser = localStorage.getItem('mw_logged_user');
+          if (!loggedUser) {
+            e.preventDefault();
+            openAuthModal();
+          }
+        });
+      }
+    });
+
+    function checkUserSession() {
+      const loggedUserStr = localStorage.getItem('mw_logged_user');
+      const profileSpan = document.getElementById('profile-nav-text');
+      const sessionCard = document.getElementById('user-session-card');
+      const sessionName = document.getElementById('session-user-name');
+
+      if (loggedUserStr) {
+        const user = JSON.parse(loggedUserStr);
+        if (profileSpan) profileSpan.innerText = user.name;
+        if (sessionCard) sessionCard.style.display = 'inline-flex';
+        if (sessionName) sessionName.innerText = user.name + ' (' + user.email + ')';
+      } else {
+        if (profileSpan) profileSpan.innerText = 'Profile';
+        if (sessionCard) sessionCard.style.display = 'none';
+      }
+    }
+
+    function openAuthModal() {
+      document.getElementById('auth-modal').style.display = 'flex';
+      document.getElementById('auth-error').style.display = 'none';
+    }
+
+    function closeAuthModal() {
+      document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      const title = document.getElementById('auth-modal-title');
+      const nameGroup = document.getElementById('auth-name-group');
+      const submitBtn = document.getElementById('auth-submit-btn');
+      const toggleLabel = document.getElementById('auth-toggle-label');
+      const toggleLink = document.getElementById('auth-toggle-link');
+      const errorDiv = document.getElementById('auth-error');
+
+      errorDiv.style.display = 'none';
+
+      if (isRegisterMode) {
+        title.innerText = 'Create Account - MOVIES WORLD';
+        nameGroup.style.display = 'block';
+        submitBtn.innerText = 'Sign Up';
+        toggleLabel.innerText = 'Already have an account?';
+        toggleLink.innerText = 'Sign In';
+      } else {
+        title.innerText = 'Sign In to MOVIES WORLD';
+        nameGroup.style.display = 'none';
+        submitBtn.innerText = 'Sign In';
+        toggleLabel.innerText = "Don't have an account?";
+        toggleLink.innerText = 'Sign Up';
+      }
+    }
+
+    function submitAuthForm() {
+      const email = document.getElementById('auth-email-input').value.trim();
+      const password = document.getElementById('auth-password-input').value.trim();
+      const name = document.getElementById('auth-name-input').value.trim();
+      const errorDiv = document.getElementById('auth-error');
+
+      if (!email || !password || (isRegisterMode && !name)) {
+        errorDiv.innerText = 'Please fill in all required fields.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      if (isRegisterMode) {
+        // Register new user in localStorage
+        const userObj = { name, email, password };
+        localStorage.setItem('mw_user_account_' + email, JSON.stringify(userObj));
+        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+        alert('Account created successfully!');
+      } else {
+        // Login existing user
+        const storedUser = localStorage.getItem('mw_user_account_' + email);
+        if (!storedUser) {
+          errorDiv.innerText = 'Account not found. Please Sign Up first.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        const userObj = JSON.parse(storedUser);
+        if (userObj.password !== password) {
+          errorDiv.innerText = 'Incorrect password. Please try again.';
+          errorDiv.style.display = 'block';
+          return;
+        }
+        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+      }
+
+      closeAuthModal();
+      checkUserSession();
+      window.location.reload();
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('mw_logged_user');
+      checkUserSession();
+      window.location.reload();
+    }
+  </script>
 
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
