@@ -5,40 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies World - 50 Movie Reviews</title>
     <style>
-        /* Google Translate Notification Banner සහ iframe සම්පූර්ණයෙන්ම සැඟවීමට */
         .goog-te-banner-frame.skiptranslate, 
         .goog-te-gadget-icon,
         .skiptranslate iframe {
-          display: none !important;
+            display: none !important;
         }
         body {
-          top: 0px !important;
-          position: static !important;
+            top: 0px !important;
+            position: static !important;
         }
 
-        /* භාෂා මෙනුව සඳහා Dark & Blur විලාසය */
         .lang-selector-wrap select {
-          background: rgba(15, 20, 25, 0.85) !important;
-          backdrop-filter: blur(12px) !important;
-          -webkit-backdrop-filter: blur(12px) !important;
-          color: #ffffff !important;
-          border: 1px solid rgba(255, 255, 255, 0.15) !important;
-          padding: 8px 14px !important;
-          border-radius: 20px !important;
-          font-family: inherit !important;
-          font-size: 14px !important;
-          font-weight: 500 !important;
-          cursor: pointer !important;
-          outline: none !important;
-          transition: all 0.2s ease !important;
+            background: rgba(15, 20, 25, 0.85) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            padding: 8px 14px !important;
+            border-radius: 20px !important;
+            font-family: inherit !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            outline: none !important;
+            transition: all 0.2s ease !important;
         }
         .lang-selector-wrap select:hover {
-          border-color: #e50914 !important;
+            border-color: #e50914 !important;
         }
         .lang-selector-wrap select option {
-          background-color: #0f1419 !important;
-          color: #ffffff !important;
-          padding: 10px !important;
+            background-color: #0f1419 !important;
+            color: #ffffff !important;
+            padding: 10px !important;
         }
 
         * {
@@ -53,7 +51,6 @@
             min-height: 100vh;
         }
 
-        /* HEADER & SEARCH BAR */
         header {
             padding: 20px;
             background-color: #121212;
@@ -129,7 +126,6 @@
             border-radius: 4px;
         }
 
-        /* HOME / REVIEWS SECTION */
         #homePage {
             padding: 30px 20px;
             max-width: 1300px;
@@ -179,7 +175,6 @@
             line-height: 1.4;
         }
 
-        /* MOVIE DETAILS PAGE */
         #detailsPage {
             display: none;
             position: relative;
@@ -320,11 +315,9 @@
 </head>
 <body>
 
-    <!-- HEADER / SEARCH -->
     <header>
         <div class="header-top">
             <h1 class="app-title" onclick="showHomePage()">Movies World</h1>
-            <!-- භාෂා මෙනුව එකතු කරන ලදී -->
             <div class="lang-selector-wrap">
                 <select id="custom-translate-select" aria-label="Select Language" onchange="changeLanguage(this.value)">
                     <option value="en">English</option>
@@ -346,13 +339,11 @@
         </div>
     </header>
 
-    <!-- HOME / REVIEWS LIST (50 MOVIES) -->
     <div id="homePage">
         <h2 class="section-title">Latest Movie Reviews (50 Collections)</h2>
         <div class="reviews-grid" id="reviewsContainer"></div>
     </div>
 
-    <!-- MOVIE DETAILS PAGE -->
     <div id="detailsPage">
         <button class="back-btn" onclick="showHomePage()">← Back</button>
         <div class="overlay">
@@ -380,7 +371,6 @@
         </div>
     </div>
 
-    <!-- භාෂාව තබාගැනීමට අවශ්‍ය කුකී ස්ක්‍රිප්ට් එක -->
     <script type="text/javascript">
       function changeLanguage(lang) {
         let hostname = window.location.hostname;
@@ -416,7 +406,6 @@
     <script>
         const API_KEY = '8ee66710f2f840fe7b6a29bc84db0629';
 
-        // Reviews list containing 50 popular movies with TMDB IDs
         const movieReviews = [
             { tmdbId: 361743, title: "Top Gun: Maverick", review: "An adrenaline-pumping experience best enjoyed on the biggest screen possible." },
             { tmdbId: 27205, title: "Inception", review: "A mind-bending cinematic experience that dives deep into the sub-conscious." },
@@ -470,7 +459,6 @@
             { tmdbId: 671, title: "Harry Potter and the Sorcerer's Stone", review: "The magical entry point into J.K. Rowling's spellbinding wizarding world." }
         ];
 
-        // Render 50 Reviews Grid
         const reviewsContainer = document.getElementById('reviewsContainer');
         movieReviews.forEach(item => {
             const card = document.createElement('div');
@@ -484,7 +472,6 @@
             reviewsContainer.appendChild(card);
         });
 
-        // Search Bar logic via TMDB API
         async function handleSearch() {
             const query = document.getElementById('searchInput').value.trim();
             const dropdown = document.getElementById('dropdown');
@@ -527,14 +514,12 @@
             }
         }
 
-        // FETCH & OPEN MOVIE DETAILS (Works for both Search & 50 Reviews Clicks)
         async function loadMovieDetails(movieId) {
             document.getElementById('homePage').style.display = 'none';
             const detailsPage = document.getElementById('detailsPage');
             detailsPage.style.display = 'block';
             window.scrollTo(0, 0);
 
-            // Reset Loading UI
             document.getElementById('movieTitle').innerText = "Loading...";
             document.getElementById('tagline').innerText = "";
             document.getElementById('posterImg').src = "";
@@ -543,28 +528,24 @@
                 const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&append_to_response=videos`);
                 const movie = await res.json();
 
-                // Fill Movie Data
                 document.getElementById('movieTitle').innerText = movie.title || "Untitled";
                 document.getElementById('tagline').innerText = movie.tagline || movie.overview || "";
                 document.getElementById('ratingVal').innerText = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
                 document.getElementById('yearVal').innerText = movie.release_date ? movie.release_date.split('-')[0] : "----";
                 document.getElementById('runtimeVal').innerText = movie.runtime ? `${movie.runtime} min` : "N/A";
                 
-                // Poster Image (Fixed link to load properly)
                 if (movie.poster_path) {
                     document.getElementById('posterImg').src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
                 } else {
                     document.getElementById('posterImg').src = 'https://via.placeholder.com/320x480?text=No+Image';
                 }
 
-                // Backdrop Image
                 if (movie.backdrop_path) {
                     detailsPage.style.backgroundImage = `url('https://image.tmdb.org/t/p/original${movie.backdrop_path}')`;
                 } else {
                     detailsPage.style.backgroundImage = 'none';
                 }
 
-                // Genres Badges
                 const genreContainer = document.getElementById('genreContainer');
                 genreContainer.innerHTML = '';
                 if (movie.genres) {
@@ -576,7 +557,6 @@
                     });
                 }
 
-                // Youtube Trailer Link
                 const trailer = movie.videos && movie.videos.results ? movie.videos.results.find(vid => vid.type === 'Trailer' && vid.site === 'YouTube') : null;
                 const trailerBtn = document.getElementById('trailerBtn');
                 if (trailer) {
