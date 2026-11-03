@@ -308,7 +308,7 @@
     </section>
   </main>
 
-  <!-- Login / Signup Modal (GitHub Style Matching Theme) -->
+  <!-- Login / Signup Modal (GitHub & Google Picker Style) -->
   <div id="auth-modal">
     <div class="auth-box">
       <h3 id="auth-modal-title" style="margin-bottom: 22px; font-size: 20px; font-weight: 600; text-align: center;">Sign in to MOVIES WORLD</h3>
@@ -448,7 +448,7 @@
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <!-- Auth & Session Management Script -->
+  <!-- Auth, Professional Google Account Picker & Session Management Script -->
   <script>
     let isRegisterMode = false;
 
@@ -557,29 +557,55 @@
       window.location.reload();
     }
 
+    // Social & Professional Google Account Picker Handler
     function socialLogin(provider) {
-      const userObj = {
-        name: provider + " User",
-        email: "user." + provider.toLowerCase() + "@moviesworld.com",
-        provider: provider
-      };
-      localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
-      alert('Successfully signed in with ' + provider + '!');
-      closeAuthModal();
-      checkUserSession();
-      window.location.reload();
+      if (provider === 'Google') {
+        openGoogleAccountPicker();
+      } else {
+        const userObj = {
+          name: provider + " User",
+          email: "user." + provider.toLowerCase() + "@moviesworld.com",
+          provider: provider
+        };
+        localStorage.setItem('mw_logged_user', JSON.stringify(userObj));
+        alert('Successfully signed in with ' + provider + '!');
+        closeAuthModal();
+        checkUserSession();
+        window.location.reload();
+      }
     }
 
-    function handleLogout() {
-      localStorage.removeItem('mw_logged_user');
-      checkUserSession();
-      window.location.reload();
-    }
-  </script>
+    function openGoogleAccountPicker() {
+      const pickerHTML = `
+        <div id="google-picker-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); z-index:100000; display:flex; justify-content:center; align-items:center; font-family:'Inter', sans-serif;">
+          <div style="background:#ffffff; color:#1f1f1f; width:100%; max-width:400px; border-radius:16px; padding:32px 24px; box-shadow:0 12px 32px rgba(0,0,0,0.3); text-align:center;">
+            
+            <svg width="40" height="40" viewBox="0 0 48 48" style="margin-bottom:12px;">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            
+            <h2 style="font-size:20px; font-weight:500; margin-bottom:4px; color:#1f1f1f;">Choose an account</h2>
+            <p style="font-size:14px; color:#5f6368; margin-bottom:24px;">to continue to <strong style="color:#1f1f1f;">MOVIES WORLD</strong></p>
 
-  <script src="js/config.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/watchlist.js"></script>
-</body>
-</html>
+            <div style="text-align:left; border-top:1px solid #e0e0e0;">
+              
+              <div onclick="selectGoogleAccount('User Name', 'user.gmail@gmail.com')" style="display:flex; align-items:center; padding:14px 8px; border-bottom:1px solid #f0f0f0; cursor:pointer; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                <div style="width:40px; height:40px; border-radius:50%; background:#e50914; color:#fff; display:flex; justify-content:center; align-items:center; font-weight:600; font-size:16px; margin-right:12px;">U</div>
+                <div style="flex:1;">
+                  <div style="font-size:14px; font-weight:600; color:#1f1f1f;">User Name</div>
+                  <div style="font-size:12px; color:#5f6368;">user.gmail@gmail.com</div>
+                </div>
+              </div>
+
+              <div onclick="selectGoogleAccount('Personal Account', 'myaccount@gmail.com')" style="display:flex; align-items:center; padding:14px 8px; border-bottom:1px solid #f0f0f0; cursor:pointer; border-radius:8px; transition:background 0.2s;" onmouseover="this.style.background='#f8f9fa'" onmouseout="this.style.background='transparent'">
+                <div style="width:40px; height:40px; border-radius:50%; background:#1a73e8; color:#fff; display:flex; justify-content:center; align-items:center; font-weight:600; font-size:16px; margin-right:12px;">P</div>
+                <div style="flex:1;">
+                  <div style="font-size:14px; font-weight:600; color:#1f1f1f;">Personal Account</div>
+                  <div style="font-size:12px; color:#5f6368;">myaccount@gmail.com</div>
+                </div>
+              </div>
+
+              <div onclick="promptAnotherGoogleAccount()" style="display:flex; align-items:
