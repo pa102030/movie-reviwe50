@@ -8,8 +8,6 @@ document.addEventListener("mw:ready", async () => {
   let m;
   try { m = await MW_API.getMovie(id); }
   catch (e) { root.innerHTML = errorBox("Movie not found or unavailable."); return; }
-console.log("Movie Data:", m);
-console.log("Cast List:", m.cast);
   document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
   let canonicalLink = document.querySelector('link[rel="canonical"]');
   if (!canonicalLink) {
@@ -125,7 +123,7 @@ console.log("Cast List:", m.cast);
   const LOGO_COLORS = { "netflix": "#e50914", "prime": "#00a8e1", "disney": "#113ccf", "max": "#8a2be2", "apple": "#333", "google": "#4285f4", "peacock": "#000", "paramount": "#0064ff", "hulu": "#1ce783" };
   const logoColor = name => { const k = Object.keys(LOGO_COLORS).find(k => name.toLowerCase().includes(k)); return LOGO_COLORS[k] || "#5b6472"; };
   let watchHTML = `<h2 id="watch"><i class="fa-solid fa-ticket"></i> Where to Watch</h2>`;
-  const regionCodes = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KH KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW").split(" ");
+  const regionCodes = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW").split(" ");
   const regionNames = new Intl.DisplayNames([navigator.language || "en"], { type: "region" });
   const regionOptions = regionCodes.map(code => [code, regionNames.of(code)]).filter(x => x[1]).sort((a, b) => a[1].localeCompare(b[1]));
   const storedRegion = localStorage.getItem("mw_watch_region");
@@ -144,7 +142,7 @@ console.log("Cast List:", m.cast);
   } else {
     watchHTML += `<p class="story" id="watch-empty">No providers are listed for this title in the selected country. Try another country or check the provider directly.</p>`;
   }
-  watchHTML += `<p class="legal-note"><i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> MOVIES WORLD never hosts pirated content. Buttons open official, licensed platforms only.</p>`;
+  watchHTML += `<p class="legal-note"><i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> MOVIES WORLD never hosts pirated content. Buttons open licensed platforms or availability guides.</p>`;
   watchPanel.innerHTML = watchHTML;
   const regionControl = watchPanel.querySelector("#watch-region");
   if (regionControl) regionControl.addEventListener("change", async () => {
