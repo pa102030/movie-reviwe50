@@ -7,7 +7,7 @@
    ============================================================ */
 const MW_CONFIG = {
   API_KEY: "", // Local development only. Do not put production credentials here.
-  TMDB_PROXY_URL: "", // Example: https://movies-world-tmdb.<account>.workers.dev/3
+  TMDB_PROXY_URL: "https://movies-world-tmdb.nimsara-pasindu-2007.workers.dev/3", // Production Cloudflare Worker proxy
   API_BASE: "https://api.themoviedb.org/3",
   IMG_BASE: "https://image.tmdb.org/t/p/",
   LANGUAGE: "en-US",
