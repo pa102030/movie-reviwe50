@@ -12,7 +12,7 @@ const MW_CONFIG = {
   API_BASE: "https://api.themoviedb.org/3",
   IMG_BASE: "https://image.tmdb.org/t/p/",
   LANGUAGE: "en-US",
-  REGION: "US",
+  REGION: "US", // fallback region; users can choose their own provider country
   USE_DEMO: true,          // auto-disabled when an API key is present
   PAGE_SIZE: 24
 };
