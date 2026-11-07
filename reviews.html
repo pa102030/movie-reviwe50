@@ -222,7 +222,7 @@ document.getElementById('back').addEventListener('click',home);
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});
 document.getElementById('language').addEventListener('change',e=>{const lang=e.target.value;if(lang==='en')return;document.cookie='googtrans=/en/'+lang+';path=/';document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname;location.reload()});
-document.getElementById('yearNow').textContent=new Date().getFullYear();
+const yearNow=document.getElementById('yearNow');if(yearNow)yearNow.textContent=new Date().getFullYear();
 render();loadPosters();
 function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta,hi,es,fr,de,ja,zh-CN,ar',autoDisplay:false},'google_translate_element')}
 </script>
