@@ -91,6 +91,7 @@ const MW_API = (() => {
     const params = { page: opts.page || 1, "vote_count.gte": 200 };
     if (opts.year)        params["primary_release_year"] = opts.year;
     if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
+    if (opts.language)    params.with_original_language = opts.language;
     if (opts.sort === "rating")      params.sort_by = "vote_average.desc";
     else if (opts.sort === "newest")  params.sort_by = "primary_release_date.desc";
     else if (opts.sort === "oldest")  params.sort_by = "primary_release_date.asc";
@@ -153,11 +154,12 @@ const MW_API = (() => {
     return m;
   }
 
-  async function getWatchProviders(id) {
+  async function getWatchProviders(id, region = MW_CONFIG.REGION) {
     if (MW_CONFIG.USE_DEMO) return [];
     try {
       const data = await tmdb("/movie/" + id + "/watch/providers");
-      const r = data.results[MW_CONFIG.REGION];
+      const safeRegion = /^[A-Z]{2}$/.test(String(region || "")) ? region : MW_CONFIG.REGION;
+      const r = data.results[safeRegion];
       if (!r) return [];
       const map = (arr, type) => (arr || []).slice(0, 4).map(p => ({ name: p.provider_name, type }));
       return [...map(r.flatrate, "stream"), ...map(r.rent, "rent"), ...map(r.buy, "buy")];
