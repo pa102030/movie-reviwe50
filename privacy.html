@@ -84,7 +84,7 @@
         <button class="icon-btn" data-open-search aria-label="Search movies"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="icon-btn" data-theme-toggle aria-label="Toggle dark and light theme"><i class="fa-solid fa-circle-half-stroke"></i></button>
         <a href="watchlist.html" class="btn-profile"><i class="fa-solid fa-user"></i> <span id="profile-nav-text">Profile</span></a>
-        <button class="icon-btn hamburger" data-open-search aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <button class="icon-btn hamburger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
       </div>
     </div>
   </header>
@@ -184,30 +184,59 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="logo"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
-          <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo" aria-label="MOVIES WORLD home">
+          <span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>
+          MOVIES<b>WORLD</b>
+        </a>
+        <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
+        <div class="socials">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
         </div>
-        <div class="footer-col"><h4>Explore</h4><ul>
-          <li><a href="index.html">Home</a></li><li><a href="movies.html">Movies</a></li>
-          <li><a href="reviews.html">Reviews</a></li><li><a href="genres.html">Genres</a></li>
-        </ul></div>
-        <div class="footer-col"><h4>Company</h4><ul>
-          <li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li>
-        </ul></div>
-        <div class="footer-col"><h4>Account</h4><ul>
-          <li><a href="watchlist.html">Watchlist</a></li>
-        </ul></div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 MOVIES WORLD. All rights reserved.</span>
-        <span>This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="movies.html">Movies</a></li>
+          <li><a href="reviews.html">Reviews</a></li>
+          <li><a href="genres.html">Genres</a></li>
+          <li><a href="movies.html?sort=rating">Top Rated</a></li>
+          <li><a href="movies.html?sort=newest">Latest</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Years</h4>
+        <ul>
+          <li><a href="movies.html?year=2026">Best of 2026</a></li>
+          <li><a href="movies.html?year=2025">Best of 2025</a></li>
+          <li><a href="movies.html?year=2024">Best of 2024</a></li>
+          <li><a href="movies.html?year=2020">Best of 2020</a></li>
+          <li><a href="movies.html?year=2010">Best of 2010</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="watchlist.html">Watchlist</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
       </div>
     </div>
-  </footer>
+    <div class="footer-bottom">
+      <span>© 2026 MOVIES WORLD. All rights reserved.</span>
+      <span>All movie data courtesy of TMDB · This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+    </div>
+  </div>
+</footer>
   <script>
     function changeLanguage(lang) {
       document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + location.hostname;
