@@ -129,6 +129,7 @@ console.log("Cast List:", m.cast);
     regionOptions.map(([code,label]) => '<option value="' + code + '"' + (code === savedRegion ? ' selected' : '') + '>' + label + '</option>').join("") +
     '</select><p class="story" id="watch-region-status" aria-live="polite">Showing services available in the selected country.</p>';
   let watchList = (await MW_API.getWatchProviders(m.id, savedRegion)).map(w => typeof w === "string" ? { name: w, type: "rent" } : w);
+  watchHTML += regionSelect;
   if (watchList.length) {
     watchHTML += `<div class="watch-list">${watchList.map(w => `
       <div class="watch-item">
