@@ -11,6 +11,13 @@ document.addEventListener("mw:ready", async () => {
 console.log("Movie Data:", m);
 console.log("Cast List:", m.cast);
   document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
+  let canonicalLink = document.querySelector('link[rel="canonical"]');
+  if (!canonicalLink) {
+    canonicalLink = document.createElement("link");
+    canonicalLink.rel = "canonical";
+    document.head.appendChild(canonicalLink);
+  }
+  canonicalLink.href = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(id);
   const desc = (m.overview || "").slice(0, 155);
   setMeta("description", `${m.title} (${m.year}) — rating, review, trailer and where to watch legally. ${desc}`);
   injectMovieSchema(m);
