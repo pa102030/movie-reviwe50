@@ -46,7 +46,6 @@ console.log("Cast List:", m.cast);
         ${m.year ? `<span class="pill">${m.year}</span>` : ""}
         ${m.runtime ? `<span class="pill">${m.runtime} min</span>` : ""}
         ${m.ageRating ? `<span class="pill">${esc(m.ageRating)}</span>` : ""}
-        ${m.rating >= 7.5 ? '<span class="pill" style="color:var(--gold);border-color:rgba(245,197,24,.4)">4K</span>' : '<span class="pill">HD</span>'}
       </div>
       <div class="genre-tags">${(m.genres || []).map(g => `<a href="genres.html?genre=${encodeURIComponent(g)}">${esc(g)}</a>`).join("")}</div>
       <div class="detail-actions">
@@ -165,12 +164,12 @@ console.log("Cast List:", m.cast);
       if (status) status.insertAdjacentHTML("afterend", markup);
       const selectedCountry = regionOptions.find(x => x[0] === selectedRegion);
       if (status) status.textContent = "Showing services available in " + (selectedCountry ? selectedCountry[1] : selectedRegion) + ".";
-      bindProviderButtons();
+      bindProviderButtons(providers);
     } catch (error) {
       if (status) status.textContent = "Could not update availability. Please try again.";
     }
   });
-  function bindProviderButtons() {
+  function bindProviderButtons(currentProviders = watchList) {
     watchPanel.querySelectorAll("[data-provider]").forEach(b => b.addEventListener("click", () => {
     const q = encodeURIComponent(b.dataset.movie);
     const urls = {
@@ -185,14 +184,14 @@ console.log("Cast List:", m.cast);
       "paramount": `https://www.paramountplus.com/search/?query=${q}`
     };
     const k = Object.keys(urls).find(k => b.dataset.provider.toLowerCase().includes(k));
-    const provider = watchList.find(item => item.name === b.dataset.provider);
+    const provider = currentProviders.find(item => item.name === b.dataset.provider);
     const destination = urls[k] || provider?.link;
     if (!destination) { toast("No verified provider link is available for this title.", "fa-circle-info"); return; }
     window.open(destination, "_blank", "noopener,noreferrer");
     toast("Opening official platform…", "fa-arrow-up-right-from-square");
     }));
   }
-  bindProviderButtons();
+  bindProviderButtons(watchList);
 
   /* ---------- similar ---------- */
   try {
