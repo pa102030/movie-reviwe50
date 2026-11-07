@@ -219,8 +219,21 @@ const MW_API = (() => {
     return [...new Set(DB.flatMap(m => m.genres))].map(name => ({ id: name, name }));
   }
 
+  async function languages() {
+    if (!MW_CONFIG.USE_DEMO) {
+      const list = await tmdb("/configuration/languages");
+      return list.map(item => ({
+        code: item.iso_639_1,
+        name: item.english_name || item.name || item.iso_639_1
+      })).sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return [...new Set(DB.map(movie => movie.language).filter(Boolean))]
+      .map(code => ({ code, name: code.toUpperCase() }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   const featured = () => discover({ sort: "rating", size: 1 }).then(r => r.results[0] || null);
 
-  return { init, discover, getMovie, getWatchProviders, search, similar, genres, featured, getTrailer, img,
+  return { init, discover, getMovie, getWatchProviders, search, similar, genres, languages, featured, getTrailer, img,
            isDemo: () => MW_CONFIG.USE_DEMO, all: () => DB };
 })();
