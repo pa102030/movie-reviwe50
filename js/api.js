@@ -59,7 +59,7 @@ const MW_API = (() => {
 
   /* ---------- helpers: TMDB mode ---------- */
   async function tmdb(path, params) {
-    const proxyBase = String(MW_CONFIG.TMDB_PROXY_URL || "").replace(/\\/+$/, "");
+    const proxyBase = String(MW_CONFIG.TMDB_PROXY_URL || "").replace(/\/+$/, "");
     const directKey = String(MW_CONFIG.API_KEY || "").trim();
     if (!proxyBase && !directKey) throw new Error("TMDB is not configured. Demo mode is active.");
     const base = proxyBase || MW_CONFIG.API_BASE;
