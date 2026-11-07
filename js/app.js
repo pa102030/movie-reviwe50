@@ -12,7 +12,8 @@ const MWStore = {
   },
 
   set(key, val) {
-    localStorage.setItem(key, JSON.stringify(val));
+    try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+    catch (error) { console.warn("MOVIES WORLD storage unavailable:", error); toast("Browser storage is unavailable. Your change may not be saved.", "fa-triangle-exclamation"); return false; }
   },
 
   inWatchlist(id) {
@@ -103,7 +104,6 @@ function movieCard(m) {
 
   el.innerHTML = `
     <a href="movie.html?id=${m.id}" class="poster-wrap" aria-label="View details for ${esc(m.title)}">
-      ${m.rating >= 7.5 ? '<span class="badge-hd">4K</span>' : '<span class="badge-hd">HD</span>'}
       <span class="badge-rate">
         <i class="fa-solid fa-star"></i>
         ${m.rating ? m.rating.toFixed(1) : "—"}
@@ -209,7 +209,7 @@ function bindCardButtons(scope = document) {
 function renderGrid(container, list) {
   container.innerHTML = "";
 
-  if (!list.length) return;
+  if (!list.length) { container.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><i class="fa-solid fa-film"></i><h3>No movies to display</h3><p>Please try again later or change your filters.</p></div>'; return; }
 
   list.forEach(m => container.appendChild(movieCard(m)));
 

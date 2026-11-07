@@ -102,7 +102,7 @@ const MW_API = (() => {
     let data;
 
     if (opts.search) {
-      const sParams = { query: opts.search, page: opts.page || 1, include_adult: "false" };
+      const sParams = { query: opts.search, page: opts.page || 1, include_adult: "false", ...(opts.year ? { year: opts.year } : {}) };
       data = await tmdb("/search/movie", sParams);
     } else {
       if (opts.genre) {
@@ -137,7 +137,7 @@ const MW_API = (() => {
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
 
-    return { results: movies, total: data.total_results, page: data.page };
+    return { results: movies, total: opts.search ? movies.length : data.total_results, page: data.page };
   }
 
   /* ---------- public API ---------- */
@@ -177,9 +177,9 @@ const MW_API = (() => {
     try {
       const data = await tmdb("/movie/" + id + "/watch/providers");
       const safeRegion = /^[A-Z]{2}$/.test(String(region || "")) ? region : MW_CONFIG.REGION;
-      const r = data.results[safeRegion];
+      const r = data.results?.[safeRegion];
       if (!r) return [];
-      const map = (arr, type) => (arr || []).slice(0, 4).map(p => ({ name: p.provider_name, type }));
+      const map = (arr, type) => (arr || []).slice(0, 4).map(p => ({ name: p.provider_name, type, logo: img(p.logo_path, "w92"), link: r.link || null }));
       return [...map(r.flatrate, "stream"), ...map(r.rent, "rent"), ...map(r.buy, "buy")];
     } catch (e) { return []; }
   }
