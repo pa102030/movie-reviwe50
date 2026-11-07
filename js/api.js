@@ -115,11 +115,29 @@ const MW_API = (() => {
       data = await tmdb("/discover/movie", params);
     }
 
-    const movies = (data.results || [])
+    let results = data.results || [];
+    if (opts.search) {
+      let selectedGenreId = null;
+      if (opts.genre) {
+        const allGenres = await genres();
+        const selectedGenre = allGenres.find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
+        selectedGenreId = selectedGenre ? selectedGenre.id : null;
+      }
+      results = results.filter(m => {
+        const year = m.release_date ? Number(m.release_date.slice(0, 4)) : 0;
+        if (year < 2000 || year > 2026) return false;
+        if (opts.year && year !== Number(opts.year)) return false;
+        if (opts.minRating && Number(m.vote_average || 0) < Number(opts.minRating)) return false;
+        if (opts.language && m.original_language !== opts.language) return false;
+        if (selectedGenreId && !(m.genre_ids || []).includes(Number(selectedGenreId))) return false;
+        return true;
+      });
+    }
+    const movies = results
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
 
-    return { results: movies, total: data.total_results, page: data.page };
+    return { results: movies, total: opts.search ? movies.length : data.total_results, page: data.page };
   }
 
   /* ---------- public API ---------- */
