@@ -323,17 +323,10 @@
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>
   <script src="js/home.js"></script>
-  <!-- Firebase Authentication -->
+  <!-- Firebase Authentication: keep the homepage module complete so the page scripts can finish loading. -->
   <script type="module">
-
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-
-    import {
-      getAuth,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCwrFXNjcaDyzcaz58Nbgqw4BSMapw63yw",
@@ -346,4 +339,19 @@
     };
 
     try {
-      const app = initializeApp
+      const firebaseApp = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+      const auth = getAuth(firebaseApp);
+      onAuthStateChanged(auth, user => {
+        const profileText = document.getElementById("profile-nav-text");
+        if (profileText) {
+          profileText.textContent = user
+            ? (user.displayName || (user.email ? user.email.split("@")[0] : "Account"))
+            : "Profile";
+        }
+      });
+    } catch (error) {
+      console.warn("Firebase profile status is unavailable:", error);
+    }
+  </script>
+</body>
+</html>

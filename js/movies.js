@@ -35,12 +35,16 @@ document.addEventListener("mw:ready", () => {
       gSel.appendChild(o);
     });
   });
-  fetch("data/movies.json").then(r => r.json()).then(d => {
-    const langs = [...new Set(d.movies.map(m => m.language))].sort();
+  MW_API.languages().then(langs => {
     const lSel = document.getElementById("f-language");
-    langs.forEach(l => { const o = document.createElement("option"); o.value = l; o.textContent = l; lSel.appendChild(o); });
+    langs.forEach(language => {
+      const o = document.createElement("option");
+      o.value = language.code;
+      o.textContent = language.name;
+      lSel.appendChild(o);
+    });
     lSel.value = state.language;
-  }).catch(() => {});
+  }).catch(error => console.warn("Movie language filters unavailable:", error));
 
   document.getElementById("f-rating").value = state.minRating;
   document.getElementById("f-sort").value = state.sort;

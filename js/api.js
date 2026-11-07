@@ -91,6 +91,7 @@ const MW_API = (() => {
     const params = { page: opts.page || 1, "vote_count.gte": 200 };
     if (opts.year)        params["primary_release_year"] = opts.year;
     if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
+    if (opts.language)    params.with_original_language = opts.language;
     if (opts.sort === "rating")      params.sort_by = "vote_average.desc";
     else if (opts.sort === "newest")  params.sort_by = "primary_release_date.desc";
     else if (opts.sort === "oldest")  params.sort_by = "primary_release_date.asc";
@@ -114,7 +115,25 @@ const MW_API = (() => {
       data = await tmdb("/discover/movie", params);
     }
 
-    const movies = (data.results || [])
+    let results = data.results || [];
+    if (opts.search) {
+      let selectedGenreId = null;
+      if (opts.genre) {
+        const allGenres = await genres();
+        const selectedGenre = allGenres.find(g => g.name.toLowerCase() === opts.genre.toLowerCase());
+        selectedGenreId = selectedGenre ? selectedGenre.id : null;
+      }
+      results = results.filter(m => {
+        const year = m.release_date ? Number(m.release_date.slice(0, 4)) : 0;
+        if (year < 2000 || year > 2026) return false;
+        if (opts.year && year !== Number(opts.year)) return false;
+        if (opts.minRating && Number(m.vote_average || 0) < Number(opts.minRating)) return false;
+        if (opts.language && m.original_language !== opts.language) return false;
+        if (selectedGenreId && !(m.genre_ids || []).includes(Number(selectedGenreId))) return false;
+        return true;
+      });
+    }
+    const movies = results
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
 
@@ -153,11 +172,12 @@ const MW_API = (() => {
     return m;
   }
 
-  async function getWatchProviders(id) {
+  async function getWatchProviders(id, region = MW_CONFIG.REGION) {
     if (MW_CONFIG.USE_DEMO) return [];
     try {
       const data = await tmdb("/movie/" + id + "/watch/providers");
-      const r = data.results[MW_CONFIG.REGION];
+      const safeRegion = /^[A-Z]{2}$/.test(String(region || "")) ? region : MW_CONFIG.REGION;
+      const r = data.results[safeRegion];
       if (!r) return [];
       const map = (arr, type) => (arr || []).slice(0, 4).map(p => ({ name: p.provider_name, type }));
       return [...map(r.flatrate, "stream"), ...map(r.rent, "rent"), ...map(r.buy, "buy")];
@@ -199,8 +219,21 @@ const MW_API = (() => {
     return [...new Set(DB.flatMap(m => m.genres))].map(name => ({ id: name, name }));
   }
 
+  async function languages() {
+    if (!MW_CONFIG.USE_DEMO) {
+      const list = await tmdb("/configuration/languages");
+      return list.map(item => ({
+        code: item.iso_639_1,
+        name: item.english_name || item.name || item.iso_639_1
+      })).sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return [...new Set(DB.map(movie => movie.language).filter(Boolean))]
+      .map(code => ({ code, name: code.toUpperCase() }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   const featured = () => discover({ sort: "rating", size: 1 }).then(r => r.results[0] || null);
 
-  return { init, discover, getMovie, search, similar, genres, featured, getTrailer, img,
+  return { init, discover, getMovie, getWatchProviders, search, similar, genres, languages, featured, getTrailer, img,
            isDemo: () => MW_CONFIG.USE_DEMO, all: () => DB };
 })();

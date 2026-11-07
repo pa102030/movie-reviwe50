@@ -11,6 +11,13 @@ document.addEventListener("mw:ready", async () => {
 console.log("Movie Data:", m);
 console.log("Cast List:", m.cast);
   document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
+  let canonicalLink = document.querySelector('link[rel="canonical"]');
+  if (!canonicalLink) {
+    canonicalLink = document.createElement("link");
+    canonicalLink.rel = "canonical";
+    document.head.appendChild(canonicalLink);
+  }
+  canonicalLink.href = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(id);
   const desc = (m.overview || "").slice(0, 155);
   setMeta("description", `${m.title} (${m.year}) — rating, review, trailer and where to watch legally. ${desc}`);
   injectMovieSchema(m);
@@ -119,7 +126,17 @@ console.log("Cast List:", m.cast);
   const LOGO_COLORS = { "netflix": "#e50914", "prime": "#00a8e1", "disney": "#113ccf", "max": "#8a2be2", "apple": "#333", "google": "#4285f4", "peacock": "#000", "paramount": "#0064ff", "hulu": "#1ce783" };
   const logoColor = name => { const k = Object.keys(LOGO_COLORS).find(k => name.toLowerCase().includes(k)); return LOGO_COLORS[k] || "#5b6472"; };
   let watchHTML = `<h2 id="watch"><i class="fa-solid fa-ticket"></i> Where to Watch</h2>`;
-  const watchList = (m.watch || []).map(w => typeof w === "string" ? { name: w, type: "rent" } : w);
+  const regionOptions = [
+    ["US","United States"],["GB","United Kingdom"],["CA","Canada"],["AU","Australia"],
+    ["IN","India"],["LK","Sri Lanka"],["NZ","New Zealand"],["SG","Singapore"],
+    ["DE","Germany"],["FR","France"],["JP","Japan"],["BR","Brazil"]
+  ];
+  const savedRegion = localStorage.getItem("mw_watch_region") || MW_CONFIG.REGION || "US";
+  const regionSelect = '<label class="watch-region-label" for="watch-region">Streaming country</label><select id="watch-region" class="watch-region-select">' +
+    regionOptions.map(([code,label]) => '<option value="' + code + '"' + (code === savedRegion ? ' selected' : '') + '>' + label + '</option>').join("") +
+    '</select><p class="story" id="watch-region-status" aria-live="polite">Showing services available in the selected country.</p>';
+  let watchList = (await MW_API.getWatchProviders(m.id, savedRegion)).map(w => typeof w === "string" ? { name: w, type: "rent" } : w);
+  watchHTML += regionSelect;
   if (watchList.length) {
     watchHTML += `<div class="watch-list">${watchList.map(w => `
       <div class="watch-item">
@@ -127,11 +144,34 @@ console.log("Cast List:", m.cast);
         <button class="wbtn ${w.type === "stream" ? "stream" : "rentbuy"}" data-provider="${esc(w.name)}" data-movie="${esc(m.title)}">${w.type === "stream" ? "WATCH" : "RENT / BUY"}</button>
       </div>`).join("")}</div>`;
   } else {
-    watchHTML += `<p class="story">Availability varies by country. Connect a TMDB API key (see README) for live, region-accurate streaming data.</p>`;
+    watchHTML += `<p class="story" id="watch-empty">No providers are listed for this title in the selected country. Try another country or check the provider directly.</p>`;
   }
   watchHTML += `<p class="legal-note"><i class="fa-solid fa-shield-halved" style="color:var(--green)"></i> MOVIES WORLD never hosts pirated content. Buttons open official, licensed platforms only.</p>`;
   watchPanel.innerHTML = watchHTML;
-  watchPanel.querySelectorAll("[data-provider]").forEach(b => b.addEventListener("click", () => {
+  const regionControl = watchPanel.querySelector("#watch-region");
+  if (regionControl) regionControl.addEventListener("change", async () => {
+    const selectedRegion = regionControl.value;
+    localStorage.setItem("mw_watch_region", selectedRegion);
+    const status = watchPanel.querySelector("#watch-region-status");
+    const listBox = watchPanel.querySelector(".watch-list");
+    const emptyBox = watchPanel.querySelector("#watch-empty");
+    if (status) status.textContent = "Updating streaming services…";
+    if (listBox) listBox.remove();
+    if (emptyBox) emptyBox.remove();
+    try {
+      const providers = await MW_API.getWatchProviders(m.id, selectedRegion);
+      const markup = providers.length
+        ? '<div class="watch-list">' + providers.map(w => '<div class="watch-item"><span class="wname"><span class="wlogo" style="background:' + logoColor(w.name) + '">' + esc(w.name[0]) + '</span>' + esc(w.name) + '</span><button class="wbtn ' + (w.type === "stream" ? "stream" : "rentbuy") + '" data-provider="' + esc(w.name) + '" data-movie="' + esc(m.title) + '">' + (w.type === "stream" ? "WATCH" : "RENT / BUY") + '</button></div>').join("") + '</div>'
+        : '<p class="story" id="watch-empty">No providers are listed for this title in the selected country. Try another country or check the provider directly.</p>';
+      if (status) status.insertAdjacentHTML("afterend", markup);
+      if (status) status.textContent = "Showing services available in " + regionOptions.find(x => x[0] === selectedRegion)[1] + ".";
+      bindProviderButtons();
+    } catch (error) {
+      if (status) status.textContent = "Could not update availability. Please try again.";
+    }
+  });
+  function bindProviderButtons() {
+    watchPanel.querySelectorAll("[data-provider]").forEach(b => b.addEventListener("click", () => {
     const q = encodeURIComponent(b.dataset.movie);
     const urls = {
       "netflix": `https://www.netflix.com/search?q=${q}`,
@@ -147,7 +187,9 @@ console.log("Cast List:", m.cast);
     const k = Object.keys(urls).find(k => b.dataset.provider.toLowerCase().includes(k));
     window.open(urls[k] || `https://www.google.com/search?q=${encodeURIComponent(b.dataset.movie + " " + b.dataset.provider + " official")}`, "_blank", "noopener");
     toast("Opening official platform…", "fa-arrow-up-right-from-square");
-  }));
+    }));
+  }
+  bindProviderButtons();
 
   /* ---------- similar ---------- */
   try {
