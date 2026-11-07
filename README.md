@@ -59,7 +59,21 @@ That's it — the app automatically switches to TMDB mode: real posters, backdro
 
 ---
 
-## 🖥️ Optional Backend (recommended for production)
+## 🔐 Production TMDB API setup (recommended)
+
+The public website must not contain your TMDB API Read Access Token or a private API credential. This repository now supports a Cloudflare Worker proxy.
+
+1. In Cloudflare, create a **Worker** and paste the contents of `cloudflare-worker.js`.
+2. In Worker **Settings → Variables and Secrets**, add:
+   - Secret: `TMDB_READ_TOKEN` = your TMDB API **Read Access Token** (not the public demo key).
+   - Variable: `ALLOWED_ORIGIN` = `https://themoviesworld.com`.
+3. Deploy the Worker and copy its URL.
+4. In `js/config.js`, set `TMDB_PROXY_URL` to `https://YOUR-WORKER.workers.dev/3`. Leave `API_KEY` empty.
+5. Commit and publish. Demo mode remains active until a proxy URL is configured.
+
+The Worker only allows the read-only TMDB endpoints used by this site and rejects browser requests from other origins. CORS is not authentication or complete abuse prevention; add Cloudflare rate limiting in the dashboard and monitor Worker usage. Keep the token only in the Worker secret store.
+
+## 🖥️ Optional Backend (legacy example)
 
 Store your key server-side and proxy requests:
 

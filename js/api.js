@@ -59,17 +59,33 @@ const MW_API = (() => {
 
   /* ---------- helpers: TMDB mode ---------- */
   async function tmdb(path, params) {
-    const key = MW_CONFIG.API_KEY;
-    const url = new URL(MW_CONFIG.API_BASE + path);
-    url.searchParams.set("api_key", key);
-    url.searchParams.set("language", MW_CONFIG.LANGUAGE);
-    if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    const proxyBase = String(MW_CONFIG.TMDB_PROXY_URL || "").replace(/\\/+$/, "");
+    const directKey = String(MW_CONFIG.API_KEY || "").trim();
+    if (!proxyBase && !directKey) throw new Error("TMDB is not configured. Demo mode is active.");
+    const base = proxyBase || MW_CONFIG.API_BASE;
+    const url = new URL(base + path);
+    if (!proxyBase) url.searchParams.set("api_key", directKey);
+    url.searchParams.set("language", MW_CONFIG.LANGUAGE || "en-US");
+    if (params) Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, String(v));
+    });
     if (cache.has(url.href)) return cache.get(url.href);
-    const res = await fetch(url.href);
-    if (!res.ok) throw new Error("TMDB request failed: " + res.status);
-    const json = await res.json();
-    cache.set(url.href, json);
-    return json;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    try {
+      const res = await fetch(url.href, { method: "GET", headers: { Accept: "application/json" }, signal: controller.signal });
+      if (!res.ok) {
+        let detail = "";
+        try { const body = await res.json(); detail = body.status_message || body.error || ""; } catch (_) {}
+        throw new Error("TMDB request failed (" + res.status + ")" + (detail ? ": " + detail : ""));
+      }
+      const json = await res.json();
+      cache.set(url.href, json);
+      if (cache.size > 150) cache.delete(cache.keys().next().value);
+      return json;
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   function tmdbToMovie(m) {
@@ -137,7 +153,7 @@ const MW_API = (() => {
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
 
-    return { results: movies, total: opts.search ? movies.length : data.total_results, page: data.page };
+    return { results: movies, total: Number(data.total_results || 0), page: Number(data.page || opts.page || 1), totalPages: Math.min(Number(data.total_pages || 1), 500) };
   }
 
   /* ---------- public API ---------- */
@@ -196,7 +212,7 @@ const MW_API = (() => {
   async function search(q, limit = 8) {
     if (!MW_CONFIG.USE_DEMO) {
       const data = await tmdb("/search/movie", { query: q, include_adult: "false", page: 1 });
-      return data.results.filter(m => m.release_date && +m.release_date.slice(0,4) <= 2026)
+      return (data.results || []).filter(m => m.release_date && +m.release_date.slice(0,4) >= 2000 && +m.release_date.slice(0,4) <= 2026)
         .slice(0, limit).map(tmdbToMovie);
     }
     return demoQuery({ search: q, sort: "popularity", size: limit }).results;
@@ -205,7 +221,7 @@ const MW_API = (() => {
   async function similar(id, limit = 10) {
     if (!MW_CONFIG.USE_DEMO) {
       const data = await tmdb("/movie/" + id + "/similar");
-      return data.results.slice(0, limit).map(tmdbToMovie);
+      return (data.results || []).filter(m => m.release_date && +m.release_date.slice(0,4) >= 2000 && +m.release_date.slice(0,4) <= 2026).slice(0, limit).map(tmdbToMovie);
     }
     const m = DB.find(x => String(x.id) === String(id));
     if (!m) return [];
