@@ -137,7 +137,7 @@ const MW_API = (() => {
       .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
       .map(m => tmdbToMovie(m));
 
-    return { results: movies, total: opts.search ? movies.length : data.total_results, page: data.page };
+    return { results: movies, total: data.total_results, page: data.page };
   }
 
   /* ---------- public API ---------- */
