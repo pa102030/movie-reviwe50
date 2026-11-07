@@ -126,12 +126,11 @@ console.log("Cast List:", m.cast);
   const LOGO_COLORS = { "netflix": "#e50914", "prime": "#00a8e1", "disney": "#113ccf", "max": "#8a2be2", "apple": "#333", "google": "#4285f4", "peacock": "#000", "paramount": "#0064ff", "hulu": "#1ce783" };
   const logoColor = name => { const k = Object.keys(LOGO_COLORS).find(k => name.toLowerCase().includes(k)); return LOGO_COLORS[k] || "#5b6472"; };
   let watchHTML = `<h2 id="watch"><i class="fa-solid fa-ticket"></i> Where to Watch</h2>`;
-  const regionOptions = [
-    ["US","United States"],["GB","United Kingdom"],["CA","Canada"],["AU","Australia"],
-    ["IN","India"],["LK","Sri Lanka"],["NZ","New Zealand"],["SG","Singapore"],
-    ["DE","Germany"],["FR","France"],["JP","Japan"],["BR","Brazil"]
-  ];
-  const savedRegion = localStorage.getItem("mw_watch_region") || MW_CONFIG.REGION || "US";
+  const regionCodes = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KH KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW").split(" ");
+  const regionNames = new Intl.DisplayNames([navigator.language || "en"], { type: "region" });
+  const regionOptions = regionCodes.map(code => [code, regionNames.of(code)]).filter(x => x[1]).sort((a, b) => a[1].localeCompare(b[1]));
+  const storedRegion = localStorage.getItem("mw_watch_region");
+  const savedRegion = regionOptions.some(([code]) => code === storedRegion) ? storedRegion : (regionOptions.some(([code]) => code === MW_CONFIG.REGION) ? MW_CONFIG.REGION : "US");
   const regionSelect = '<label class="watch-region-label" for="watch-region">Streaming country</label><select id="watch-region" class="watch-region-select">' +
     regionOptions.map(([code,label]) => '<option value="' + code + '"' + (code === savedRegion ? ' selected' : '') + '>' + label + '</option>').join("") +
     '</select><p class="story" id="watch-region-status" aria-live="polite">Showing services available in the selected country.</p>';
@@ -164,7 +163,8 @@ console.log("Cast List:", m.cast);
         ? '<div class="watch-list">' + providers.map(w => '<div class="watch-item"><span class="wname"><span class="wlogo" style="background:' + logoColor(w.name) + '">' + esc(w.name[0]) + '</span>' + esc(w.name) + '</span><button class="wbtn ' + (w.type === "stream" ? "stream" : "rentbuy") + '" data-provider="' + esc(w.name) + '" data-movie="' + esc(m.title) + '">' + (w.type === "stream" ? "WATCH" : "RENT / BUY") + '</button></div>').join("") + '</div>'
         : '<p class="story" id="watch-empty">No providers are listed for this title in the selected country. Try another country or check the provider directly.</p>';
       if (status) status.insertAdjacentHTML("afterend", markup);
-      if (status) status.textContent = "Showing services available in " + regionOptions.find(x => x[0] === selectedRegion)[1] + ".";
+      const selectedCountry = regionOptions.find(x => x[0] === selectedRegion);
+      if (status) status.textContent = "Showing services available in " + (selectedCountry ? selectedCountry[1] : selectedRegion) + ".";
       bindProviderButtons();
     } catch (error) {
       if (status) status.textContent = "Could not update availability. Please try again.";
@@ -185,7 +185,10 @@ console.log("Cast List:", m.cast);
       "paramount": `https://www.paramountplus.com/search/?query=${q}`
     };
     const k = Object.keys(urls).find(k => b.dataset.provider.toLowerCase().includes(k));
-    window.open(urls[k] || `https://www.google.com/search?q=${encodeURIComponent(b.dataset.movie + " " + b.dataset.provider + " official")}`, "_blank", "noopener");
+    const provider = watchList.find(item => item.name === b.dataset.provider);
+    const destination = urls[k] || provider?.link;
+    if (!destination) { toast("No verified provider link is available for this title.", "fa-circle-info"); return; }
+    window.open(destination, "_blank", "noopener,noreferrer");
     toast("Opening official platform…", "fa-arrow-up-right-from-square");
     }));
   }
