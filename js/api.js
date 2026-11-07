@@ -203,6 +203,6 @@ const MW_API = (() => {
 
   const featured = () => discover({ sort: "rating", size: 1 }).then(r => r.results[0] || null);
 
-  return { init, discover, getMovie, search, similar, genres, featured, getTrailer, img,
+  return { init, discover, getMovie, getWatchProviders, search, similar, genres, featured, getTrailer, img,
            isDemo: () => MW_CONFIG.USE_DEMO, all: () => DB };
 })();
