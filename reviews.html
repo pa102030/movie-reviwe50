@@ -51,8 +51,8 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 </div></header>
 <main>
 <section id="listing">
-<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore 100 selected films through editorial review drafts, movie posters, cast information, ratings and official trailer links. Our reviews consider story, performances, filmmaking and the overall viewing experience.</p><div class="stats"><span class="stat">100 selected films</span><span class="stat">Movie details & cast</span><span class="stat">Editorial reviews</span></div></div>
-<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><button class="filter" data-filter="reviewed">Editorial reviews</button><span class="count" id="count">Loading movie information…</span></div>
+<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore 100 selected films through editorial review drafts, movie posters, cast information, ratings and official trailer links. Our reviews consider story, performances, filmmaking and the overall viewing experience.</p><div class="stats"><span class="stat">100 selected films</span><span class="stat">Movie details & cast</span><span class="stat">Clearly labelled review drafts</span></div></div>
+<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><button class="filter" data-filter="reviewed">Review drafts</button><span class="count" id="count">Loading movie information…</span></div>
 <div class="grid" id="grid"><div class="loadstate">Loading movie posters and details…</div></div>
 </section>
 <section id="detail">
@@ -144,7 +144,7 @@ async function tmdb(path,attempt=0){
 function cardMarkup(f){
  const d=cache.get(f.id)||{};
  const poster=d.poster_path?IMAGE+'w500'+d.poster_path:'';
- const el=document.createElement('article');el.className='card';el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','Read '+f.title+' review');
+ const el=document.createElement('a');el.className='card';el.href='reviews.html?id='+encodeURIComponent(f.id);el.style.textDecoration='none';el.style.color='inherit';el.setAttribute('aria-label','Read '+f.title+' review');
  if(poster){const im=document.createElement('img');im.className='poster';im.loading='lazy';im.alt=f.title+' movie poster';im.src=poster;im.onerror=()=>{const fallback=document.createElement('div');fallback.className='poster-fallback';fallback.textContent=f.title+' poster unavailable';im.replaceWith(fallback)};el.append(im)}
  else{const fallback=document.createElement('div');fallback.className='poster-fallback';fallback.textContent=cache.has(f.id)?f.title+' poster unavailable':'Loading poster…';el.append(fallback)}
  const body=document.createElement('div');body.className='cardbody';
@@ -152,7 +152,7 @@ function cardMarkup(f){
  const meta=document.createElement('div');meta.className='meta';meta.innerHTML='<span class="score">'+(d.vote_average?'★ '+d.vote_average.toFixed(1)+'/10':'TMDB details loading')+'</span>'+(d.release_date?' · '+d.release_date.slice(0,4):'');
  const p=document.createElement('p');p.className='intro';p.textContent=f.story;
  body.append(h,meta,p);el.append(body);
- el.addEventListener('click',()=>openFilm(f));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openFilm(f)}});
+ el.addEventListener('click',e=>{e.preventDefault();openFilm(f,true)});
  return el;
 }
 function render(){
@@ -190,10 +190,30 @@ function buildReview(f,movie){
  ];
  return '<div class="eyebrow">INDEPENDENT EDITORIAL REVIEW</div><h2>'+esc(f.title)+': Review</h2><p><strong>Review overview:</strong> '+esc(f.story)+'</p>'+sections.map(s=>'<h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p>').join('')+'<div class="verdict"><strong>MOVIES WORLD verdict:</strong> '+esc(f.verdict)+'<br><small>Editorial draft. This review is separate from TMDB metadata and is not a claim of personal viewing experience.</small></div>';
 }
-async function openFilm(f){
+function setMeta(name,content){let el=document.querySelector('meta[name="' + name + '"]');if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el)}el.content=content}
+function setPropertyMeta(property,content){let el=document.querySelector('meta[property="' + property + '"]');if(!el){el=document.createElement('meta');el.setAttribute('property',property);document.head.appendChild(el)}el.content=content}
+function setReviewSchema(f,d,canonical){
+ const old=document.getElementById('mw-review-schema');if(old)old.remove();
+ const schema={"@context":"https://schema.org","@graph":[
+  {"@type":"Movie","@id":canonical+"#movie","url":canonical,"name":d.title||f.title,"datePublished":d.release_date||undefined,"description":d.overview||f.story,"image":d.poster_path?IMAGE+"w500"+d.poster_path:undefined,"genre":(d.genres||[]).map(g=>g.name),"duration":d.runtime?"PT"+Number(d.runtime)+"M":undefined},
+  {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://themoviesworld.com/"},{"@type":"ListItem","position":2,"name":"Reviews","item":"https://themoviesworld.com/reviews.html"},{"@type":"ListItem","position":3,"name":d.title||f.title,"item":canonical}]}
+ ]};const s=document.createElement('script');s.id='mw-review-schema';s.type='application/ld+json';s.textContent=JSON.stringify(schema);document.head.appendChild(s);
+}
+function setReviewMeta(f,d){
+ const canonical=location.origin+location.pathname+'?id='+encodeURIComponent(f.id);
+ const title=(d.title||f.title)+' Review Draft | MOVIES WORLD';
+ const description=((f.story||d.overview||'Movie information, cast, rating and trailer.')+' Editorial draft; not a claim of personal viewing experience.').slice(0,300);
+ document.title=title;let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
+ setMeta('description',description);setMeta('robots','index, follow, max-image-preview:large');
+ setPropertyMeta('og:title',title);setPropertyMeta('og:description',description);setPropertyMeta('og:url',canonical);setPropertyMeta('og:type','article');
+ setMeta('twitter:title',title);setMeta('twitter:description',description);if(d.poster_path){const poster=IMAGE+'w500'+d.poster_path;setPropertyMeta('og:image',poster);setMeta('twitter:card','summary_large_image');setMeta('twitter:image',poster)}
+ setReviewSchema(f,d,canonical);
+}
+async function openFilm(f,pushHistory=false){
  document.getElementById('listing').style.display='none';document.getElementById('detail').style.display='block';window.scrollTo(0,0);
- const d=cache.get(f.id)||{};
- document.title=f.title+' Review | MOVIES WORLD';
+ if(pushHistory)history.pushState({reviewId:f.id},'','reviews.html?id='+encodeURIComponent(f.id));
+ let d=cache.get(f.id)||{};if(!d.title){try{d=await tmdb('/movie/'+f.id+'?language=en-US');cache.set(f.id,d)}catch(e){console.warn('Could not load movie detail for '+f.title,e)}}
+ setReviewMeta(f,d);
  document.getElementById('title').textContent=d.title||f.title;
  document.getElementById('poster').src=d.poster_path?IMAGE+'w500'+d.poster_path:'';
  document.getElementById('poster').onerror=()=>{document.getElementById('poster').style.display='none'};document.getElementById('poster').style.display=d.poster_path?'block':'none';
@@ -224,12 +244,23 @@ async function openFilm(f){
   if(!cast.children.length)cast.textContent='Cast information unavailable.';
  }catch(e){document.getElementById('cast').textContent='Cast information could not be loaded.';console.error(e)}
 }
-function home(){document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block';document.title='100 Movie Reviews | MOVIES WORLD';window.scrollTo(0,0)}
-document.getElementById('back').addEventListener('click',home);
+function home(updateUrl=true){
+ document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block';window.scrollTo(0,0);if(updateUrl)history.replaceState({},'','reviews.html');
+ document.title='100 Movie Review Drafts | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
+ setMeta('description','Browse 100 selected movie review drafts with posters, cast information, ratings and official trailer links. Drafts are clearly identified and are not claims of personal viewing experience.');setMeta('robots','index, follow, max-image-preview:large');
+ setPropertyMeta('og:title','100 Movie Review Drafts | MOVIES WORLD');setPropertyMeta('og:description','Browse selected films, cast details, ratings and clearly labelled editorial review drafts.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
+ setMeta('twitter:title','100 Movie Review Drafts | MOVIES WORLD');setMeta('twitter:description','Browse selected films, cast details, ratings and clearly labelled editorial review drafts.');
+}
+document.getElementById('back').addEventListener('click',()=>home(true));
+window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('id');const film=films.find(item=>String(item.id)===id);if(film)openFilm(film,false);else home(false)});
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});
 document.getElementById('language').addEventListener('change',e=>{const lang=e.target.value;if(lang==='en')return;document.cookie='googtrans=/en/'+lang+';path=/';document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname;location.reload()});
 const yearNow=document.getElementById('yearNow');if(yearNow)yearNow.textContent=new Date().getFullYear();
+const initialReviewId=new URLSearchParams(location.search).get('id');const initialReview=films.find(f=>String(f.id)===initialReviewId);
+if(initialReview)openFilm(initialReview,false);
+else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block'}
+else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Review Drafts","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
 render();loadPosters();
 function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta,hi,es,fr,de,ja,zh-CN,ar',autoDisplay:false},'google_translate_element')}
 </script>
