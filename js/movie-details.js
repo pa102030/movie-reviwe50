@@ -3,11 +3,11 @@
 document.addEventListener("mw:ready", async () => {
   const id = new URLSearchParams(location.search).get("id");
   const root = document.getElementById("detail-root");
-  if (!id) { root.innerHTML = errorBox("No movie selected."); return; }
+  if (!id || !/^\d+$/.test(id)) { setMeta("robots", "noindex, nofollow"); root.innerHTML = errorBox("No valid movie was selected."); return; }
 
   let m;
   try { m = await MW_API.getMovie(id); }
-  catch (e) { root.innerHTML = errorBox("Movie not found or unavailable."); return; }
+  catch (e) { setMeta("robots", "noindex, nofollow"); root.innerHTML = errorBox("Movie not found or unavailable."); return; }
   document.title = `${m.title} (${m.year}) | MOVIES WORLD Review & Where to Watch`;
   let canonicalLink = document.querySelector('link[rel="canonical"]');
   if (!canonicalLink) {
@@ -16,10 +16,12 @@ document.addEventListener("mw:ready", async () => {
     document.head.appendChild(canonicalLink);
   }
   canonicalLink.href = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(id);
-  const desc = (m.overview || "").slice(0, 155);
-  setMeta("description", `${m.title} (${m.year}) — rating, review, trailer and where to watch legally. ${desc}`);
-  injectMovieSchema(m);
-
+  const desc = (m.title + " (" + (m.year || "") + ") — movie synopsis, cast, rating, trailer and legal streaming availability. " + (m.overview || "")).slice(0, 300);
+  setMeta("description", desc); setMeta("robots", "index, follow, max-image-preview:large");
+  setPropertyMeta("og:title", document.title); setPropertyMeta("og:description", desc); setPropertyMeta("og:url", canonicalLink.href); setPropertyMeta("og:type", "video.movie");
+  if (m.poster) { setPropertyMeta("og:image", m.poster); setPropertyMeta("og:image:alt", m.title + " movie poster"); setMeta("twitter:card", "summary_large_image"); setMeta("twitter:image", m.poster); }
+  setMeta("twitter:title", document.title); setMeta("twitter:description", desc);
+  injectMovieSchema(m, canonicalLink.href);
   const inW = MWStore.inWatchlist(m.id), inF = MWStore.inFavorites(m.id);
   const cast = m.cast || [];
   const facts = [
@@ -204,21 +206,14 @@ document.addEventListener("mw:ready", async () => {
   function errorBox(msg) {
     return `<div class="page-hero"><div class="empty-state"><i class="fa-solid fa-film"></i><h3>${esc(msg)}</h3><p><a href="movies.html" style="color:var(--accent-2);font-weight:600">Browse all movies →</a></p></div></div>`;
   }
-  function setMeta(name, content) {
-    let el = document.querySelector(`meta[name="${name}"]`);
-    if (!el) { el = document.createElement("meta"); el.name = name; document.head.appendChild(el); }
-    el.content = content;
-  }
-  function injectMovieSchema(m) {
-    const s = document.createElement("script");
-    s.type = "application/ld+json";
-    s.textContent = JSON.stringify({
-      "@context": "https://schema.org", "@type": "Movie",
-      name: m.title, datePublished: String(m.year),
-      description: m.overview, image: m.poster || undefined,
-      director: m.director ? { "@type": "Person", name: m.director } : undefined,
-      aggregateRating: m.rating ? { "@type": "AggregateRating", ratingValue: m.rating, bestRating: 10, ratingCount: m.votes || 1 } : undefined
-    });
-    document.head.appendChild(s);
+  function setMeta(name, content) { let el=document.querySelector('meta[name="' + name + '"]'); if(!el){el=document.createElement("meta");el.name=name;document.head.appendChild(el);} el.content=content; }
+  function setPropertyMeta(property, content) { let el=document.querySelector('meta[property="' + property + '"]'); if(!el){el=document.createElement("meta");el.setAttribute("property",property);document.head.appendChild(el);} el.content=content; }
+  function injectMovieSchema(m, canonicalUrl) {
+    const old=document.getElementById("mw-movie-schema"); if(old)old.remove();
+    const schema={"@context":"https://schema.org","@graph":[
+      {"@type":"Movie","@id":canonicalUrl+"#movie","url":canonicalUrl,"name":m.title,"datePublished":m.releaseDate||(m.year?String(m.year):undefined),"description":m.overview||undefined,"image":m.poster||undefined,"genre":Array.isArray(m.genres)?m.genres:undefined,"duration":m.runtime?"PT"+Number(m.runtime)+"M":undefined,"director":m.director?{"@type":"Person","name":m.director}:undefined,"actor":(m.cast||[]).slice(0,10).map(p=>({"@type":"Person","name":typeof p==="string"?p:(p.name||p.original_name)})).filter(p=>p.name)},
+      {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://themoviesworld.com/"},{"@type":"ListItem","position":2,"name":"Movies","item":"https://themoviesworld.com/movies.html"},{"@type":"ListItem","position":3,"name":m.title,"item":canonicalUrl}]}
+    ]};
+    const s=document.createElement("script");s.id="mw-movie-schema";s.type="application/ld+json";s.textContent=JSON.stringify(schema);document.head.appendChild(s);
   }
 });
