@@ -24,6 +24,18 @@
 <link rel="preconnect" href="https://api.themoviedb.org">
 <link rel="preconnect" href="https://image.tmdb.org">
 <style>
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-gadget-icon,
+    .skiptranslate iframe {
+      display: none !important;
+    }
+
+    body {
+      top: 0 !important;
+      position: static !important;
+    }
+
+
 :root{--bg:#0a0d12;--panel:#151b26;--panel2:#1c2431;--text:#f2f5f9;--muted:#9aa7b8;--red:#e50914;--gold:#f5c518;--line:rgba(255,255,255,.08)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body,Inter,system-ui,sans-serif);line-height:1.65;padding-top:var(--header-h,72px)}button,input,select{font:inherit}
 header.site-header{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--header-h,72px);display:flex;align-items:center;background:linear-gradient(180deg,rgba(6,8,12,.96),rgba(6,8,12,.82));backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06)}
@@ -52,7 +64,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 <header class="site-header"><div class="header-inner">
 <a href="index.html" class="logo" aria-label="MOVIES WORLD home"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
 <nav class="main-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="movies.html">Movies</a><a href="reviews.html" class="active">Reviews</a><a href="genres.html">Genres</a><a href="movies.html?sort=rating">Top Rated</a><a href="movies.html?sort=newest">Latest</a><a href="watchlist.html">Watchlist</a></nav>
-<div class="header-actions"><div class="tools"><input id="search" class="search" type="search" placeholder="Search movies..." aria-label="Search movies"><select id="language" class="lang" aria-label="Select language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option><option value="zh-CN">中文</option><option value="ar">العربية</option></select></div></div>
+<div class="header-actions"><div class="tools"><input id="search" class="search" type="search" placeholder="Search movies..." aria-label="Search movies"><select id="custom-translate-select" class="lang" aria-label="Select language" onchange="changeLanguage(this.value)"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option><option value="zh-CN">中文</option><option value="ar">العربية</option></select></div></div>
 </div></header>
 <main>
 <section id="listing">
@@ -315,15 +327,64 @@ document.getElementById('back').addEventListener('click',()=>home(true));
 window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('id');const film=films.find(item=>String(item.id)===id);if(film)openFilm(film,false);else home(false)});
 document.getElementById('search').addEventListener('input',render);
 document.getElementById('filters').addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;filter=b.dataset.filter;document.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});
-document.getElementById('language').addEventListener('change',e=>{const lang=e.target.value;if(lang==='en')return;document.cookie='googtrans=/en/'+lang+';path=/';document.cookie='googtrans=/en/'+lang+';path=/;domain='+location.hostname;location.reload()});
+
 const yearNow=document.getElementById('yearNow');if(yearNow)yearNow.textContent=new Date().getFullYear();
 const initialReviewId=new URLSearchParams(location.search).get('id');const initialReview=films.find(f=>String(f.id)===initialReviewId);
 if(initialReview)openFilm(initialReview,false);
 else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block'}
 else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Information","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
 render();loadPosters();document.getElementById('load-more').addEventListener('click',loadMoreMovies);loadMoreMovies();
-function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta,hi,es,fr,de,ja,zh-CN,ar',autoDisplay:false},'google_translate_element')}
-</script>
+
 <div id="google_translate_element" style="display:none"></div>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <!-- Google Translate Language Control -->
+  <script>
+    function changeLanguage(lang) {
+      const hostname = window.location.hostname;
+
+      document.cookie =
+        "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
+
+      document.cookie =
+        "googtrans=/en/" + lang + "; path=/;";
+
+      location.reload();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const match = document.cookie.match(
+        new RegExp("(^| )googtrans=([^;]+)")
+      );
+
+      if (match) {
+        const currentLang = match[2].split("/")[2];
+        const select = document.getElementById(
+          "custom-translate-select"
+        );
+
+        if (select && currentLang) {
+          select.value = currentLang;
+        }
+      }
+    });
+  </script>
+
+  <!-- Google Translate -->
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: "en",
+        includedLanguages: "en,si,ta,hi,es,fr,de,zh-CN,ja,ar",
+        autoDisplay: false
+      }, "google_translate_element");
+    }
+  </script>
+
+  <script
+    type="text/javascript"
+    src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+  </script>
+
 </body></html>
