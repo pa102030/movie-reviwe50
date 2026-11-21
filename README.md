@@ -139,3 +139,7 @@ MOVIES-WORLD/
 
 This product uses the TMDB API but is not endorsed or certified by TMDB.
 MOVIES WORLD **never hosts or links to pirated files** — all watch/rent/buy/download buttons open official licensed platforms.
+
+## ☁️ Cloudflare Git deployments
+
+This repository is connected to the existing `movies-world-tmdb` Cloudflare Worker. Commits pushed to the configured production branch (`main`) can trigger a Cloudflare build and deployment. Keep `TMDB_READ_TOKEN` in the Cloudflare secret store; never add it to this repository.
