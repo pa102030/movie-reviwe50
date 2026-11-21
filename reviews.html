@@ -59,6 +59,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 <style>
 .review-verdict{margin:24px 0;padding:20px;border-left:3px solid #e50914;background:rgba(255,255,255,.045);border-radius:8px}.review-verdict h3{margin-top:0}.review-meta{font-size:.9rem;color:var(--muted,#9aa4b2);margin-top:18px}
 </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -91,12 +92,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
           MOVIES<b>WORLD</b>
         </a>
         <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
-        <div class="socials">
-          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-        </div>
+        
       </div>
       <div class="footer-col">
         <h4>Explore</h4>
@@ -188,7 +184,7 @@ async function loadMoreMovies(){
  button.disabled=true;button.textContent='Loading films…';
  try{
   const next=discoverPage+1;
-  const data=await tmdb('/discover/movie?include_adult=false&sort_by=popularity.desc&primary_release_date.gte=2000-01-01&primary_release_date.lte=2026-12-31&page='+next);
+  const data=await tmdb('/discover/movie?include_adult=false&sort_by=popularity.desc&primary_release_date.gte=2000-01-01&primary_release_date.lte='+new Date().toISOString().slice(0,10)+'&page='+next);
   discoverPage=next;discoverTotalPages=Math.min(Number(data.total_pages||1),500);
   const known=new Set(films.map(f=>Number(f.id)));
   const added=[];
@@ -245,22 +241,21 @@ function buildReview(f,movie,credits){
  const rating=Number(movie.vote_average||0);
  const runtime=Number(movie.runtime||0);
  const story=f.story||overview;
- const craft=f.craft||'The film’s direction and performances are best considered in relation to the material it sets out to deliver. Its visual approach, editing and sound all contribute to the way the story moves, while the cast’s work determines how convincingly the characters hold the audience’s attention.';
- const caveat=f.caveat||'The premise and available production information do not guarantee that every choice will work for every viewer. The pacing, tone and balance between character moments and spectacle may be divisive, particularly for audiences expecting a different approach from this genre.';
- const verdict=f.verdict||'A '+genreText.toLowerCase()+' title whose appeal rests on its central premise and execution. Viewers drawn to this kind of story may find it worth exploring, while its particular pace and tone will determine how strongly it connects.';
- const score=rating?'<p class="review-meta">TMDB audience rating: <strong>'+rating.toFixed(1)+'/10</strong>. This is a community rating, not a MOVIES WORLD score.</p>':'';
+ const hasEditorialReview=!!(f.craft&&f.caveat&&f.verdict);
+ const score=rating?'<p class="review-meta">TMDB audience rating: <strong>'+rating.toFixed(1)+'/10</strong>. This is a community rating, not a MOVIES WORLD editorial score.</p>':'';
  const details=(director?'<p><strong>Director:</strong> '+esc(director)+'.</p>':'')+(cast.length?'<p><strong>Featuring:</strong> '+esc(cast.join(', '))+'.</p>':'');
  const runtimeLine=runtime?' The running time is '+runtime+' minutes.':'';
- return '<div class="eyebrow">MOVIES WORLD REVIEW</div>'+
-  '<h2>'+esc(title)+': an in-depth review</h2>'+
-  '<h3>Story and direction</h3><p>'+esc(story)+'</p>'+
+ const editorialNotice='<p class="review-meta">This film guide is based on the published synopsis and available film metadata. It is not presented as an independently written editorial review. A full film-specific review will appear here after editorial assessment.</p>';
+ return '<div class="eyebrow">'+(hasEditorialReview?'MOVIES WORLD EDITORIAL REVIEW':'MOVIES WORLD FILM GUIDE')+'</div>'+
+  '<h2>'+esc(title)+(hasEditorialReview?': an in-depth review':': story, cast and film details')+'</h2>'+
+  '<h3>'+(hasEditorialReview?'Story and direction':'Story overview')+'</h3><p>'+esc(story)+'</p>'+
   '<p>'+esc(overview)+'</p>'+
-  '<h3>Performances and filmmaking</h3><p>'+esc(craft)+'</p>'+
+  '<h3>'+(hasEditorialReview?'Performances and filmmaking':'Production and cast information')+'</h3>'+
+  (hasEditorialReview?'<p>'+esc(f.craft)+'</p>':'')+
   details+
-  '<p>'+esc(title)+' works within the conventions of its '+esc(genreText.toLowerCase())+' category.'+esc(runtimeLine)+' The overall effect depends on how well its storytelling, performances and technical choices support one another.</p>'+
-  '<h3>Where it may divide viewers</h3><p>'+esc(caveat)+'</p>'+
-  '<div class="review-verdict"><h3>Final verdict</h3><p>'+esc(verdict)+'</p></div>'+score+
-  '<p class="review-meta">MOVIES WORLD editorial analysis based on the film’s published synopsis and available production information. It does not claim a personal viewing experience. Movie facts and TMDB audience ratings are kept distinct from editorial opinion.</p>';
+  (hasEditorialReview?'<p>'+esc(title)+' works within the conventions of its '+esc(genreText.toLowerCase())+' category.'+esc(runtimeLine)+' The overall effect depends on how well its storytelling, performances and technical choices support one another.</p>':'<p>'+esc(title)+' is listed as a '+esc(genreText.toLowerCase())+' film.'+esc(runtimeLine)+'</p>')+
+  (hasEditorialReview?'<h3>Where it may divide viewers</h3><p>'+esc(f.caveat)+'</p><div class="review-verdict"><h3>Final verdict</h3><p>'+esc(f.verdict)+'</p></div>':editorialNotice)+score+
+  (hasEditorialReview?'<p class="review-meta">MOVIES WORLD editorial analysis based on the film’s published synopsis and available production information. It does not claim a personal viewing experience. Movie facts and TMDB audience ratings are kept distinct from editorial opinion.</p>':'');
 }
 function setMeta(name,content){let el=document.querySelector('meta[name="' + name + '"]');if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el)}el.content=content}
 function setPropertyMeta(property,content){let el=document.querySelector('meta[property="' + property + '"]');if(!el){el=document.createElement('meta');el.setAttribute('property',property);document.head.appendChild(el)}el.content=content}

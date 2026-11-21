@@ -113,7 +113,12 @@ const MW_API = (() => {
   }
 
   async function tmdbDiscover(opts) {
-    const params = { page: opts.page || 1, "vote_count.gte": 200 };
+    const today = new Date().toISOString().slice(0, 10);
+    const params = {
+      page: opts.page || 1,
+      "primary_release_date.gte": "2000-01-01",
+      "primary_release_date.lte": opts.releaseLte || today
+    };
     if (opts.year)        params["primary_release_year"] = opts.year;
     if (opts.minRating)   params["vote_average.gte"] = opts.minRating;
     if (opts.language)    params.with_original_language = opts.language;
@@ -150,7 +155,7 @@ const MW_API = (() => {
       }
       results = results.filter(m => {
         const year = m.release_date ? Number(m.release_date.slice(0, 4)) : 0;
-        if (year < 2000 || year > 2026) return false;
+        if (year < 2000 || year > 2026 || (m.release_date && m.release_date > today)) return false;
         if (opts.year && year !== Number(opts.year)) return false;
         if (opts.minRating && Number(m.vote_average || 0) < Number(opts.minRating)) return false;
         if (opts.language && m.original_language !== opts.language) return false;
@@ -159,7 +164,7 @@ const MW_API = (() => {
       });
     }
     const movies = results
-      .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026; })
+      .filter(m => { const y = m.release_date ? +m.release_date.slice(0,4) : 0; return y >= 2000 && y <= 2026 && (!m.release_date || m.release_date <= today); })
       .map(m => tmdbToMovie(m));
 
     return { results: movies, total: Number(data.total_results || 0), page: Number(data.page || opts.page || 1), totalPages: Math.min(Number(data.total_pages || 1), 500) };
