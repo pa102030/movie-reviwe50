@@ -17,7 +17,7 @@ document.addEventListener("mw:ready", async () => {
   }
   canonicalLink.href = window.location.origin + window.location.pathname + "?id=" + encodeURIComponent(id);
   const desc = (m.title + " (" + (m.year || "") + ") — movie synopsis, cast, rating, trailer and legal streaming availability. " + (m.overview || "")).slice(0, 300);
-  setMeta("description", desc); setMeta("robots", "index, follow, max-image-preview:large");
+  setMeta("description", desc); setMeta("robots", "noindex, follow");
   setPropertyMeta("og:title", document.title); setPropertyMeta("og:description", desc); setPropertyMeta("og:url", canonicalLink.href); setPropertyMeta("og:type", "video.movie");
   if (m.poster) { setPropertyMeta("og:image", m.poster); setPropertyMeta("og:image:alt", m.title + " movie poster"); setMeta("twitter:card", "summary_large_image"); setMeta("twitter:image", m.poster); }
   setMeta("twitter:title", document.title); setMeta("twitter:description", desc);
@@ -75,7 +75,7 @@ document.addEventListener("mw:ready", async () => {
     ${hasEditorialReview ? `<div class="score-bars">
       ${[["Story", rv.story], ["Acting", rv.acting], ["Direction", rv.direction], ["Cinematography", rv.cinematography], ["Music", rv.music], ["Visual Effects", rv.vfx], ["Entertainment", rv.entertainment]].map(([k, v]) =>
         `<div class="sbar"><span>${k}</span><div class="track"><div class="fill" data-w="${v * 10}"></div></div><b>${v.toFixed(1)}</b></div>`).join("")}
-    </div>` : `<p class="story">This is the TMDB community rating, not an independent MOVIES WORLD review. Editorial reviews will be published after they have been written and checked.</p>`}
+    </div>` : `<p class="story">This is the TMDB community rating, not an independent MOVIES WORLD editorial score. Selected film-specific analyses are available in the <a href="reviews.html">Reviews section</a>.</p>`}
     ${hasEditorialReview ? `<p class="story" style="margin-top:16px">${esc(rv.body)}</p>` : ""}
     ${hasEditorialReview ? `<div class="verdict"><h4><i class="fa-solid fa-gavel"></i> MOVIES WORLD Verdict</h4><p>${esc(rv.verdict)}</p></div>` : ""}`;
   requestAnimationFrame(() => setTimeout(() =>
