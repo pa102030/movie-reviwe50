@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0d12">
 <meta name="color-scheme" content="dark">
-<meta name="robots" content="noindex, follow">
-<meta name="description" content="Explore movie information, cast details, ratings and trailers from MOVIES WORLD. Editorial reviews are being prepared and will be published after editorial verification.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="description" content="Read selected MOVIES WORLD film analyses covering story, filmmaking, strengths, limitations and editorial verdicts. TMDB community ratings are identified separately.">
 <link rel="canonical" href="https://themoviesworld.com/reviews.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Movie Reviews | MOVIES WORLD">
@@ -69,10 +69,10 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 </div></header>
 <main>
 <section id="listing">
-<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore films released from 2000 to 2026 with detailed movie information, cast, ratings, trailers and MOVIES WORLD editorial analysis.</p><div class="stats"><span class="stat">Movie information</span><span class="stat">Cast & ratings</span><span class="stat">Reviews & film analysis</span></div></div>
+<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Read 100 selected film-specific analyses. Each entry discusses the story, filmmaking choices, strengths, limitations and an editorial verdict. TMDB community ratings and factual movie information are identified separately from MOVIES WORLD commentary.</p><div class="stats"><span class="stat">Story & filmmaking</span><span class="stat">Strengths & limitations</span><span class="stat">Editorial verdicts</span></div></div>
 <div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><span class="count" id="count">Loading movie information…</span></div>
 <div class="grid" id="grid"><div class="loadstate">Loading movie posters and details…</div></div>
-<div class="load-more-wrap"><button class="filter" id="load-more" type="button">Load more films</button></div>
+
 </section>
 <section id="detail">
 <button class="back" id="back">← Back to reviews</button>
@@ -175,7 +175,7 @@ function render(){
  const filtered=films.filter(f=>(filter==='all'||!!f.story)&&(!q||f.title.toLowerCase().includes(q)||String(f.story||'').toLowerCase().includes(q)));
  grid.replaceChildren();
  filtered.forEach(f=>grid.append(cardMarkup(f)));
- document.getElementById('count').textContent=filtered.length+' movies shown · catalogue 2000–2026';
+ document.getElementById('count').textContent=filtered.length+' editorial entries shown';
 }
 async function loadMoreMovies(){
  if(discoverBusy||discoverPage>=discoverTotalPages)return;
@@ -268,10 +268,10 @@ function setReviewSchema(f,d,canonical){
 }
 function setReviewMeta(f,d){
  const canonical=location.origin+location.pathname+'?id='+encodeURIComponent(f.id);
- const title=(d.title||f.title)+' Movie Information | MOVIES WORLD';
- const description=(d.overview||'Movie information, cast, rating and trailer details from MOVIES WORLD.').slice(0,300);
+ const title=(d.title||f.title)+' Review & Film Analysis | MOVIES WORLD';
+ const description=('MOVIES WORLD editorial analysis: '+[f.story,f.craft,f.caveat,f.verdict].filter(Boolean).join(' ')).slice(0,300);
  document.title=title;let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
- setMeta('description',description);setMeta('robots','noindex, follow');
+ setMeta('description',description);setMeta('robots','index, follow, max-image-preview:large');
  setPropertyMeta('og:title',title);setPropertyMeta('og:description',description);setPropertyMeta('og:url',canonical);setPropertyMeta('og:type','article');
  setMeta('twitter:title',title);setMeta('twitter:description',description);if(d.poster_path){const poster=IMAGE+'w500'+d.poster_path;setPropertyMeta('og:image',poster);setMeta('twitter:card','summary_large_image');setMeta('twitter:image',poster)}
  setReviewSchema(f,d,canonical);
@@ -314,7 +314,7 @@ async function openFilm(f,pushHistory=false){
 function home(updateUrl=true){
  document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block';window.scrollTo(0,0);if(updateUrl)history.replaceState({},'','reviews.html');
  document.title='Movie Reviews | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
- setMeta('description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD. Editorial reviews are being prepared and will be published after editorial verification.');setMeta('robots','noindex, follow');
+ setMeta('description','Read selected MOVIES WORLD film analyses covering story, filmmaking, strengths, limitations and editorial verdicts.');setMeta('robots','index, follow, max-image-preview:large');
  setPropertyMeta('og:title','Movie Reviews | MOVIES WORLD');setPropertyMeta('og:description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
  setMeta('twitter:title','Movie Reviews | MOVIES WORLD');setMeta('twitter:description','Explore MOVIES WORLD movie reviews, film information, cast details, ratings and trailers from 2000 to 2026.');
 }
@@ -328,7 +328,7 @@ const initialReviewId=new URLSearchParams(location.search).get('id');const initi
 if(initialReview)openFilm(initialReview,false);
 else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block'}
 else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Information","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
-render();loadPosters();document.getElementById('load-more').addEventListener('click',loadMoreMovies);loadMoreMovies();
+render();loadPosters();
 
 </script>
 
