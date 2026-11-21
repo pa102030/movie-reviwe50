@@ -404,12 +404,34 @@
 </footer>
 
   <script type="text/javascript">
-    function changeLanguage(lang) {
-      let hostname = window.location.hostname;
-      document.cookie = "googtrans=/en/" + lang + "; path=/; domain=" + hostname;
-      document.cookie = "googtrans=/en/" + lang + "; path=/;";
-      location.reload();
+    function googleTranslateElementInit() {
+      if (!window.google || !google.translate || !google.translate.TranslateElement) return;
+      new google.translate.TranslateElement({
+        pageLanguage: "en",
+        includedLanguages: "en,si,ta,hi,es,fr,de,ja,zh-CN,ar",
+        autoDisplay: false
+      }, "google_translate_element");
     }
+
+    function changeLanguage(lang) {
+      const expires = "expires=" + new Date(Date.now() + 365 * 86400000).toUTCString();
+      const host = window.location.hostname;
+      const domain = host.indexOf(".") >= 0 ? "; domain=" + host.replace(/^www\\./, "") : "";
+      if (lang === "en") {
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" + domain;
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      } else {
+        document.cookie = "googtrans=/en/" + lang + "; " + expires + "; path=/" + domain;
+        document.cookie = "googtrans=/en/" + lang + "; " + expires + "; path=/";
+      }
+      window.location.reload();
+    }
+
+    (function restoreLanguageSelection() {
+      const match = document.cookie.match(/(?:^|; )googtrans=\\/en\\/([^;]+)/);
+      const select = document.getElementById("custom-translate-select");
+      if (match && select) select.value = decodeURIComponent(match[1]);
+    })();
   </script>
   <div id="google_translate_element" style="display:none;"></div>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
