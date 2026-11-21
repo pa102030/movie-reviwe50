@@ -2,7 +2,7 @@
 
 ### *Discover. Review. Watch.*
 
-A premium, dark-cinematic movie discovery & review web app covering **every movie released from 2000 → 2026** — powered by the TMDB API, with an offline demo mode built in.
+A responsive movie discovery web app for films released from **2000–2026**, powered by TMDB with an offline demo mode. Catalog coverage and availability depend on TMDB data and selected filters.
 
 ---
 
@@ -15,7 +15,7 @@ A premium, dark-cinematic movie discovery & review web app covering **every movi
 - **Dynamic year pages**: `movies.html?year=2026` → "Best Movies of 2026"
 - **Dynamic genre pages**: `genres.html?genre=horror` → popular / highest rated / latest
 - **Movie detail page** (`movie.html?id=`) — backdrop hero, poster, full credits, story, JSON-LD schema
-- **Original editorial review system** — overall score ring, animated category bars (Story / Acting / Direction / Cinematography / Music / VFX / Entertainment) + MOVIES WORLD Verdict
+- **Transparent review status** — TMDB community ratings are labelled separately from independent MOVIES WORLD editorial reviews; unfinished review drafts are not presented as published reviews
 - **Legal "Where to Watch"** — stream / rent / buy buttons that open official platforms (Netflix, Prime Video, Disney+, Apple TV, Google TV, Max, Hulu, Peacock, Paramount+). **No pirated content, ever.**
 - **Trailer modal** — embedded official YouTube player (API mode)
 - **Watchlist & Favorites** — saved in `localStorage`

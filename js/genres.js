@@ -7,7 +7,18 @@ document.addEventListener("mw:ready", async () => {
   const genreWrap = document.getElementById("genre-page");
   const ICONS = { Action: "fa-explosion", Adventure: "fa-mountain-sun", Animation: "fa-wand-magic-sparkles", Comedy: "fa-face-laugh", Crime: "fa-user-secret", Drama: "fa-masks-theater", Fantasy: "fa-dragon", Horror: "fa-skull", Mystery: "fa-magnifying-glass", Romance: "fa-heart", "Sci-Fi": "fa-rocket", Thriller: "fa-bolt", War: "fa-shield-halved", Western: "fa-hat-cowboy" };
 
-  const gs = await MW_API.genres();
+  let gs = [];
+  try {
+    gs = await MW_API.genres();
+  } catch (error) {
+    console.error("Genre list could not be loaded:", error);
+    const target = genre ? genreWrap : indexWrap;
+    if (target) {
+      target.style.display = "";
+      target.innerHTML = '<div class="empty-state"><i class="fa-solid fa-triangle-exclamation"></i><h3>Genres are temporarily unavailable</h3><p>Please check your connection and try again.</p><a class="btn btn-red" href="movies.html">Browse Movies</a></div>';
+    }
+    return;
+  }
   const names = gs.map(g => g.name || g);
 
   if (!genre) {

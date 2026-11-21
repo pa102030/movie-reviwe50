@@ -8,13 +8,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a0d12">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Browse 100 selected movie review drafts with posters, cast information, ratings and official trailer links. Drafts are clearly labelled and are not claims of personal viewing experience.">
+<meta name="robots" content="noindex, follow">
+<meta name="description" content="Explore movie information, cast details, ratings and trailers from MOVIES WORLD. Editorial reviews are being prepared and will be published after editorial verification.">
 <link rel="canonical" href="https://themoviesworld.com/reviews.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="100 Movie Review Drafts | MOVIES WORLD">
-<meta property="og:description" content="Browse selected films, cast details, ratings and clearly labelled editorial review drafts.">
+<meta property="og:title" content="Movie Reviews | MOVIES WORLD">
+<meta property="og:description" content="Explore movie information, cast details, ratings and trailers from MOVIES WORLD.">
 <meta property="og:url" content="https://themoviesworld.com/reviews.html">
-<title>100 Movie Review Drafts | MOVIES WORLD</title>
+<title>Movie Reviews | MOVIES WORLD</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,12 +48,12 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 <header class="site-header"><div class="header-inner">
 <a href="index.html" class="logo" aria-label="MOVIES WORLD home"><span class="logo-mark"><i class="fa-solid fa-clapperboard"></i></span>MOVIES<b>WORLD</b></a>
 <nav class="main-nav" aria-label="Main navigation"><a href="index.html">Home</a><a href="movies.html">Movies</a><a href="reviews.html" class="active">Reviews</a><a href="genres.html">Genres</a><a href="movies.html?sort=rating">Top Rated</a><a href="movies.html?sort=newest">Latest</a><a href="watchlist.html">Watchlist</a></nav>
-<div class="header-actions"><div class="tools"><input id="search" class="search" type="search" placeholder="Search 100 movie reviews..." aria-label="Search movies"><select id="language" class="lang" aria-label="Select language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option><option value="zh-CN">中文</option><option value="ar">العربية</option></select></div></div>
+<div class="header-actions"><div class="tools"><input id="search" class="search" type="search" placeholder="Search movies..." aria-label="Search movies"><select id="language" class="lang" aria-label="Select language"><option value="en">English</option><option value="si">සිංහල</option><option value="ta">தமிழ்</option><option value="hi">हिन्दी</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option><option value="zh-CN">中文</option><option value="ar">العربية</option></select></div></div>
 </div></header>
 <main>
 <section id="listing">
-<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore 100 selected films through editorial review drafts, movie posters, cast information, ratings and official trailer links. Our reviews consider story, performances, filmmaking and the overall viewing experience.</p><div class="stats"><span class="stat">100 selected films</span><span class="stat">Movie details & cast</span><span class="stat">Clearly labelled review drafts</span></div></div>
-<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><button class="filter" data-filter="reviewed">Review drafts</button><span class="count" id="count">Loading movie information…</span></div>
+<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore selected films with movie posters, cast information, ratings and official trailer links. Our editorial reviews are being prepared and will be published only after an editor has checked the content.</p><div class="stats"><span class="stat">Movie information</span><span class="stat">Cast & ratings</span><span class="stat">Editorial content under review</span></div></div>
+<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><span class="count" id="count">Loading movie information…</span></div>
 <div class="grid" id="grid"><div class="loadstate">Loading movie posters and details…</div></div>
 </section>
 <section id="detail">
@@ -181,14 +182,7 @@ async function loadPosters(){
  if(!loaded){document.getElementById('grid').insertAdjacentHTML('afterbegin','<div class="loadstate">Movie images could not be retrieved from TMDB. Check the API key in js/config.js and the browser Console for the exact error.</div>');}
 }
 function buildReview(f,movie){
- const sections=[
- ['Story and themes',f.story+' The review’s central focus is how this premise shapes the characters’ choices and gives the film its emotional or dramatic direction. Rather than treating the plot as a list of events, this reading considers the ideas that connect the major story developments.'],
- ['Performances and characters','The performances are important to the film’s effect because the audience needs to understand the people behind the central conflict. The character work is best considered in relation to the film’s tone: whether it depends on restraint, heightened expression, humour or emotional intensity. '+f.story],
- ['Direction and filmmaking',f.craft+' The visual and sound choices are not simply decoration; they help establish the film’s atmosphere, rhythm and point of view. Editing, production design, cinematography and music work together to guide the audience through the experience.'],
- ['What works and what may not',f.caveat+' These limitations do not automatically undermine the film, but they are worth considering when deciding whether its style and pacing will suit your preferences. A strong review should recognise both the qualities that make a film distinctive and the choices that may not work for every viewer.'],
- ['Final verdict',f.verdict+' Overall, the film offers a specific experience shaped by its subject, performances and filmmaking choices. This MOVIES WORLD assessment is an editorial draft and should be checked by an editor before publication.']
- ];
- return '<div class="eyebrow">INDEPENDENT EDITORIAL REVIEW</div><h2>'+esc(f.title)+': Review</h2><p><strong>Review overview:</strong> '+esc(f.story)+'</p>'+sections.map(s=>'<h3>'+esc(s[0])+'</h3><p>'+esc(s[1])+'</p>').join('')+'<div class="verdict"><strong>MOVIES WORLD verdict:</strong> '+esc(f.verdict)+'<br><small>Editorial draft. This review is separate from TMDB metadata and is not a claim of personal viewing experience.</small></div>';
+ return '<div class="eyebrow">EDITORIAL STATUS</div><h2>'+esc(f.title)+': Editorial review not yet published</h2><p>MOVIES WORLD has not published an independent editorial review for this film yet. The information on this page is provided for movie discovery and is not presented as a personal viewing experience or an editor-written review.</p><p>For verified movie metadata, cast, ratings and trailers, visit the <a href="movie.html?id='+encodeURIComponent(f.id)+'">movie details page</a>. Editorial reviews will appear here only after an editor has written and checked the content.</p>';
 }
 function setMeta(name,content){let el=document.querySelector('meta[name="' + name + '"]');if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el)}el.content=content}
 function setPropertyMeta(property,content){let el=document.querySelector('meta[property="' + property + '"]');if(!el){el=document.createElement('meta');el.setAttribute('property',property);document.head.appendChild(el)}el.content=content}
@@ -201,10 +195,10 @@ function setReviewSchema(f,d,canonical){
 }
 function setReviewMeta(f,d){
  const canonical=location.origin+location.pathname+'?id='+encodeURIComponent(f.id);
- const title=(d.title||f.title)+' Review Draft | MOVIES WORLD';
- const description=((f.story||d.overview||'Movie information, cast, rating and trailer.')+' Editorial draft; not a claim of personal viewing experience.').slice(0,300);
+ const title=(d.title||f.title)+' Movie Information | MOVIES WORLD';
+ const description=(d.overview||'Movie information, cast, rating and trailer details from MOVIES WORLD.').slice(0,300);
  document.title=title;let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
- setMeta('description',description);setMeta('robots','index, follow, max-image-preview:large');
+ setMeta('description',description);setMeta('robots','noindex, follow');
  setPropertyMeta('og:title',title);setPropertyMeta('og:description',description);setPropertyMeta('og:url',canonical);setPropertyMeta('og:type','article');
  setMeta('twitter:title',title);setMeta('twitter:description',description);if(d.poster_path){const poster=IMAGE+'w500'+d.poster_path;setPropertyMeta('og:image',poster);setMeta('twitter:card','summary_large_image');setMeta('twitter:image',poster)}
  setReviewSchema(f,d,canonical);
@@ -246,10 +240,10 @@ async function openFilm(f,pushHistory=false){
 }
 function home(updateUrl=true){
  document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block';window.scrollTo(0,0);if(updateUrl)history.replaceState({},'','reviews.html');
- document.title='100 Movie Review Drafts | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
- setMeta('description','Browse 100 selected movie review drafts with posters, cast information, ratings and official trailer links. Drafts are clearly identified and are not claims of personal viewing experience.');setMeta('robots','index, follow, max-image-preview:large');
- setPropertyMeta('og:title','100 Movie Review Drafts | MOVIES WORLD');setPropertyMeta('og:description','Browse selected films, cast details, ratings and clearly labelled editorial review drafts.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
- setMeta('twitter:title','100 Movie Review Drafts | MOVIES WORLD');setMeta('twitter:description','Browse selected films, cast details, ratings and clearly labelled editorial review drafts.');
+ document.title='Movie Reviews | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
+ setMeta('description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD. Editorial reviews are being prepared and will be published after editorial verification.');setMeta('robots','noindex, follow');
+ setPropertyMeta('og:title','Movie Reviews | MOVIES WORLD');setPropertyMeta('og:description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
+ setMeta('twitter:title','Movie Reviews | MOVIES WORLD');setMeta('twitter:description','Editorial reviews are being prepared. Explore movie information, cast details, ratings and trailers.');
 }
 document.getElementById('back').addEventListener('click',()=>home(true));
 window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('id');const film=films.find(item=>String(item.id)===id);if(film)openFilm(film,false);else home(false)});
@@ -260,7 +254,7 @@ const yearNow=document.getElementById('yearNow');if(yearNow)yearNow.textContent=
 const initialReviewId=new URLSearchParams(location.search).get('id');const initialReview=films.find(f=>String(f.id)===initialReviewId);
 if(initialReview)openFilm(initialReview,false);
 else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block'}
-else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Review Drafts","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
+else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Information","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
 render();loadPosters();
 function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'en,si,ta,hi,es,fr,de,ja,zh-CN,ar',autoDisplay:false},'google_translate_element')}
 </script>

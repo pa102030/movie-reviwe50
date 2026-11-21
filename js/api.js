@@ -4,6 +4,7 @@
 const MW_API = (() => {
   let DB = [];         // demo database
   let cache = new Map(); // simple in-memory cache
+  let TMDB_GENRES = [];
 
   async function init() {
     if (MW_CONFIG.USE_DEMO) {
@@ -15,6 +16,14 @@ const MW_API = (() => {
       } catch (e) {
         console.error("Demo DB failed to load:", e);
         DB = [];
+      }
+    } else {
+      try {
+        const data = await tmdb("/genre/movie/list");
+        TMDB_GENRES = data.genres || [];
+      } catch (e) {
+        console.warn("TMDB genre dictionary unavailable:", e);
+        TMDB_GENRES = [];
       }
     }
     return DB;
@@ -95,7 +104,7 @@ const MW_API = (() => {
       releaseDate: m.release_date, rating: Math.round(m.vote_average * 10) / 10,
       votes: m.vote_count, overview: m.overview, tagline: m.tagline || "",
       poster: img(m.poster_path, "w500"), backdrop: img(m.backdrop_path, "original"),
-      genres: (m.genres || []).map(g => g.name),
+      genres: (m.genres || (m.genre_ids || []).map(id => TMDB_GENRES.find(g => Number(g.id) === Number(id))).filter(Boolean)).map(g => typeof g === "string" ? g : g.name),
       runtime: m.runtime || null, language: m.original_language,
       country: (m.production_countries || []).map(c => c.name),
       director: m.director || null, cast: m.cast || [], ageRating: m.certification || null,
@@ -165,9 +174,9 @@ const MW_API = (() => {
   async function getMovie(id) {
     if (!MW_CONFIG.USE_DEMO) {
       const m = await tmdb("/movie/" + id, { append_to_response: "credits,videos,release_dates" });
-      const director = (m.credits.crew || []).find(c => c.job === "Director");
-      const trailer = (m.videos.results || []).find(v => v.site === "YouTube" && v.type === "Trailer");
-      const cert = (m.release_dates.results || []).find(r => r.iso_3166_1 === MW_CONFIG.REGION);
+      const director = (m.credits?.crew || []).find(c => c.job === "Director");
+      const trailer = (m.videos?.results || []).find(v => v.site === "YouTube" && v.type === "Trailer");
+      const cert = (m.release_dates?.results || []).find(r => r.iso_3166_1 === MW_CONFIG.REGION);
       const movie = tmdbToMovie(m);
       movie.director = director ? director.name : null;
       
@@ -231,7 +240,12 @@ const MW_API = (() => {
   }
 
   async function genres() {
-    if (!MW_CONFIG.USE_DEMO) return tmdb("/genre/movie/list").then(d => d.genres);
+    if (!MW_CONFIG.USE_DEMO) {
+      if (TMDB_GENRES.length) return TMDB_GENRES;
+      const data = await tmdb("/genre/movie/list");
+      TMDB_GENRES = data.genres || [];
+      return TMDB_GENRES;
+    }
     return [...new Set(DB.flatMap(m => m.genres))].map(name => ({ id: name, name }));
   }
 
