@@ -1,0 +1,17 @@
+# Do not publish repository/deployment source files as public website assets.
+cloudflare-worker.js
+wrangler.toml
+.assetsignore
+README.md
+*.md
+*.toml
+*.yml
+*.yaml
+*.jsonc
+*.lock
+LICENSE*
+CHANGELOG*
+CONTRIBUTING*
+.github/
+.git/
+node_modules/
