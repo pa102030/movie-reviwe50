@@ -1,0 +1,11 @@
+name = "movies-world-tmdb"
+main = "./cloudflare-worker.js"
+compatibility_date = "2026-11-21"
+# Preserve dashboard-managed environment variables while deploying from this config.
+keep_vars = true
+
+[assets]
+# Serve the existing root-level MOVIES WORLD site files as Worker Static Assets.
+directory = "."
+# Keep /3/* requests on the Worker so the existing TMDB proxy continues to work.
+run_worker_first = ["/3/*"]
