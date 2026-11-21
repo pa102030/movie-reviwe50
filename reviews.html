@@ -59,6 +59,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 <style>
 .review-verdict{margin:24px 0;padding:20px;border-left:3px solid #e50914;background:rgba(255,255,255,.045);border-radius:8px}.review-verdict h3{margin-top:0}.review-meta{font-size:.9rem;color:var(--muted,#9aa4b2);margin-top:18px}
 </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
 <header class="site-header"><div class="header-inner">
@@ -91,12 +92,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
           MOVIES<b>WORLD</b>
         </a>
         <p>Your destination for discovering great movies. Discover. Review. Watch.</p>
-        <div class="socials">
-          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-          <a href="#" aria-label="X (Twitter)"><i class="fa-brands fa-x-twitter"></i></a>
-        </div>
+        
       </div>
       <div class="footer-col">
         <h4>Explore</h4>
@@ -188,7 +184,7 @@ async function loadMoreMovies(){
  button.disabled=true;button.textContent='Loading films…';
  try{
   const next=discoverPage+1;
-  const data=await tmdb('/discover/movie?include_adult=false&sort_by=popularity.desc&primary_release_date.gte=2000-01-01&primary_release_date.lte=2026-12-31&page='+next);
+  const data=await tmdb('/discover/movie?include_adult=false&sort_by=popularity.desc&primary_release_date.gte=2000-01-01&primary_release_date.lte='+new Date().toISOString().slice(0,10)+'&page='+next);
   discoverPage=next;discoverTotalPages=Math.min(Number(data.total_pages||1),500);
   const known=new Set(films.map(f=>Number(f.id)));
   const added=[];
