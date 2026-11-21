@@ -335,6 +335,8 @@ else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getEleme
 else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Information","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
 render();loadPosters();document.getElementById('load-more').addEventListener('click',loadMoreMovies);loadMoreMovies();
 
+</script>
+
   <!-- Google Translate Language Control -->
   <script>
     function changeLanguage(lang) {
