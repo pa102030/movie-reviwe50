@@ -60,23 +60,24 @@ document.addEventListener("mw:ready", async () => {
   /* ---------- review score ---------- */
   const scorePanel = document.getElementById("review-panel");
   const rv = m.review;
-  const overall = rv ? ((rv.story + rv.acting + rv.direction + rv.cinematography + rv.music + rv.vfx + rv.entertainment) / 7) : (m.rating || 0);
+  const hasEditorialReview = !!(rv && rv.body && rv.verdict);
+  const overall = hasEditorialReview ? ((rv.story + rv.acting + rv.direction + rv.cinematography + rv.music + rv.vfx + rv.entertainment) / 7) : (m.rating || 0);
   const stars = n => "★".repeat(Math.round(n / 2)) + "☆".repeat(5 - Math.round(n / 2));
   scorePanel.innerHTML = `
-    <h2><i class="fa-solid fa-star-half-stroke"></i> MOVIES WORLD Review</h2>
+    <h2><i class="fa-solid fa-star-half-stroke"></i> ${hasEditorialReview ? "MOVIES WORLD Editorial Review" : "TMDB Community Rating"}</h2>
     <div class="score-ring">
       <div class="ring" style="--p:${(overall * 10).toFixed(0)}"><span>${overall.toFixed(1)}</span></div>
       <div>
         <div class="stars-lg" aria-hidden="true">${stars(overall)}</div>
-        <div class="score-note"><b style="color:var(--text)">MOVIE SCORE ${overall.toFixed(1)}/10</b> · based on ${m.votes ? m.votes.toLocaleString() + " votes" : "editorial rating"}</div>
+        <div class="score-note"><b style="color:var(--text)">${hasEditorialReview ? "EDITORIAL SCORE" : "TMDB RATING"} ${overall.toFixed(1)}/10</b> · ${hasEditorialReview ? "MOVIES WORLD editorial assessment" : (m.votes ? "based on " + m.votes.toLocaleString() + " TMDB votes" : "community rating supplied by TMDB")}</div>
       </div>
     </div>
-    ${rv ? `<div class="score-bars">
+    ${hasEditorialReview ? `<div class="score-bars">
       ${[["Story", rv.story], ["Acting", rv.acting], ["Direction", rv.direction], ["Cinematography", rv.cinematography], ["Music", rv.music], ["Visual Effects", rv.vfx], ["Entertainment", rv.entertainment]].map(([k, v]) =>
         `<div class="sbar"><span>${k}</span><div class="track"><div class="fill" data-w="${v * 10}"></div></div><b>${v.toFixed(1)}</b></div>`).join("")}
-    </div>` : `<p class="story">Full editorial breakdown coming soon. Community rating: <b style="color:var(--gold)">${m.rating}/10</b>.</p>`}
-    <p class="story" style="margin-top:16px">${rv ? esc(rv.body) : esc(m.overview || "")}</p>
-    ${rv ? `<div class="verdict"><h4><i class="fa-solid fa-gavel"></i> MOVIES WORLD Verdict</h4><p>${esc(rv.verdict)}</p></div>` : ""}`;
+    </div>` : `<p class="story">This is the TMDB community rating, not an independent MOVIES WORLD review. Editorial reviews will be published after they have been written and checked.</p>`}
+    ${hasEditorialReview ? `<p class="story" style="margin-top:16px">${esc(rv.body)}</p>` : ""}
+    ${hasEditorialReview ? `<div class="verdict"><h4><i class="fa-solid fa-gavel"></i> MOVIES WORLD Verdict</h4><p>${esc(rv.verdict)}</p></div>` : ""}`;
   requestAnimationFrame(() => setTimeout(() =>
     scorePanel.querySelectorAll(".fill").forEach(f => f.style.width = f.dataset.w + "%"), 120));
 

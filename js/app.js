@@ -598,7 +598,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     initChrome();
     initSearch();
 
-    if (!window.MW_API || typeof MW_API.init !== "function") {
+    // MW_API is declared with a top-level const in js/api.js. Global lexical
+    // bindings are not properties of window, so check the binding directly.
+    if (typeof MW_API === "undefined" || typeof MW_API.init !== "function") {
       throw new Error(
         "MW_API.init is unavailable. Check that js/api.js loads before js/app.js."
       );
