@@ -56,7 +56,7 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 </div></header>
 <main>
 <section id="listing">
-<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore selected films with movie posters, cast information, ratings and official trailer links. Our editorial reviews are being prepared and will be published only after an editor has checked the content.</p><div class="stats"><span class="stat">Movie information</span><span class="stat">Cast & ratings</span><span class="stat">Editorial content under review</span></div></div>
+<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore films released from 2000 to 2026 with detailed movie information, cast, ratings, trailers and MOVIES WORLD editorial analysis.</p><div class="stats"><span class="stat">Movie information</span><span class="stat">Cast & ratings</span><span class="stat">Reviews & film analysis</span></div></div>
 <div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><span class="count" id="count">Loading movie information…</span></div>
 <div class="grid" id="grid"><div class="loadstate">Loading movie posters and details…</div></div>
 <div class="load-more-wrap"><button class="filter" id="load-more" type="button">Load more films</button></div>
@@ -309,7 +309,7 @@ function home(updateUrl=true){
  document.title='Movie Reviews | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
  setMeta('description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD. Editorial reviews are being prepared and will be published after editorial verification.');setMeta('robots','noindex, follow');
  setPropertyMeta('og:title','Movie Reviews | MOVIES WORLD');setPropertyMeta('og:description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
- setMeta('twitter:title','Movie Reviews | MOVIES WORLD');setMeta('twitter:description','Editorial reviews are being prepared. Explore movie information, cast details, ratings and trailers.');
+ setMeta('twitter:title','Movie Reviews | MOVIES WORLD');setMeta('twitter:description','Explore MOVIES WORLD movie reviews, film information, cast details, ratings and trailers from 2000 to 2026.');
 }
 document.getElementById('back').addEventListener('click',()=>home(true));
 window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('id');const film=films.find(item=>String(item.id)===id);if(film)openFilm(film,false);else home(false)});
