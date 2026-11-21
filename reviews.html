@@ -178,7 +178,7 @@ function render(){
  document.getElementById('count').textContent=filtered.length+' editorial entries shown';
 }
 async function loadPosters(){
- if(!PROXY_BASE && !API_KEY){document.getElementById('grid').innerHTML='<div class="loadstate">TMDB connection was not found. Please check the Cloudflare Worker URL in js/config.js.</div>';document.getElementById('tmdb-status').textContent='Movie images unavailable; editorial text is still available.';return;}
+ if(!PROXY_BASE && !API_KEY){document.getElementById('tmdb-status').textContent='TMDB is not configured; movie images are unavailable. Editorial analyses remain available.';return;}
  let index=0,loaded=0,failed=0;
  async function worker(){
   while(index<films.length){
