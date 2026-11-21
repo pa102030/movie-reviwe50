@@ -69,8 +69,8 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 </div></header>
 <main>
 <section id="listing">
-<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Read 100 selected film-specific analyses. Each entry discusses the story, filmmaking choices, strengths, limitations and an editorial verdict. TMDB community ratings and factual movie information are identified separately from MOVIES WORLD commentary.</p><div class="stats"><span class="stat">Story & filmmaking</span><span class="stat">Strengths & limitations</span><span class="stat">Editorial verdicts</span></div></div>
-<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><span class="count" id="count">Loading movie information…</span></div>
+<div class="hero"><div class="eyebrow">MOVIES WORLD EDITORIAL</div><h1>Movie Reviews</h1><p>Explore 100 selected film analyses with separate sections for story context, filmmaking, a film-specific editorial perspective, limitations and a final assessment. Movie facts and TMDB community ratings are clearly separated from MOVIES WORLD commentary. These analyses are based on published film and production information; they do not claim first-hand viewing.</p><div class="stats"><span class="stat">Story & filmmaking</span><span class="stat">Strengths & limitations</span><span class="stat">Editorial verdicts</span></div></div>
+<div class="toolbar" id="filters"><button class="filter active" data-filter="all">All movies</button><span class="count" id="count" aria-live="polite">100 editorial entries</span><span class="count" id="tmdb-status" aria-live="polite">Posters loading…</span></div>
 <div class="grid" id="grid"><div class="loadstate">Loading movie posters and details…</div></div>
 
 </section>
@@ -78,9 +78,9 @@ footer{text-align:center;border-top:1px solid var(--line);padding:25px;color:var
 <button class="back" id="back">← Back to reviews</button>
 <div class="detailhero"><img class="backdrop" id="backdrop" alt=""><div class="detailinner">
 <img class="detailposter" id="poster" alt="Movie poster">
-<div><div class="eyebrow">MOVIES WORLD REVIEW</div><h1 class="detailtitle" id="title">Loading…</h1><p class="tagline" id="tagline"></p><div class="facts"><span class="gold" id="rating"></span><span class="pill" id="year"></span><span class="pill" id="runtime"></span></div><div class="genre" id="genres"></div><a class="trailer" id="trailer" href="#" target="_blank" rel="noopener noreferrer">▶ Watch trailer</a></div>
+<div><div class="eyebrow">MOVIES WORLD FILM ANALYSIS</div><h1 class="detailtitle" id="title">Loading…</h1><p class="tagline" id="tagline"></p><div class="facts"><span class="gold" id="rating"></span><span class="pill" id="year"></span><span class="pill" id="runtime"></span></div><div class="genre" id="genres"></div><a class="trailer" id="trailer" href="#" target="_blank" rel="noopener noreferrer">▶ Watch trailer</a></div>
 </div></div>
-<div class="columns"><article class="article" id="article"><p>Loading review…</p></article><aside class="side"><h3>Movie information</h3><p id="overview"></p><p><strong>Director:</strong> <span id="director">—</span></p><p><strong>Production:</strong> <span id="production">—</span></p><h3>Cast</h3><div class="cast" id="cast"></div></aside></div>
+<div class="columns"><article class="article" id="article"><p>Loading editorial analysis…</p></article><aside class="side"><h3>Movie information</h3><p><strong>Director:</strong> <span id="director">—</span></p><p><strong>Production:</strong> <span id="production">—</span></p><h3>Cast</h3><div class="cast" id="cast"></div></aside></div>
 </section>
 </main>
 <footer class="site-footer">
@@ -171,13 +171,14 @@ function cardMarkup(f){
 }
 function render(){
  const q=document.getElementById('search').value.trim().toLowerCase();
- const filtered=films.filter(f=>(filter==='all'||!!f.story)&&(!q||f.title.toLowerCase().includes(q)||String(f.story||'').toLowerCase().includes(q)));
+ const filtered=films.filter(f=>(filter==='all'||!!f.story)&&(!q||[f.title,f.story,f.craft,f.analysis,f.caveat,f.verdict].some(value=>String(value||'').toLowerCase().includes(q))));
  grid.replaceChildren();
- filtered.forEach(f=>grid.append(cardMarkup(f)));
+ if(filtered.length){filtered.forEach(f=>grid.append(cardMarkup(f)));}
+ else{const empty=document.createElement('div');empty.className='loadstate';empty.textContent='No editorial entries match your search. Try another title or keyword.';grid.append(empty);}
  document.getElementById('count').textContent=filtered.length+' editorial entries shown';
 }
 async function loadPosters(){
- if(!PROXY_BASE && !API_KEY){document.getElementById('grid').innerHTML='<div class="loadstate">TMDB connection was not found. Please check the Cloudflare Worker URL in js/config.js.</div>';document.getElementById('count').textContent='TMDB configuration missing';return;}
+ if(!PROXY_BASE && !API_KEY){document.getElementById('grid').innerHTML='<div class="loadstate">TMDB connection was not found. Please check the Cloudflare Worker URL in js/config.js.</div>';document.getElementById('tmdb-status').textContent='Movie images unavailable; editorial text is still available.';return;}
  let index=0,loaded=0,failed=0;
  async function worker(){
   while(index<films.length){
@@ -191,8 +192,8 @@ async function loadPosters(){
   }
  }
  await Promise.all(Array.from({length:6},worker));
- document.getElementById('count').textContent=films.length+' films · '+loaded+' posters/details loaded'+(failed?' · '+failed+' could not load':'');
- if(!loaded){document.getElementById('grid').insertAdjacentHTML('afterbegin','<div class="loadstate">Movie images could not be retrieved from TMDB. Check the API key in js/config.js and the browser Console for the exact error.</div>');}
+ document.getElementById('tmdb-status').textContent=loaded+' of '+films.length+' movie images/details loaded'+(failed?' · '+failed+' unavailable':'');
+ if(!loaded){document.getElementById('tmdb-status').textContent='TMDB images unavailable; editorial analyses remain available.';}
 }
 function buildReview(f,movie,credits){
  const title=movie.title||f.title||'This film';
@@ -211,8 +212,7 @@ function buildReview(f,movie,credits){
  const editorialNotice='<p class="review-meta">This film guide is based on the published synopsis and available film metadata. It is not presented as an independently written editorial review. A full film-specific review will appear here after editorial assessment.</p>';
  return '<div class="eyebrow">'+(hasEditorialReview?'MOVIES WORLD EDITORIAL ANALYSIS':'MOVIES WORLD FILM GUIDE')+'</div>'+
   '<h2>'+esc(title)+(hasEditorialReview?': editorial analysis':': story, cast and film details')+'</h2>'+
-  '<h3>'+(hasEditorialReview?'Story and direction':'Story overview')+'</h3><p>'+esc(story)+'</p>'+
-  '<p>'+esc(overview)+'</p>'+
+  '<h3>'+(hasEditorialReview?'Story context':'Story overview')+'</h3><p>'+esc(story)+'</p>'+
   '<h3>'+(hasEditorialReview?'Performances and filmmaking':'Production and cast information')+'</h3>'+
   (hasEditorialReview?'<p>'+esc(f.craft)+'</p>':'')+
   details+
@@ -231,8 +231,8 @@ function setReviewSchema(f,d,canonical){
 }
 function setReviewMeta(f,d){
  const canonical=location.origin+location.pathname+'?id='+encodeURIComponent(f.id);
- const title=(d.title||f.title)+' Review & Film Analysis | MOVIES WORLD';
- const description=('MOVIES WORLD editorial analysis: '+[f.story,f.craft,f.caveat,f.verdict].filter(Boolean).join(' ')).slice(0,300);
+ const title=(d.title||f.title)+' Film Analysis | MOVIES WORLD';
+ const description=('MOVIES WORLD film analysis: '+[f.story,f.craft,f.analysis,f.caveat,f.verdict].filter(Boolean).join(' ')).slice(0,300);
  document.title=title;let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}link.href=canonical;
  setMeta('description',description);setMeta('robots','index, follow, max-image-preview:large');
  setPropertyMeta('og:title',title);setPropertyMeta('og:description',description);setPropertyMeta('og:url',canonical);setPropertyMeta('og:type','article');
@@ -254,12 +254,13 @@ async function openFilm(f,pushHistory=false){
  document.getElementById('year').textContent=d.release_date?d.release_date.slice(0,4):'Year unavailable';
  document.getElementById('runtime').textContent=d.runtime?d.runtime+' min':'Runtime unavailable';
  document.getElementById('genres').textContent=(d.genres||[]).map(g=>g.name).join(' · ');
- document.getElementById('overview').textContent=d.overview||'TMDB synopsis is not available at the moment.';
  document.getElementById('article').innerHTML=buildReview(f,d);
  document.getElementById('trailer').href='https://www.youtube.com/results?search_query='+encodeURIComponent((d.title||f.title)+' official trailer');
  document.getElementById('cast').innerHTML='<p>Loading cast…</p>';
  try{
-  const [credits,videos]=await Promise.all([tmdb('/movie/'+f.id+'/credits?language=en-US'),tmdb('/movie/'+f.id+'/videos?language=en-US')]);
+  const results=await Promise.allSettled([tmdb('/movie/'+f.id+'/credits?language=en-US'),tmdb('/movie/'+f.id+'/videos?language=en-US')]);
+  const credits=results[0].status==='fulfilled'?results[0].value:{cast:[],crew:[]};
+  const videos=results[1].status==='fulfilled'?results[1].value:{results:[]};
   const director=(credits.crew||[]).find(p=>p.job==='Director');
   document.getElementById('director').textContent=director?director.name:'Not listed';
   document.getElementById('production').textContent=(d.production_companies||[]).slice(0,3).map(x=>x.name).join(', ')||'Not listed';
@@ -272,14 +273,15 @@ async function openFilm(f,pushHistory=false){
    const name=document.createElement('span');name.textContent=person.name+(person.character?' · '+person.character:'');box.append(name);cast.append(box);
   });
   if(!cast.children.length)cast.textContent='Cast information unavailable.';
- }catch(e){document.getElementById('cast').textContent='Cast information could not be loaded.';console.error(e)}
+  document.getElementById('article').innerHTML=buildReview(f,d,credits);
+ }catch(e){document.getElementById('cast').textContent='Cast information could not be loaded.';document.getElementById('article').innerHTML=buildReview(f,d,null);console.error(e)}
 }
 function home(updateUrl=true){
  document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block';window.scrollTo(0,0);if(updateUrl)history.replaceState({},'','reviews.html');
- document.title='Movie Reviews | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
- setMeta('description','Read selected MOVIES WORLD film analyses covering story, filmmaking, strengths, limitations and editorial verdicts.');setMeta('robots','index, follow, max-image-preview:large');
- setPropertyMeta('og:title','Movie Reviews | MOVIES WORLD');setPropertyMeta('og:description','Explore movie information, cast details, ratings and trailers from MOVIES WORLD.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
- setMeta('twitter:title','Movie Reviews | MOVIES WORLD');setMeta('twitter:description','Explore MOVIES WORLD movie reviews, film information, cast details, ratings and trailers from 2000 to 2026.');
+ document.title='Film Analyses | MOVIES WORLD';let canonical=document.querySelector('link[rel="canonical"]');if(canonical)canonical.href='https://themoviesworld.com/reviews.html';
+ setMeta('description','Explore 100 selected MOVIES WORLD film analyses covering story context, filmmaking, film-specific perspectives, limitations and editorial assessments.');setMeta('robots','index, follow, max-image-preview:large');
+ setPropertyMeta('og:title','Film Analyses | MOVIES WORLD');setPropertyMeta('og:description','Explore 100 selected film analyses with story context, filmmaking commentary and editorial assessments.');setPropertyMeta('og:url','https://themoviesworld.com/reviews.html');setPropertyMeta('og:type','website');
+ setMeta('twitter:title','Film Analyses | MOVIES WORLD');setMeta('twitter:description','Explore 100 selected MOVIES WORLD film analyses with film-specific commentary and editorial assessments.');
 }
 document.getElementById('back').addEventListener('click',()=>home(true));
 window.addEventListener('popstate',()=>{const id=new URLSearchParams(location.search).get('id');const film=films.find(item=>String(item.id)===id);if(film)openFilm(film,false);else home(false)});
@@ -290,7 +292,7 @@ const yearNow=document.getElementById('yearNow');if(yearNow)yearNow.textContent=
 const initialReviewId=new URLSearchParams(location.search).get('id');const initialReview=films.find(f=>String(f.id)===initialReviewId);
 if(initialReview)openFilm(initialReview,false);
 else if(initialReviewId){setMeta('robots','noindex, nofollow');document.getElementById('detail').style.display='none';document.getElementById('listing').style.display='block'}
-else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Movie Information","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
+else{const schema=document.createElement('script');schema.id='mw-review-list-schema';schema.type='application/ld+json';schema.textContent=JSON.stringify({"@context":"https://schema.org","@type":"CollectionPage","name":"MOVIES WORLD Selected Film Analyses","url":"https://themoviesworld.com/reviews.html","mainEntity":{"@type":"ItemList","numberOfItems":films.length,"itemListElement":films.map((f,i)=>({"@type":"ListItem","position":i+1,"name":f.title,"url":"https://themoviesworld.com/reviews.html?id="+encodeURIComponent(f.id)}))}});document.head.appendChild(schema)}
 render();loadPosters();
 
 </script>
